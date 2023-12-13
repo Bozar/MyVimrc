@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-11, 14:35:14
+" Last Update: 2023-12-13, 16:36:34
 
 
 " +========= Initialization =========+ {{{2
