@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-13, 16:36:34
+" Last Update: 2023-12-13, 17:07:58
 
 
 " +========= Initialization =========+ {{{2
@@ -50,13 +50,14 @@ elseif s:INIT_FLAG ==# 1
   " repository.
   const s:SAMPLE_VIMRC = [
     \ '" ====================',
-    \ 'const g:PRIVATE_DATA = {}',
-    \ "const g:PRIVATE_DATA['PATH_TO_PACK'] = ''",
-    \ "const g:PRIVATE_DATA['WORKING_DIRECTORY'] = ''",
-    \ "const g:PRIVATE_DATA['LOC_FILE'] = []",
-    \ "const g:PRIVATE_DATA['OPEN_DESKTOP'] = []",
+    \ 'let g:PRIVATE_DATA = {}',
+    \ "let g:PRIVATE_DATA['PATH_TO_PACK'] = ''",
+    \ "let g:PRIVATE_DATA['WORKING_DIRECTORY'] = ''",
+    \ "let g:PRIVATE_DATA['LOC_FILE'] = []",
+    \ "let g:PRIVATE_DATA['OPEN_DESKTOP'] = []",
     \ '',
     \ '',
+    \ 'lockvar! g:PRIVATE_DATA',
     \ '"execute ''source _vimrc''',
     \ '',
     \ 'unlet g:PRIVATE_DATA',
