@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-13, 17:07:58
+" Last Update: 2023-12-13, 22:38:42
 
 
 " +========= Initialization =========+ {{{2
@@ -944,6 +944,9 @@ function! s:SetLocalOption(file_type) abort
 
   function! l:dict_func['outl']() abort
     setlocal statusline=%!g:MyStatusLine(3,2)
+    if <sid>IsInTempFolder()
+      setlocal noswapfile
+    endif
   endfunction
 
 
@@ -956,6 +959,9 @@ function! s:SetLocalOption(file_type) abort
 
   function! l:dict_func['npad']() abort
     setlocal statusline=%!g:MyStatusLine(3,0)
+    if <sid>IsInTempFolder()
+      setlocal noswapfile
+    endif
   endfunction
 
 
