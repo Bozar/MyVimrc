@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-13, 22:38:42
+" Last Update: 2023-12-14, 09:13:11
 
 
 " +========= Initialization =========+ {{{2
@@ -200,11 +200,15 @@ endif
 
 " Colorscheme
 " https://vi.stackexchange.com/questions/18932/
-try
-  execute 'colorscheme ' .. s:COLORSCHEME
-catch /^Vim\%((\a\+)\)\=:E185/
-  colorscheme default
-endtry
+if s:IS_GUI
+  try
+    execute 'colorscheme ' .. s:COLORSCHEME
+  catch /^Vim\%((\a\+)\)\=:E185/
+    colorscheme default
+  endtry
+else
+    colorscheme default
+endif
 
 
 " +--------- Settings Triggered by Auto-Commands ---------+ {{{3
