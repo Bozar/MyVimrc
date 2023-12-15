@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-14, 09:13:11
+" Last Update: 2023-12-15, 09:12:53
 
 
 " +========= Initialization =========+ {{{2
@@ -152,6 +152,11 @@ set smartcase
 set foldmethod=marker
 " Unfold all text by default.
 set foldlevel=99
+
+
+" File formats
+set fileformat=unix
+set fileformats=unix,dos
 
 
 " File encodings
