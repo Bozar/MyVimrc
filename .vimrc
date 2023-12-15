@@ -1,9 +1,5 @@
 " Bozar's .vimrc file {{{1
-<<<<<<< Updated upstream
-" Last Update: 2023-12-15, 11:14:26
-=======
 " Last Update: 2023-12-17, 15:28:11
->>>>>>> Stashed changes
 
 
 " +========= Initialization =========+ {{{2
@@ -590,7 +586,7 @@ endfunction
 
 
 function! s:IsInTempFolder() abort
-  return expand('%:p') =~# <sid>EscapeString(expand($TEMP), 1)
+  return expand('%:p') =~# <sid>EscapeString(expand(<sid>GetTempDirctory()), 1)
 endfunction
 
 
@@ -647,7 +643,7 @@ function! s:OutlineHelper(helper, ...) abort
 
     " vnoremap
     if l:MAP_MODE
-      const l:CURRENT_LINE = @*
+      const l:CURRENT_LINE = @"
     else
       const l:CURRENT_LINE = getline(line('.'))
     endif
@@ -1100,12 +1096,12 @@ function! s:SetBufferKeyMap(file_type) abort
     nnoremap <buffer> <silent> <cr>
         \ :call <sid>OutlineHelper('SearchLine', 0, 0)<cr>
     vnoremap <buffer> <silent> <cr>
-        \ <esc>:call <sid>OutlineHelper('SearchLine', 1, 0)<cr>
+        \ y:call <sid>OutlineHelper('SearchLine', 1, 0)<cr>
 
     nnoremap <buffer> <silent> <c-cr>
         \ :call <sid>OutlineHelper('SearchLine', 0, 1)<cr>
     vnoremap <buffer> <silent> <c-cr>
-        \ <esc>:call <sid>OutlineHelper('SearchLine', 1, 1)<cr>
+        \ y:call <sid>OutlineHelper('SearchLine', 1, 1)<cr>
   endfunction
 
 
@@ -2302,12 +2298,18 @@ function! s:EscapeString(input, escape_mode) abort
 endfunction
 
 
+function! s:GetTempDirctory() abort
+  return s:IS_WINDOWS ? $TEMP : '/var/tmp'
+endfunction
+
+
 function! s:GetTempFile(file_type, file_name_only = 0) abort
   const l:FILE_NAME = 'tmp.' .. a:file_type
+
   if a:file_name_only
     return l:FILE_NAME
   else
-    return expand($TEMP .. '/' .. l:FILE_NAME)
+    return expand(<sid>GetTempDirctory() .. '/' .. l:FILE_NAME)
   endif
 endfunction
 
@@ -2330,4 +2332,6 @@ endfunction
 
 " s:BufferListHelper(helper, ...) abort
 " Add an option to move a buffer to the top?
+
+"TODO: Replace register *.
 
