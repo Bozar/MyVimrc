@@ -336,7 +336,7 @@ nnoremap <silent> <unique> <c-End> :call <sid>CloseTabPage()<cr>
 
 
 nnoremap <silent> <unique> <leader>fs :silent call <sid>QuickSearch(0)<cr>
-vnoremap <silent> <unique> <tab> <esc> :silent call <sid>QuickSearch(1)<cr>
+vnoremap <silent> <unique> <tab> y:silent call <sid>QuickSearch(1)<cr>
 
 
 " Jump to a window
@@ -1248,7 +1248,7 @@ function! s:QuickSearch(add_to_register) abort
     const l:EOL = "\n"
     const l:INPUT = 'Pattern A: [' .. l:PATTERN .. ']' .. l:EOL
         \ .. 'String B: [' .. l:SUBSTITUTE .. ']' .. l:EOL
-        \ .. 'Register *: [' .. @* .. ']' .. l:EOL
+        \ .. 'Register ": [' .. @" .. ']' .. l:EOL
         \ .. 'Overwrite [A|B], [S]wap A & B, [D]elete B,' .. l:EOL
         \ .. '> [C]opy|[E]xecute command, [Y]ank all '
     return l:INPUT
@@ -1278,8 +1278,8 @@ function! s:QuickSearch(add_to_register) abort
   endfunction
 
 
-  " If register * has more than one lines, keep only the first one.
-  const l:RAW_PATTERN = substitute(@*, '\v([^\n]*)\n*.*', '\1', '')
+  " If `register "` has more than one lines, keep only the first one.
+  const l:RAW_PATTERN = substitute(@", '\v([^\n]*)\n*.*', '\1', '')
   const l:ESCAPED_PATTERN = <sid>EscapeString(l:RAW_PATTERN, 0)
   " Call from visual mode.
   if a:add_to_register
