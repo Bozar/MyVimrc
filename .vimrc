@@ -58,7 +58,7 @@ elseif s:INIT_FLAG ==# 1
     \ '',
     \ '',
     \ 'lockvar! g:PRIVATE_DATA',
-    \ '"execute ''source _vimrc''',
+    \ '"execute ''source .vimrc''',
     \ '',
     \ 'unlet g:PRIVATE_DATA',
     \ '',
