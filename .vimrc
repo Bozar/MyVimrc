@@ -1034,26 +1034,26 @@ function! s:SetBufferKeyMap(file_type) abort
     nnoremap <buffer> <silent> <f1>
         \ :call <sid>LocalizationHelper('MapSearchKey', 0, 0)<cr>
     vnoremap <buffer> <silent> <f1>
-        \ <esc>:call <sid>LocalizationHelper('MapSearchKey', 1, 0)<cr>
+        \ y:call <sid>LocalizationHelper('MapSearchKey', 1, 0)<cr>
 
     nnoremap <buffer> <silent> <f2>
         \ :call <sid>LocalizationHelper('MapSearchKey', 0, 1)<cr>
     vnoremap <buffer> <silent> <f2>
-        \ <esc>:call <sid>LocalizationHelper('MapSearchKey', 1, 1)<cr>
+        \ y:call <sid>LocalizationHelper('MapSearchKey', 1, 1)<cr>
     nnoremap <buffer> <silent> <s-f2>
         \ :call <sid>LocalizationHelper('SearchGUID')<cr>
 
     nnoremap <buffer> <silent> <f3>
         \ :call <sid>LocalizationHelper('FilterSearchResult', 0)<cr>
     vnoremap <buffer> <silent> <f3>
-        \ <esc>:call <sid>LocalizationHelper('FilterSearchResult', 1)<cr>
+        \ y:call <sid>LocalizationHelper('FilterSearchResult', 1)<cr>
     nnoremap <buffer> <silent> <s-f3>
         \ :call <sid>LocalizationHelper('FilterSearchResult', 2)<cr>
 
     nnoremap <buffer> <silent> <f4>
         \ :call <sid>LocalizationHelper('CopyGlossary', 0)<cr>
     vnoremap <buffer> <silent> <f4>
-        \ <esc>:call <sid>LocalizationHelper('CopyGlossary', 1)<cr>
+        \ y:call <sid>LocalizationHelper('CopyGlossary', 1)<cr>
     nnoremap <buffer> <silent> <s-f4>
         \ :call <sid>LocalizationHelper('CopyGlossary', -1)<cr>
 
@@ -1063,16 +1063,16 @@ function! s:SetBufferKeyMap(file_type) abort
     nnoremap <buffer> <silent> <f6>
         \ :call <sid>LocalizationHelper('RemoveLabel', 0, 0)<cr>
     vnoremap <buffer> <silent> <f6>
-        \ <esc>:call <sid>LocalizationHelper('RemoveLabel', 1, 0)<cr>
+        \ y:call <sid>LocalizationHelper('RemoveLabel', 1, 0)<cr>
     nnoremap <buffer> <silent> <s-f6>
         \ :call <sid>LocalizationHelper('RemoveLabel', 0, 1)<cr>
     vnoremap <buffer> <silent> <s-f6>
-        \ <esc>:call <sid>LocalizationHelper('RemoveLabel', 1, 1)<cr>
+        \ y:call <sid>LocalizationHelper('RemoveLabel', 1, 1)<cr>
 
     nnoremap <buffer> <silent> <f7>
         \ :call <sid>LocalizationHelper('MapSearchKey', 0, 2)<cr>
     vnoremap <buffer> <silent> <f7>
-        \ <esc>:call <sid>LocalizationHelper('MapSearchKey', 1, 2)<cr>
+        \ y:call <sid>LocalizationHelper('MapSearchKey', 1, 2)<cr>
 
   endfunction
 
@@ -1084,7 +1084,7 @@ function! s:SetBufferKeyMap(file_type) abort
 
     nnoremap <buffer> <silent> i :call <sid>BufferListHelper('OpenTab')<cr>
     vnoremap <buffer> <silent> i
-        \ <esc>:call <sid>BufferListHelper('OpenTabInBatch')<cr>
+        \ y:call <sid>BufferListHelper('OpenTabInBatch')<cr>
 
     nnoremap <buffer> <silent> u :call <sid>BufferListHelper('UpdateBuffer')<cr>
     vnoremap <buffer> <silent> u
@@ -2111,10 +2111,10 @@ function! s:LocalizationHelper(helper, ...) abort
     const l:MAP_MODE = self['OPT_ARG'][0]
     const l:SEARCH_FILE = self['OPT_ARG'][1]
 
-    const l:TEXT = (l:MAP_MODE ==# 0) ? expand('<cword>') : @*
+    const l:TEXT = (l:MAP_MODE ==# 0) ? expand('<cword>') : @"
     const l:FILE = self['LOC_FILE'][l:SEARCH_FILE]
     const l:COMMAND = self['_SearchFile'](l:TEXT, l:FILE, self['OUTPUT'][0])
-    let @* = self['DEBUG'] ? l:COMMAND : @*
+    let @" = self['DEBUG'] ? l:COMMAND : @"
     call self['JumpToOutputBuffer']()
   endfunction
 
@@ -2125,7 +2125,7 @@ function! s:LocalizationHelper(helper, ...) abort
     if l:GUID ==# l:CURRENT_LINE
       return
     endif
-    let @* = l:GUID
+    let @" = l:GUID
     call <sid>LocalizationHelper('MapSearchKey', 1, 1)
   endfunction
 
@@ -2145,7 +2145,7 @@ function! s:LocalizationHelper(helper, ...) abort
     if l:MAP_MODE ==# 2
       execute 'g/' .. l:MARK .. '\t[^\t]{-}\t\t/delete'
     else
-      const l:TEXT = (l:MAP_MODE ==# 0) ? l:SEARCH : @*
+      const l:TEXT = (l:MAP_MODE ==# 0) ? l:SEARCH : @"
       execute 'g!/' .. <sid>EscapeString(l:TEXT, 0) .. '/delete'
     endif
     execute 1
@@ -2184,14 +2184,14 @@ function! s:LocalizationHelper(helper, ...) abort
       unsilent const l:INPUT = input(
           \ 'Source A: ' .. s:LocalizationHelper_source .. l:EOL
           \ .. 'Target B: ' .. s:LocalizationHelper_target .. l:EOL
-          \ .. 'Register *: ' .. @* .. l:EOL
+          \ .. 'Register ": ' .. @" .. l:EOL
           \ .. 'Overwrite [A|B], [S]wap A & B '
           \ )
       if l:INPUT =~# 'a'
-        let s:LocalizationHelper_source = @*
+        let s:LocalizationHelper_source = @"
       endif
       if l:INPUT =~# 'b'
-        let s:LocalizationHelper_target = @*
+        let s:LocalizationHelper_target = @"
       endif
       if l:INPUT =~# 's'
         const l:TEMP_SAVE = s:LocalizationHelper_source
@@ -2332,6 +2332,4 @@ endfunction
 
 " s:BufferListHelper(helper, ...) abort
 " Add an option to move a buffer to the top?
-
-"TODO: Replace register *.
 
