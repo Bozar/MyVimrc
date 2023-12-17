@@ -1,5 +1,9 @@
 " Bozar's .vimrc file {{{1
+<<<<<<< Updated upstream
 " Last Update: 2023-12-15, 11:14:26
+=======
+" Last Update: 2023-12-17, 15:28:11
+>>>>>>> Stashed changes
 
 
 " +========= Initialization =========+ {{{2
@@ -175,7 +179,11 @@ set guicursor+=a:blinkon0
 
 " Tab page
 set tabline=%!g:MyTabLine()
-set showtabline=2
+if s:IS_GUI
+  set showtabline=2
+else
+  set showtabline=0
+endif
 
 
 " Map leader
