@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-17, 15:28:11
+" Last Update: 2023-12-19, 22:55:29
 
 
 " +========= Initialization =========+ {{{2
@@ -1396,6 +1396,7 @@ endfunction
 "     'LOCAL_DIR': '',
 "     'WIN_LAYOUT': [0, 0],
 "     'SHOW_LINE': 0,
+"     'SHOW_FILE': '',
 "     'ARG_EDIT': ['', ...],
 "   },
 "   {...},
@@ -1405,6 +1406,7 @@ function! s:LoadProject(project_dict) abort
   const l:LOCAL_DIR = get(a:project_dict, 'LOCAL_DIR', '')
   const l:WIN_LAYOUT = get(a:project_dict, 'WIN_LAYOUT', [])
   const l:ARG_EDIT = get(a:project_dict, 'ARG_EDIT', [])
+  const l:SHOW_FILE = get(a:project_dict, 'SHOW_FILE', '')
   const l:SHOW_LINE = get(a:project_dict, 'SHOW_LINE', 0)
 
   const l:SAVE_DIR = getcwd()
@@ -1420,6 +1422,10 @@ function! s:LoadProject(project_dict) abort
   for l:i in l:ARG_EDIT
     execute 'argedit ' .. l:i
   endfor
+  if l:SHOW_FILE !=# ''
+    execute 'argedit ' .. l:SHOW_FILE
+  endif
+  last
   %argdelete
 
   call <sid>TryJumpToMark('m', l:SHOW_LINE)
