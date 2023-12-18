@@ -1409,7 +1409,7 @@ function! s:LoadProject(project_dict) abort
 
   const l:SAVE_DIR = getcwd()
   if l:LOCAL_DIR !=# ''
-    execute 'lcd ' .. l:LOCAL_DIR
+    execute 'cd ' .. l:LOCAL_DIR
   endif
 
   const l:NEW_LAYOUT = get(l:WIN_LAYOUT, 0, -1)
@@ -1423,7 +1423,7 @@ function! s:LoadProject(project_dict) abort
   %argdelete
 
   call <sid>TryJumpToMark('m', l:SHOW_LINE)
-  execute 'lcd ' .. l:SAVE_DIR
+  execute 'cd ' .. l:SAVE_DIR
 endfunction
 
 
