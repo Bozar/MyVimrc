@@ -12,7 +12,6 @@ const s:INIT_FLAG = 0
 
 const s:IS_GUI = has('gui_running')
 const s:IS_WINDOWS = has('win32')
-const s:DISABLE_HELP_KEY = 0
 
 " https://github.com/lifepillar/vim-solarized8
 const s:COLORSCHEME = 'solarized8'
@@ -354,12 +353,8 @@ nnoremap <silent> <unique> <leader>jl
     \ :call <sid>JumpToWindowByName(<sid>GetTempFile('outl', 1))<cr>
 
 
-if s:DISABLE_HELP_KEY
-  call <sid>DisableF1()
-else
-  " This key binding is hard-coded in `s:InitDesktop()`.
-  nnoremap <silent> <unique> <F1> :silent call <sid>InitDesktop()<cr>
-endif
+" This key binding is hard-coded in `s:InitDesktop()`.
+nnoremap <silent> <unique> <F1> :silent call <sid>InitDesktop()<cr>
 
 
 " `[xz]?` - Split windows in the same tab or a new tab.
@@ -1375,17 +1370,14 @@ endfunction
 
 " This function should only be called once when pressing <F1>.
 function! s:InitDesktop() abort
-  for l:i in s:OPEN_DESKTOP
-    call <sid>LoadProject(l:i)
-  endfor
-  tabnext 1
-  redraw!
+  if len(s:OPEN_DESKTOP) ># 0
+    for l:i in s:OPEN_DESKTOP
+      call <sid>LoadProject(l:i)
+    endfor
+    tabnext 1
+    redraw!
+  endif
   nunmap <F1>
-  call <sid>DisableF1()
-endfunction
-
-
-function! s:DisableF1() abort
   nnoremap <silent> <unique> <F1> <nop>
 endfunction
 
