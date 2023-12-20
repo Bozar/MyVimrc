@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-19, 22:55:29
+" Last Update: 2023-12-20, 10:53:22
 
 
 " +========= Initialization =========+ {{{2
@@ -1386,8 +1386,9 @@ endfunction
 " [
 "   {
 "     'LOCAL_DIR': '',
-"     'WIN_LAYOUT': [0, 0],
-"     'SHOW_LINE': 0,
+"     'WIN_LAYOUT': -1,
+"     'NEW_TAB': 0,
+"     'SHOW_LINE': -1,
 "     'SHOW_FILE': '',
 "     'ARG_EDIT': ['', ...],
 "   },
@@ -1396,19 +1397,18 @@ endfunction
 
 function! s:LoadProject(project_dict) abort
   const l:LOCAL_DIR = get(a:project_dict, 'LOCAL_DIR', '')
-  const l:WIN_LAYOUT = get(a:project_dict, 'WIN_LAYOUT', [])
+  const l:WIN_LAYOUT = get(a:project_dict, 'WIN_LAYOUT', -1)
+  const l:NEW_TAB = get(a:project_dict, 'NEW_TAB', 0)
   const l:ARG_EDIT = get(a:project_dict, 'ARG_EDIT', [])
   const l:SHOW_FILE = get(a:project_dict, 'SHOW_FILE', '')
-  const l:SHOW_LINE = get(a:project_dict, 'SHOW_LINE', 0)
+  const l:SHOW_LINE = get(a:project_dict, 'SHOW_LINE', -1)
 
   const l:SAVE_DIR = getcwd()
   if l:LOCAL_DIR !=# ''
     execute 'cd ' .. l:LOCAL_DIR
   endif
 
-  const l:NEW_LAYOUT = get(l:WIN_LAYOUT, 0, -1)
-  const l:NEW_TAB = get(l:WIN_LAYOUT, 1, 0)
-  call <sid>SplitWindow(l:NEW_LAYOUT, l:NEW_TAB)
+  call <sid>SplitWindow(l:WIN_LAYOUT, l:NEW_TAB)
 
   arglocal!
   for l:i in l:ARG_EDIT
