@@ -1724,6 +1724,7 @@ endfunction
 
 
 function! s:SplitWindow(layout, new_tab = 0)
+  const l:INVALID_LAYOUT = -1
   const l:LEFT_COLUMN_WIDTH_NARROW = 85
   const l:LEFT_COLUMN_WIDTH = 90
   const l:RIGHT_BOTTOM_HEIGHT = 10
@@ -1734,7 +1735,7 @@ function! s:SplitWindow(layout, new_tab = 0)
   if a:new_tab
     tab split
   endif
-  if winnr('$') ># 1
+  if (a:layout ># l:INVALID_LAYOUT) && (winnr('$') ># 1)
     wincmd o
   endif
 
