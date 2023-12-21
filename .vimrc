@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-20, 10:53:22
+" Last Update: 2023-12-21, 10:49:03
 
 
 " +========= Initialization =========+ {{{2
@@ -316,6 +316,8 @@ nnoremap <silent> <unique> <leader>fe :Explore<cr>
 nnoremap <silent> <unique> <leader>ff :update<cr>
 nnoremap <silent> <unique> <leader>fa :wa<cr>
 nnoremap <silent> <unique> <leader>fx :xa<cr>
+nnoremap <silent> <unique> <leader>fr :resize 10<cr>
+
 
 nnoremap <silent> <unique> <leader>fv :silent call <sid>ForkVim()<cr>
 nnoremap <silent> <unique> <leader>fg :silent call <sid>FormatText()<cr>
