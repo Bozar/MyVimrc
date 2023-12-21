@@ -372,7 +372,6 @@ nnoremap <silent> <unique> <leader>zz :call <sid>SplitWindow(1, 1)<cr>
 " +--------- ### ---------+ {{{3
 
 command -bar -nargs=0 CountCjkCharacter call <sid>CountCjkCharacter()
-command -bar -nargs=0 EnterScratchMode call <sid>EnterScratchMode()
 command -bar -nargs=? FormatText silent call <sid>FormatText(<f-args>)
 
 command -bar -nargs=* InsertTimeStamp call <sid>InsertTimeStamp(<f-args>)
@@ -529,13 +528,6 @@ lockvar! s:ABBREVIATION_DICT
 
 " +========= Library Functions =========+ {{{2
 " +--------- ### ---------+ {{{3
-
-function! s:EnterScratchMode() abort
-  call <sid>JumpToScratchBuffer('npad', 1)
-  set showtabline=0
-  wincmd o
-endfunction
-
 
 function! s:IsValidWindowNumber(window) abort
     if (a:window <# 1) || (a:window ># winnr('$'))
