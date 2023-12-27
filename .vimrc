@@ -1,13 +1,12 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-21, 10:49:03
+" Last Update: 2023-12-27, 09:03:54
 
 
 " +========= Initialization =========+ {{{2
 " +--------- ### ---------+ {{{3
 
 " 0: Default boot.
-" 1: Cold boot. Source this file to initialize `~/.vimrc`.
-" 2: Custom boot. Set up a clean room for testing.
+" 1: Custom boot. Set up a clean room for testing.
 const s:INIT_FLAG = 0
 
 const s:IS_GUI = has('gui_running')
@@ -21,15 +20,29 @@ const s:COLORSCHEME = 'solarized8'
 "const s:TURN_OFF_LIGHT = 18
 
 
+" Keep `$MYVIMRC` to the minimum. Source another `.vimrc` (this file, for
+" example) in a version control repository.
+"
+" Sample `g:PRIVATE_DATA`:
+"
+" let g:PRIVATE_DATA = {}
+" let g:PRIVATE_DATA['PATH_TO_PACK'] = ''
+" let g:PRIVATE_DATA['WORKING_DIRECTORY'] = ''
+" let g:PRIVATE_DATA['LOC_FILE'] = []
+" let g:PRIVATE_DATA['OPEN_DESKTOP'] = []
+
+
 " 0: Default boot.
 if s:INIT_FLAG ==# 0
-  " 1. Define constants based on global variables in $MYVIMRC.
+  " 1. Define constants based on `g:PRIVATE_DATA`.
   const s:PRIVATE_DATA = exists('g:PRIVATE_DATA') ? g:PRIVATE_DATA : {}
 
   const s:PATH_TO_PACK = get(s:PRIVATE_DATA, 'PATH_TO_PACK', '')
   const s:WORKING_DIRECTORY = get(s:PRIVATE_DATA, 'WORKING_DIRECTORY', '')
   const s:LOC_FILE = get(s:PRIVATE_DATA, 'LOC_FILE', [])
   const s:OPEN_DESKTOP = get(s:PRIVATE_DATA, 'OPEN_DESKTOP', [])
+
+  unlet s:PRIVATE_DATA
 
   " 2. Change settings.
   if s:PATH_TO_PACK !=# ''
@@ -43,33 +56,11 @@ if s:INIT_FLAG ==# 0
   " (`vim-solarized8-1.5.1`) into the folder, but do not packadd it manually.
   packadd! matchit
 
-" 1: Cold boot.
+
+" 1: Custom boot.
 elseif s:INIT_FLAG ==# 1
-  " Keep `$MYVIMRC` to the minimum. Source another `_vimrc` in a version control
-  " repository.
-  const s:SAMPLE_VIMRC = [
-    \ '" ====================',
-    \ 'let g:PRIVATE_DATA = {}',
-    \ "let g:PRIVATE_DATA['PATH_TO_PACK'] = ''",
-    \ "let g:PRIVATE_DATA['WORKING_DIRECTORY'] = ''",
-    \ "let g:PRIVATE_DATA['LOC_FILE'] = []",
-    \ "let g:PRIVATE_DATA['OPEN_DESKTOP'] = []",
-    \ '',
-    \ '',
-    \ 'lockvar! g:PRIVATE_DATA',
-    \ '"execute ''source .vimrc''',
-    \ '',
-    \ 'unlet g:PRIVATE_DATA',
-    \ '',
-  \ ]
-
-  edit $MYVIMRC
-  call append(line('$'), s:SAMPLE_VIMRC)
   finish
 
-" 2: Custom boot.
-elseif s:INIT_FLAG ==# 2
-  finish
 
 else
   echom 'Incorrect INIT_FLAG: ' .. s:INIT_FLAG
