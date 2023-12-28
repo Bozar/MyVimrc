@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-28, 11:54:26
+" Last Update: 2023-12-28, 16:35:22
 
 
 " +========= Initialization =========+ {{{2
@@ -361,6 +361,10 @@ nnoremap <silent> <unique> <leader>zx :call <sid>SplitWindow(0, 1)<cr>
 nnoremap <silent> <unique> <leader>zz :call <sid>SplitWindow(1, 1)<cr>
 
 
+" Add a foldmarker. This map might be overwritten by a specific file type.
+nnoremap <silent> <unique> <leader>df :silent call <sid>InsertFoldMarker()<cr>
+
+
 " +========= Commands =========+ {{{2
 " +--------- ### ---------+ {{{3
 
@@ -521,6 +525,12 @@ lockvar! s:ABBREVIATION_DICT
 
 " +========= Library Functions =========+ {{{2
 " +--------- ### ---------+ {{{3
+
+function! s:InsertFoldMarker() abort
+  execute 's/$/ {{{'
+  execute 'normal! $'
+endfunction
+
 
 function! s:IsValidWindowNumber(window) abort
     if (a:window <# 1) || (a:window ># winnr('$'))
