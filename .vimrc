@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-27, 09:03:54
+" Last Update: 2023-12-28, 11:54:26
 
 
 " +========= Initialization =========+ {{{2
@@ -577,6 +577,41 @@ function! s:IsScratchBuffer() abort
 endfunction
 
 
+function! s:MarkdownHelper(helper, ...) abort
+  let l:dict_func = {}
+  let l:dict_func['OPT_ARG'] = a:000
+  let l:dict_func['ARG_COUNT'] = a:0
+  lockvar! l:dict_func['OPT_ARG']
+  lockvar! l:dict_func['ARG_COUNT']
+
+
+  " a1: l:MAP_MODE
+  function! l:dict_func['InsertCodeBlock']() abort
+    const l:MAP_MODE = self['OPT_ARG'][0]
+
+    " Normal mode
+    if l:MAP_MODE ==# 0
+      execute 's/$/\r````\r\r````/'
+      execute 'normal! k'
+    " Visual mode
+    elseif l:MAP_MODE ==# 1
+      execute "'>s/$/\r````/"
+      execute "'<s/^/````\r/"
+    endif
+  endfunction
+
+
+  function! l:dict_func['InsertTitle']() abort
+    execute 's/^/# /'
+  endfunction
+
+
+  if has_key(l:dict_func, a:helper)
+    call l:dict_func[a:helper]()
+  endif
+endfunction
+
+
 function! s:NotePadHelper(helper, ...) abort
   let l:dict_func = {}
 
@@ -1091,6 +1126,17 @@ function! s:SetBufferKeyMap(file_type) abort
     call self['outl']()
     nnoremap <buffer> <silent> <s-cr>
         \ :silent call <sid>NotePadHelper('SaveLoadText')<cr>
+  endfunction
+
+
+  function! l:dict_func['markdown']() abort
+    nnoremap <buffer> <silent> <leader>dc
+        \ :silent call <sid>MarkdownHelper('InsertCodeBlock', 0)<cr>
+    vnoremap <buffer> <silent> <leader>dc
+        \ <esc>:silent call <sid>MarkdownHelper('InsertCodeBlock', 1)<cr>
+
+    nnoremap <buffer> <silent> <leader>df
+        \ :silent call <sid>MarkdownHelper('InsertTitle')<cr>
   endfunction
 
 
