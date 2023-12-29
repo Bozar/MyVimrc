@@ -1161,7 +1161,10 @@ function! s:MyBackground() abort
   const l:DARK = 'dark'
 
   " Do not switch background.
-  return s:IS_GUI ? l:LIGHT : l:DARK
+  " Always use light background. Auto completion menu is barely visible in
+  " terminal with dark background.
+  return l:LIGHT
+  "return s:IS_GUI ? l:LIGHT : l:DARK
 
   "if s:SWITCH_BACKGROUND ==# 1
   "  return l:LIGHT
