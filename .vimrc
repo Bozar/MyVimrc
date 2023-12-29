@@ -13,11 +13,13 @@ const s:IS_GUI = has('gui_running')
 const s:IS_WINDOWS = has('win32')
 
 " https://github.com/lifepillar/vim-solarized8
-const s:COLORSCHEME = 'solarized8'
+const s:COLOR_SCHEME = 'solarized8'
 " 0: Auto, 1: Always light, 2: Always dark
 "const s:SWITCH_BACKGROUND = 0
 "const s:TURN_ON_LIGHT = 6
 "const s:TURN_OFF_LIGHT = 18
+
+const s:COLOR_COLUMN = 81
 
 
 " Keep `$MYVIMRC` to the minimum. Source another `.vimrc` (this file, for
@@ -201,7 +203,7 @@ endif
 " https://vi.stackexchange.com/questions/18932/
 if s:IS_GUI
   try
-    execute 'colorscheme ' .. s:COLORSCHEME
+    execute 'colorscheme ' .. s:COLOR_SCHEME
   catch /^Vim\%((\a\+)\)\=:E185/
     colorscheme default
   endtry
@@ -932,7 +934,7 @@ function! s:SetLocalOption(file_type) abort
 
 
   function! l:dict_func['vim']() abort
-    setlocal colorcolumn=80
+    execute 'setlocal colorcolumn=' .. s:COLOR_COLUMN
     setlocal nolinebreak
   endfunction
 
