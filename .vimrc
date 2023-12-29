@@ -339,7 +339,10 @@ nnoremap <silent> <unique> <leader>jh
     \ :call <sid>JumpToScratchBuffer('npad', 0)<cr>
 nnoremap <silent> <unique> <leader>jH
     \ :call <sid>JumpToScratchBuffer('npad', 1)<cr>
+
 nnoremap <silent> <unique> <leader>ju
+    \ :call <sid>JumpToScratchBuffer('bufl', 2)<cr>
+nnoremap <silent> <unique> <leader>jU
     \ :call <sid>JumpToScratchBuffer('bufl', 1)<cr>
 
 nnoremap <silent> <unique> <leader>jk :call <sid>JumpToWindowByPosition(0)<cr>
@@ -1811,9 +1814,11 @@ endfunction
 
 
 " 1. Find the first matched scratch buffer. If failed, create a new one.
-" 2-1. `a:overwrite ==# 0`: Jump to the window that has the buffer, or open it
-" in a new horizontal window.
-" 2-2. `a:overwrite ==# 1`: Open the buffer in the current window.
+" 2-1. `a:overwrite ==# 0`: Jump to a window that has the buffer, or open it in 
+" a new horizontal window.
+" 2-2. `a:overwrite ==# 1`: Always open the buffer in current window.
+" 2-3. `a:overwrite ==# 2`: Jump to a window that has the buffer, or open it in 
+" current window.
 function! s:JumpToScratchBuffer(file_type = '', overwrite = 0) abort
   const l:SCRATCH_LIST = <sid>ListScratchBuffer(a:file_type)
   if len(l:SCRATCH_LIST) ># 0
@@ -1822,14 +1827,18 @@ function! s:JumpToScratchBuffer(file_type = '', overwrite = 0) abort
     const l:BUFFER_NUMBER = <sid>CreateScratchBuffer(a:file_type)
   endif
 
-  if a:overwrite
+  if a:overwrite ==# 1
     execute 'buffer ' .. l:BUFFER_NUMBER
   else
     const l:WINDOW_NUMBER = bufwinnr(l:BUFFER_NUMBER)
     if l:WINDOW_NUMBER ># 0
       execute l:WINDOW_NUMBER .. 'wincmd w'
     else
-      execute 'sbuffer ' .. l:BUFFER_NUMBER
+      if a:overwrite ==# 0
+        execute 'sbuffer ' .. l:BUFFER_NUMBER
+      else
+        execute 'buffer ' .. l:BUFFER_NUMBER
+      endif
     endif
   endif
 endfunction
