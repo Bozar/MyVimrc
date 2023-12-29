@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-28, 16:35:22
+" Last Update: 2023-12-29, 13:38:48
 
 
 " +========= Initialization =========+ {{{2
@@ -155,6 +155,10 @@ set fileformats=unix,dos
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf-8,cp936,latin1
+
+
+" Case-insensitive file names
+set fileignorecase
 
 
 " Use both * and + registers when yanking in visual mode. Show the least GUI
