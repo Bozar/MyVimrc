@@ -1349,7 +1349,9 @@ function! s:QuickSearch(add_to_register) abort
 
   call l:dict_func['_SetVariable'](l:INPUT, l:RAW_PATTERN)
   if l:INPUT =~# 'y'
+    call <sid>SaveRestoreView(0)
     call l:dict_func['_YankAllText'](l:ESCAPED_PATTERN)
+    call <sid>SaveRestoreView(1)
   endif
   call l:dict_func['_QuickSubstitute'](l:INPUT)
 endfunction
