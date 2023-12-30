@@ -236,6 +236,12 @@ noremap! <unique> <c-s> *
 nnoremap <unique> Y y$
 
 
+" `Entire line` text object
+" https://www.reddit.com/r/vim/comments/6gjt02/fastest_way_to_copy_entire_line_without_the/
+xnoremap <unique> il ^og_
+onoremap <silent> <unique> il :normal vil<CR>
+
+
 " Jump to the marked position instead of line
 noremap <unique> ' `
 
