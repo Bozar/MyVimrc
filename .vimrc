@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-29, 13:38:48
+" Last Update: 2023-12-30, 22:17:50
 
 
 " +========= Initialization =========+ {{{2
@@ -980,6 +980,19 @@ function! s:SetSyntaxHighlight(file_type) abort
   endfunction
 
 
+  function! l:dict_func['text']() abort
+    syntax case ignore
+
+    syntax match textTitle /\v^.{-}\s\{{3}\d?$/
+    syntax match textList /\v^\s*\*\s/
+    "syntax match textLabel /\v^\u+:$/
+
+    highlight link textTitle markdownH1
+    highlight link textList markdownListMarker
+    "highlight link textLabel markdownBold
+  endfunction
+
+
   if has_key(l:dict_func, a:file_type)
     call l:dict_func[a:file_type]()
   endif
@@ -1826,10 +1839,10 @@ endfunction
 
 
 " 1. Find the first matched scratch buffer. If failed, create a new one.
-" 2-1. `a:overwrite ==# 0`: Jump to a window that has the buffer, or open it in 
+" 2-1. `a:overwrite ==# 0`: Jump to a window that has the buffer, or open it in
 " a new horizontal window.
 " 2-2. `a:overwrite ==# 1`: Always open the buffer in current window.
-" 2-3. `a:overwrite ==# 2`: Jump to a window that has the buffer, or open it in 
+" 2-3. `a:overwrite ==# 2`: Jump to a window that has the buffer, or open it in
 " current window.
 function! s:JumpToScratchBuffer(file_type = '', overwrite = 0) abort
   const l:SCRATCH_LIST = <sid>ListScratchBuffer(a:file_type)
