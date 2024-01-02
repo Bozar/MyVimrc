@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2023-12-30, 22:17:50
+" Last Update: 2024-01-02, 12:41:49
 
 
 " +========= Initialization =========+ {{{2
@@ -953,6 +953,23 @@ function! s:BufferListHelper(helper, ...) abort
   endfunction
 
 
+  function! l:dict_func['DeleteBuffer']() abort
+    const l:BUFFER_NUMBER = self['_GetBufferNumber']()
+    if (l:BUFFER_NUMBER <# 1)
+      return
+    endif
+    execute 'bdelete ' .. l:BUFFER_NUMBER
+  endfunction
+
+
+  function! l:dict_func['DeleteBufferInBatch']() abort
+    for l:i in range(line("'<"), line("'>"))
+      execute l:i
+      call self['DeleteBuffer']()
+    endfor
+  endfunction
+
+
   if has_key(l:dict_func, a:helper)
     call l:dict_func[a:helper]()
   endif
@@ -1142,6 +1159,13 @@ function! s:SetBufferKeyMap(file_type) abort
     nnoremap <buffer> <silent> u :call <sid>BufferListHelper('UpdateBuffer')<cr>
     vnoremap <buffer> <silent> u
         \ <esc>:call <sid>BufferListHelper('UpdateBufferInBatch')<cr>
+
+    nnoremap <buffer> <silent> d
+        \ :call <sid>BufferListHelper('DeleteBuffer')<cr>
+        \ :call <sid>BufferListHelper('RefreshBufferList')<cr>
+    vnoremap <buffer> <silent> d
+        \ <esc>:call <sid>BufferListHelper('DeleteBufferInBatch')<cr>
+        \ :call <sid>BufferListHelper('RefreshBufferList')<cr>
   endfunction
 
 
