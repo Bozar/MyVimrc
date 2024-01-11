@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2024-01-11, 13:03:27
+" Last Update: 2024-01-11, 13:25:46
 
 
 " +========= Initialization =========+ {{{2
@@ -2034,6 +2034,13 @@ function! s:FormatText(line_space = 2) abort
 
 
     function! l:dict_func['markdown']() abort
+        call self['_DeleteTrailSpace']()
+        call self['_DeleteBlankLine'](3)
+        call self['_AddLastBlankLine']()
+    endfunction
+
+
+    function! l:dict_func['text']() abort
         call self['_DeleteTrailSpace']()
         call self['_DeleteBlankLine'](3)
         call self['_AddLastBlankLine']()
