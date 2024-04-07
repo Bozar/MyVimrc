@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2024-01-11, 13:25:46
+" Last Update: 2024-04-07, 12:31:48
 
 
 " +========= Initialization =========+ {{{2
@@ -1077,14 +1077,6 @@ function! s:SetLocalOption(file_type) abort
         " :h ft-markdown-plugin
         setlocal foldmethod=expr
         setlocal foldexpr=MarkdownFold()
-        setlocal softtabstop=2
-        setlocal shiftwidth=2
-    endfunction
-
-
-    function! l:dict_func['text']() abort
-        setlocal softtabstop=2
-        setlocal shiftwidth=2
     endfunction
 
 
