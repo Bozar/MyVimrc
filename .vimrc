@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2024-04-07, 12:31:48
+" Last Update: 2024-07-20, 15:40:46
 
 
 " +========= Initialization =========+ {{{2
@@ -1005,6 +1005,7 @@ function! s:SetSyntaxHighlight(file_type) abort
         syntax case ignore
 
         syntax match textTitle /\v^.{-}\s\{{3}\d?$/
+        syntax match textTitle /\v^`{3,}$/
         syntax match textList /\v^\s*\*\s/
 
         highlight link textTitle Title
