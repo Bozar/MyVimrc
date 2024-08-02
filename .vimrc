@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2024-07-30, 22:18:14
+" Last Update: 2024-08-02, 13:53:26
 
 
 " +========= Initialization =========+ {{{2
@@ -1031,6 +1031,12 @@ function! s:SetLocalOption(file_type) abort
 
 
     function! l:dict_func['sh']() abort
+        execute 'setlocal colorcolumn=' .. s:COLOR_COLUMN
+        setlocal nolinebreak
+    endfunction
+
+
+    function! l:dict_func['gitcommit']() abort
         execute 'setlocal colorcolumn=' .. s:COLOR_COLUMN
         setlocal nolinebreak
     endfunction
