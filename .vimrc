@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2024-08-02, 13:53:26
+" Last Update: 2025-03-01, 18:45:38
 
 
 " +========= Initialization =========+ {{{2
@@ -299,13 +299,9 @@ nnoremap <unique> <c-s-tab> gT
 
 
 " Insert brackets.
-noremap! <unique> (( ()<left>
-noremap! <unique> << <><left>
-noremap! <unique> [[ []<left>
-noremap! <unique> {{ {}<left>
-noremap! <unique> "" ""<left>
-noremap! <unique> '' ''<left>
-noremap! <unique> `` ``<left>
+noremap! <unique> ( ()<left>
+noremap! <unique> [ []<left>
+noremap! <unique> { {}<left>
 
 noremap! <unique> “” “”<left>
 noremap! <unique> ‘’ ‘’<left>
