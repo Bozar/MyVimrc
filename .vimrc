@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2025-03-01, 18:45:38
+" Last Update: 2025-03-02, 12:20:05
 
 
 " +========= Initialization =========+ {{{2
@@ -114,7 +114,7 @@ set list
 " https://www.reddit.com/r/vim/comments/4hoa6e/what_do_you_use_for_your_listchars/
 set listchars=tab:].[,
 "set listchars=tab:].[,lead:›
-let &cursorline = s:IS_GUI
+set cursorline
 
 
 " Comnand line
@@ -171,11 +171,7 @@ set guicursor+=a:blinkon0
 
 " Tab page
 set tabline=%!g:MyTabLine()
-if s:IS_GUI
-    set showtabline=2
-else
-    set showtabline=0
-endif
+set showtabline=2
 
 
 " Map leader
@@ -205,15 +201,11 @@ endif
 
 " Colorscheme
 " https://vi.stackexchange.com/questions/18932/
-if s:IS_GUI
-    try
-        execute 'colorscheme ' .. s:COLOR_SCHEME
-    catch /^Vim\%((\a\+)\)\=:E185/
-        colorscheme default
-    endtry
-else
-        colorscheme default
-endif
+try
+    execute 'colorscheme ' .. s:COLOR_SCHEME
+catch /^Vim\%((\a\+)\)\=:E185/
+    colorscheme default
+endtry
 
 
 " +--------- Settings Triggered by Auto-Commands ---------+ {{{3
