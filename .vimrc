@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2025-03-04, 15:41:44
+" Last Update: 2025-03-20, 11:57:33
 
 
 " +========= Initialization =========+ {{{2
@@ -105,6 +105,8 @@ set statusline=%!g:MyStatusLine(0)
 " Display text in windows.
 set number
 set linebreak
+" Do not break at `Tab`s.
+set breakat=\ !@*-+;:,./?
 set scrolloff=0
 set display=lastline
 set laststatus=2
