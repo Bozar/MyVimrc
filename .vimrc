@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2025-03-20, 11:57:33
+" Last Update: 2025-03-21, 08:58:09
 
 
 " +========= Initialization =========+ {{{2
@@ -289,10 +289,6 @@ nnoremap <unique> <c-k> gk
 
 vnoremap <unique> <c-j> gj
 vnoremap <unique> <c-k> gk
-
-
-nnoremap <unique> <c-tab> gt
-nnoremap <unique> <c-s-tab> gT
 
 
 " Insert brackets.
@@ -1098,9 +1094,6 @@ function! s:SetBufferKeyMap(file_type) abort
 
 
     function! l:dict_func['loc']() abort
-        execute 'nnoremap <buffer> <silent> <tab> f	l'
-        execute 'nnoremap <buffer> <silent> <s-tab> F	'
-
         nnoremap <buffer> <silent> <cr>
                 \ :call <sid>LocalizationHelper('ResetCursorPosition')<cr>
         nnoremap <buffer> <silent> <c-cr>
