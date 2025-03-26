@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2025-03-21, 08:58:09
+" Last Update: 2025-03-26, 16:15:32
 
 
 " +========= Initialization =========+ {{{2
@@ -14,6 +14,9 @@ const s:IS_WINDOWS = has('win32')
 
 " https://github.com/lifepillar/vim-solarized8
 const s:COLOR_SCHEME = 'solarized8'
+if !s:IS_GUI
+    set termguicolors
+endif
 " 0: Auto, 1: Always light, 2: Always dark
 "const s:SWITCH_BACKGROUND = 0
 "const s:TURN_ON_LIGHT = 6
