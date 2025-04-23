@@ -1,9 +1,10 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2025-04-23, 10:36:18
 
 
 " +========= Initialization =========+ {{{2
 " +--------- ### ---------+ {{{3
+
+set nocompatible
 
 " 0: Default boot.
 " 1: Custom boot. Set up a clean room for testing.
@@ -736,7 +737,6 @@ function! s:LoadFileTypePlugin(file_type) abort
     call <sid>LoadAbbreviationDict(a:file_type)
     call <sid>LoadSnippetDict(a:file_type)
 
-    call <sid>SetLocalOption(a:file_type)
     call <sid>SetBufferCommand(a:file_type)
     call <sid>SetBufferKeyMap(a:file_type)
 endfunction
@@ -1006,97 +1006,6 @@ function! s:SetSyntaxHighlight(file_type) abort
 
         highlight link textTitle Title
         highlight link textList Title
-    endfunction
-
-
-    if has_key(l:dict_func, a:file_type)
-        call l:dict_func[a:file_type]()
-    endif
-endfunction
-
-
-" :h Dictionary-function
-function! s:SetLocalOption(file_type) abort
-    let l:dict_func = {}
-
-
-    function! l:dict_func['vim']() abort
-        execute 'setlocal colorcolumn=' .. s:COLOR_COLUMN
-        setlocal nolinebreak
-    endfunction
-
-
-    function! l:dict_func['sh']() abort
-        execute 'setlocal colorcolumn=' .. s:COLOR_COLUMN
-        setlocal nolinebreak
-    endfunction
-
-
-    function! l:dict_func['gdscript']() abort
-        execute 'setlocal colorcolumn=' .. s:COLOR_COLUMN
-        setlocal nolinebreak
-        setlocal expandtab
-        setlocal tabstop=8
-        setlocal softtabstop=4
-        setlocal shiftwidth=4
-    endfunction
-
-
-    function! l:dict_func['gitcommit']() abort
-        execute 'setlocal colorcolumn=' .. s:COLOR_COLUMN
-        setlocal nolinebreak
-        setlocal showtabline=0
-    endfunction
-
-
-    function! l:dict_func['bufl']() abort
-        setlocal nonumber
-        setlocal statusline=%!g:MyStatusLine(3,3)
-    endfunction
-
-
-    function! l:dict_func['outl']() abort
-        setlocal statusline=%!g:MyStatusLine(3,2)
-        if <sid>IsInTempFolder()
-            setlocal noswapfile
-        endif
-    endfunction
-
-
-    function! l:dict_func['loc']() abort
-        if <sid>IsInTempFolder()
-            setlocal statusline=%!g:MyStatusLine(3,4)
-        endif
-    endfunction
-
-
-    function! l:dict_func['npad']() abort
-        setlocal statusline=%!g:MyStatusLine(3,0)
-        if <sid>IsInTempFolder()
-            setlocal noswapfile
-        endif
-    endfunction
-
-
-    function! l:dict_func['netrw']() abort
-        setlocal statusline=%!g:MyStatusLine(2)
-    endfunction
-
-
-    function! l:dict_func['help']() abort
-        setlocal statusline=%!g:MyStatusLine(1)
-    endfunction
-
-
-    function! l:dict_func['qf']() abort
-        setlocal statusline=%!g:MyStatusLine(1)
-    endfunction
-
-
-    function! l:dict_func['markdown']() abort
-        " :h ft-markdown-plugin
-        setlocal foldmethod=expr
-        setlocal foldexpr=MarkdownFold()
     endfunction
 
 
@@ -1657,96 +1566,6 @@ function s:CountCjkCharacter()
             \ l:OUTPUT, '\1', '')
     echom l:MESSAGE .. l:COUNT
     call <sid>SaveRestoreView(1)
-endfunction
-
-
-" https://shapeshed.com/vim-statuslines/
-" https://jip.dev/posts/a-simpler-vim-statusline/
-" a:show_mode:
-"     0: show everything;
-"     1: remove path;
-"     2: remove path & file name;
-"     3: show custom text.
-" a:custom_text: Only available when a:show_mode ==# 3.
-"     0: [Date]
-"     1: [Note Pad]
-"     2: [Outline]
-"     3: [Buffer List]
-"     4: [Loc Output]
-
-function! g:MyStatusLine(show_mode, custom_text = 0) abort
-    " File path
-    const l:FILE_PATH = '%{expand("%:p:h:t:")}/'
-    " File name
-    const l:FILE_NAME = '%t'
-
-    " Core information
-    let l:LEFT_PART = ''
-    " Modified, readonly, help, preview
-    let l:LEFT_PART ..= '%m%r%h%w'
-    " Buffer number, window number
-    let l:LEFT_PART ..= ' [%{winnr()}]'
-    "let l:LEFT_PART ..= ' [%n-%{winnr()}]'
-    lockvar! l:LEFT_PART
-
-    " Separation point
-    const l:SEPARATION = '%='
-
-    " Current time
-    " https://vi.stackexchange.com/questions/17875/
-    "let l:CURRENT_TIME =''
-    "let l:CURRENT_TIME ..= '[%{strftime("%H:%M")}]'
-    "let l:CURRENT_TIME ..= '|%02.{strftime("%m")}'
-    "let l:CURRENT_TIME ..= '/%02{strftime("%d")}'
-    "let l:CURRENT_TIME ..= '/%{strftime("%Y")}]'
-    "let l:CURRENT_TIME ..= ' '
-    "lockvar! l:CURRENT_TIME
-
-    " Cursor position
-    let l:RIGHT_PART = ''
-    " Fileencoding, fileformat
-    let l:RIGHT_PART ..= '[%{&fileencoding}|%{&fileformat}|'
-    " Cursor line number
-    " Keep digits from right to left (just as text item).
-    "let l:RIGHT_PART ..= '%1.5(%l%),'
-    " Total number of lines
-    let l:RIGHT_PART ..= '%1.5L-'
-    " Percentage through file
-    let l:RIGHT_PART ..= '%P]'
-    lockvar! l:RIGHT_PART
-
-    " [FILE_PATH | FILE_NAME], LEFT_PART, SEPARATION, [CURRENT_TIME], RIGHT_PART
-    let l:status = ''
-    " Show everything
-    if a:show_mode ==# 0
-        let l:status ..= ' ' .. l:FILE_PATH .. l:FILE_NAME
-    " Remove path
-    elseif a:show_mode ==# 1
-        let l:status ..= l:FILE_NAME
-    " Remove path & file name
-    elseif a:show_mode ==# 2
-        let l:status ..= ''
-    " Show custom text
-    elseif a:show_mode ==# 3
-        let l:CUSTOM_LIST = [
-            \ <sid>GetTimeStamp(1),
-            \ '[Note Pad]',
-            \ '[Outline]',
-            \ '[Buffer List]',
-            \ '[Loc Output]',
-        \ ]
-        let l:status ..= (a:custom_text ># len(l:CUSTOM_LIST) - 1)
-                \ ? l:CUSTOM_LIST[0]
-                \ : l:CUSTOM_LIST[a:custom_text]
-    endif
-
-    let l:status ..= l:LEFT_PART
-    let l:status ..= l:SEPARATION
-    "if a:show_mode ==# 0
-    "    let l:status ..= l:CURRENT_TIME
-    "endif
-    let l:status ..= l:RIGHT_PART
-    return l:status
 endfunction
 
 
