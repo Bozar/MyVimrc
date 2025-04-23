@@ -413,14 +413,6 @@ let g:qf_disable_statusline = 1
 
 " +--------- Filetype Plugins ---------+ {{{3
 
-augroup set_filetype
-    autocmd!
-    "autocmd BufRead,BufNewFile *.j call <sid>SetFileType('j')
-    autocmd BufRead,BufNewFile *.loc call <sid>SetFileType('loc')
-    autocmd BufRead,BufNewFile *.outl call <sid>SetFileType('outl')
-augroup END
-
-
 augroup load_filetype_plugin
     autocmd!
     autocmd FileType * call <sid>LoadFileTypePlugin(&filetype)
@@ -739,19 +731,6 @@ function! s:LoadFileTypePlugin(file_type) abort
 
     call <sid>SetBufferCommand(a:file_type)
     call <sid>SetBufferKeyMap(a:file_type)
-endfunction
-
-
-function! s:SetFileType(file_type) abort
-    if exists('b:SetFileType_DONE')
-        if b:SetFileType_DONE
-            return
-        endif
-        unlet b:SetFileType_DONE
-    endif
-    const b:SetFileType_DONE = 1
-
-    execute 'setfiletype ' .. a:file_type
 endfunction
 
 
