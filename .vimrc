@@ -1,5 +1,5 @@
 " Bozar's .vimrc file {{{1
-" Last Update: 2025-03-31, 14:05:52
+" Last Update: 2025-04-23, 10:36:18
 
 
 " +========= Initialization =========+ {{{2
@@ -31,7 +31,7 @@ const s:COLOR_COLUMN = 81
 " Sample `g:PRIVATE_DATA`:
 "
 " let g:PRIVATE_DATA = {}
-" let g:PRIVATE_DATA['PATH_TO_PACK'] = ''
+" let g:PRIVATE_DATA['PACK_PATH'] = ''
 " let g:PRIVATE_DATA['WORKING_DIRECTORY'] = ''
 " let g:PRIVATE_DATA['LOC_FILE'] = []
 " let g:PRIVATE_DATA['OPEN_DESKTOP'] = []
@@ -42,7 +42,8 @@ if s:INIT_FLAG ==# 0
     " 1. Define constants based on `g:PRIVATE_DATA`.
     const s:PRIVATE_DATA = exists('g:PRIVATE_DATA') ? g:PRIVATE_DATA : {}
 
-    const s:PATH_TO_PACK = get(s:PRIVATE_DATA, 'PATH_TO_PACK', '')
+    const s:PACK_PATH = get(s:PRIVATE_DATA, 'PACK_PATH', [])
+    const s:RUNTIME_PATH = get(s:PRIVATE_DATA, 'RUNTIME_PATH', [])
     const s:WORKING_DIRECTORY = get(s:PRIVATE_DATA, 'WORKING_DIRECTORY', '')
     const s:LOC_FILE = get(s:PRIVATE_DATA, 'LOC_FILE', [])
     const s:OPEN_DESKTOP = get(s:PRIVATE_DATA, 'OPEN_DESKTOP', [])
@@ -50,9 +51,12 @@ if s:INIT_FLAG ==# 0
     unlet s:PRIVATE_DATA
 
     " 2. Change settings.
-    if s:PATH_TO_PACK !=# ''
-        execute 'set packpath+=' .. s:PATH_TO_PACK
-    endif
+    for i in s:PACK_PATH
+        execute 'set packpath+=' .. i
+    endfor
+    for i in s:RUNTIME_PATH
+        execute 'set runtimepath+=' .. i
+    endfor
     if s:WORKING_DIRECTORY !=# ''
         execute 'cd ' .. s:WORKING_DIRECTORY
     endif
