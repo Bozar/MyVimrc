@@ -416,7 +416,6 @@ let g:qf_disable_statusline = 1
 augroup load_filetype_plugin
     autocmd!
     autocmd FileType * call <sid>LoadFileTypePlugin(&filetype)
-    autocmd FileType * call <sid>SetSyntaxHighlight(&filetype)
 augroup END
 
 
@@ -729,7 +728,6 @@ function! s:LoadFileTypePlugin(file_type) abort
     call <sid>LoadAbbreviationDict(a:file_type)
     call <sid>LoadSnippetDict(a:file_type)
 
-    call <sid>SetBufferCommand(a:file_type)
     call <sid>SetBufferKeyMap(a:file_type)
 endfunction
 
@@ -955,45 +953,6 @@ function! s:BufferListHelper(helper, ...) abort
 endfunction
 
 
-function! s:SetSyntaxHighlight(file_type) abort
-    let l:dict_func = {}
-
-
-    function! l:dict_func['loc']() abort
-        syntax case ignore
-
-        syntax match locLabel /\v\C-(\a|\d)+$/
-        syntax match locLabel /\v\C\t#MARK#\t/
-        syntax match locLabel /\v\C#END#$/
-        syntax match locLabel /\v\C#CR#/
-        syntax match locSource /\v\C^[^\t]+\t/
-        syntax match locSource /\v\C^"[^\t]+$/
-        syntax match locTitle /\v^.{-}\s\{{3}\d?$/
-
-        highlight link locSource Statement
-        highlight link locLabel Identifier
-        highlight link locTitle Comment
-    endfunction
-
-
-    function! l:dict_func['text']() abort
-        syntax case ignore
-
-        syntax match textTitle /\v^.{-}\s\{{3}\d?$/
-        syntax match textTitle /\v^`{3,}$/
-        syntax match textList /\v^\s*\*\s/
-
-        highlight link textTitle Title
-        highlight link textList Title
-    endfunction
-
-
-    if has_key(l:dict_func, a:file_type)
-        call l:dict_func[a:file_type]()
-    endif
-endfunction
-
-
 function! s:SetBufferKeyMap(file_type) abort
     let l:dict_func = {}
 
@@ -1108,16 +1067,6 @@ function! s:SetBufferKeyMap(file_type) abort
         nnoremap <buffer> <silent> <leader>df
                 \ :silent call <sid>MarkdownHelper('InsertTitle')<cr>
     endfunction
-
-
-    if has_key(l:dict_func, a:file_type)
-        call l:dict_func[a:file_type]()
-    endif
-endfunction
-
-
-function! s:SetBufferCommand(file_type) abort
-    let l:dict_func = {}
 
 
     if has_key(l:dict_func, a:file_type)
