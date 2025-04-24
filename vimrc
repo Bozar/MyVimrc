@@ -1248,25 +1248,6 @@ function! s:TryJumpToMark(mark, height = 0) abort
 endfunction
 
 
-" https://vi.stackexchange.com/questions/21204/
-function! g:MyTabLine()
-    let l:result = ''
-    const l:TAB_PREFIX = 'Tab #'
-
-    for l:num in range(1, tabpagenr('$'))
-        " Tab color
-        let l:result ..= (l:num !=# tabpagenr())
-                \ ? '%#TabLine#'
-                \ : '%#TabLineSel#'
-        " Tab text
-        let l:result ..= '%' .. l:num .. 'T ' .. l:TAB_PREFIX .. l:num .. ' '
-    endfor
-    " Space filler
-    let l:result ..= '%#TabLineFill#%T%='
-    return l:result
-endfunction
-
-
 function! s:ForkVim() abort
     if s:IS_GUI
         !gvim

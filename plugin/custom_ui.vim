@@ -16,7 +16,7 @@ vim9script
 #     4: [Loc Output]
 
 def g:MyStatusLine(show_mode: number, custom_text: number = 0): string
-    var status: string = ''
+    var status_text: string = ''
 
     # File path
     const FILE_PATH: string = '%{expand("%:p:h:t:")}/'
@@ -25,49 +25,49 @@ def g:MyStatusLine(show_mode: number, custom_text: number = 0): string
 
     # 1. Core information
     # 1-1. Modified, readonly, help, preview
-    status ..= '%m%r%h%w'
+    status_text ..= '%m%r%h%w'
     # 1-2. Buffer number, window number
-    status ..= ' [%{winnr()}]'
-    #status ..= ' [%n-%{winnr()}]'
-    const LEFT_PART: string = status
+    status_text ..= ' [%{winnr()}]'
+    #status_text ..= ' [%n-%{winnr()}]'
+    const LEFT_PART: string = status_text
 
     # 2. Separation point
     const SEPARATION: string = '%='
 
     # 3. Current time
     # https://vi.stackexchange.com/questions/17875/
-    #status = ''
+    #status_text = ''
     #CURRENT_TIME ..= '[%{strftime("%H:%M")}]'
     #CURRENT_TIME ..= '|%02.{strftime("%m")}'
     #CURRENT_TIME ..= '/%02{strftime("%d")}'
     #CURRENT_TIME ..= '/%{strftime("%Y")}]'
     #CURRENT_TIME ..= ' '
-    #const CURRENT_TIME: string = status
+    #const CURRENT_TIME: string = status_text
 
     # 4. Cursor position
-    status = ''
+    status_text = ''
     # 4-1. Fileencoding, fileformat
-    status ..= '[%{&fileencoding}|%{&fileformat}|'
+    status_text ..= '[%{&fileencoding}|%{&fileformat}|'
     # 4-2. Cursor line number
     # Keep digits from right to left (just as text item).
-    #status ..= '%1.5(%l%),'
+    #status_text ..= '%1.5(%l%),'
     # 4-3. Total number of lines
-    status ..= '%1.5L-'
+    status_text ..= '%1.5L-'
     # 4-4. Percentage through file
-    status ..= '%P]'
-    const RIGHT_PART: string = status
+    status_text ..= '%P]'
+    const RIGHT_PART: string = status_text
 
     # [FILE_PATH | FILE_NAME], LEFT_PART, SEPARATION, [CURRENT_TIME], RIGHT_PART
     # Show everything
-    status = ''
+    status_text = ''
     if show_mode ==# 0
-        status ..= ' ' .. FILE_PATH .. FILE_NAME
+        status_text ..= ' ' .. FILE_PATH .. FILE_NAME
     # Remove path
     elseif show_mode ==# 1
-        status ..= FILE_NAME
+        status_text ..= FILE_NAME
     # Remove path & file name
     elseif show_mode ==# 2
-        status ..= ''
+        status_text ..= ''
     # Show custom text
     elseif show_mode ==# 3
         const CUSTOM_LIST: list<string> = [
@@ -77,17 +77,36 @@ def g:MyStatusLine(show_mode: number, custom_text: number = 0): string
             '[Buffer List]',
             '[Loc Output]',
         ]
-        status ..= (custom_text ># len(CUSTOM_LIST) - 1)
+        status_text ..= (custom_text ># len(CUSTOM_LIST) - 1)
                 ? CUSTOM_LIST[0]
                 : CUSTOM_LIST[custom_text]
     endif
 
-    status ..= LEFT_PART
-    status ..= SEPARATION
+    status_text ..= LEFT_PART
+    status_text ..= SEPARATION
     #if show_mode ==# 0
-    #    status ..= CURRENT_TIME
+    #    status_text ..= CURRENT_TIME
     #endif
-    status ..= RIGHT_PART
-    return status
+    status_text ..= RIGHT_PART
+    return status_text
+enddef
+
+
+# https://vi.stackexchange.com/questions/21204/
+def g:MyTabLine(): string
+    var tab_text: string = ''
+    const TAB_PREFIX = 'Tab #'
+
+    for i: number in range(1, tabpagenr('$'))
+        # Tab color
+        tab_text ..= (i !=# tabpagenr())
+                ? '%#TabLine#'
+                : '%#TabLineSel#'
+        # Tab text
+        tab_text ..= '%' .. i .. 'T ' .. TAB_PREFIX .. i .. ' '
+    endfor
+    # Space filler
+    tab_text ..= '%#TabLineFill#%T%='
+    return tab_text
 enddef
 
