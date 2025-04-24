@@ -1,11 +1,11 @@
 vim9script
 
-import autoload 'lib_vim.vim' as LV
 import autoload 'outline.vim' as OL
+import autoload 'temp_file.vim' as TF
 
 
 setlocal statusline=%!g:MyStatusLine(3,2)
-if LV.IsInTempFolder()
+if TF.IsInTempFolder()
     setlocal noswapfile
 endif
 

@@ -591,40 +591,6 @@ function! s:IsScratchBuffer() abort
 endfunction
 
 
-function! s:NotePadHelper(helper, ...) abort
-    let l:dict_func = {}
-
-
-    function! l:dict_func['SaveLoadText']() abort
-        const l:BACKUP_FILE = <sid>GetTempFile('npad')
-        unsilent const l:INPUT = input('[S]ave or [L]oad text? ')
-
-        if l:INPUT ==# 's'
-            call <sid>SaveRestoreView(0)
-            const l:SAVE_BUFFER = bufnr()
-            const l:SAVE_TEXT = getline(1, '$')
-            execute 'edit! ' .. l:BACKUP_FILE
-            1put! = l:SAVE_TEXT
-            .+1,$g/^/delete
-            write
-            execute 'buffer ' .. l:SAVE_BUFFER
-            call <sid>SaveRestoreView(1)
-
-        elseif l:INPUT ==# 'l'
-            if !filereadable(l:BACKUP_FILE)
-                return
-            endif
-            put = readfile(l:BACKUP_FILE)
-        endif
-    endfunction
-
-
-    if has_key(l:dict_func, a:helper)
-        call l:dict_func[a:helper]()
-    endif
-endfunction
-
-
 function! s:LoadFileTypePlugin(file_type) abort
     if exists('b:LoadFileTypePlugin_DONE')
         if b:LoadFileTypePlugin_DONE ==# a:file_type
@@ -943,13 +909,6 @@ function! s:SetBufferKeyMap(file_type) abort
         vnoremap <buffer> <silent> d
                 \ <esc>:call <sid>BufferListHelper('DeleteBufferInBatch')<cr>
                 \ :call <sid>BufferListHelper('RefreshBufferList')<cr>
-    endfunction
-
-
-    function! l:dict_func['npad']() abort
-        "call self['outl']()
-        nnoremap <buffer> <silent> <s-cr>
-                \ :silent call <sid>NotePadHelper('SaveLoadText')<cr>
     endfunction
 
 
