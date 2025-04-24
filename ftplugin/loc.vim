@@ -1,9 +1,9 @@
 vim9script
 
-import autoload 'temp_buffer.vim' as TB
+import autoload 'lib_vim.vim' as LV
 
 
-if TB.IsInTempFolder()
+if LV.IsInTempFolder()
     setlocal statusline=%!g:MyStatusLine(3,4)
 endif
 

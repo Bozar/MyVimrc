@@ -1,10 +1,10 @@
 vim9script
 
-import autoload 'temp_buffer.vim' as TB
+import autoload 'lib_vim.vim' as LV
 
 
 setlocal statusline=%!g:MyStatusLine(3,0)
-if TB.IsInTempFolder()
+if LV.IsInTempFolder()
     setlocal noswapfile
 endif
 

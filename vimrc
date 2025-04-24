@@ -625,62 +625,6 @@ function! s:NotePadHelper(helper, ...) abort
 endfunction
 
 
-function! s:OutlineHelper(helper, ...) abort
-    let l:dict_func = {}
-    let l:dict_func['OPT_ARG'] = a:000
-    lockvar! l:dict_func['OPT_ARG']
-
-
-    " a1: l:MAP_MODE
-    " a2: l:GET_INPUT
-    function! l:dict_func['SearchLine']() abort
-        const l:MAP_MODE = self['OPT_ARG'][0]
-        const l:GET_INPUT = self['OPT_ARG'][1]
-
-        " vnoremap
-        if l:MAP_MODE
-            const l:CURRENT_LINE = @"
-        else
-            const l:CURRENT_LINE = getline(line('.'))
-        endif
-        if l:CURRENT_LINE =~# '\v(^\s*$)|\n'
-            return
-        endif
-
-        " <c-cr>
-        if l:GET_INPUT
-            unsilent const l:JUMP_TO_WINDOW = str2nr(input(
-                    \ 'Search in window? '))
-            if <sid>IsValidWindowNumber(l:JUMP_TO_WINDOW)
-                const l:SEARCH_RANGE = range(l:JUMP_TO_WINDOW, l:JUMP_TO_WINDOW)
-            else
-                return
-            endif
-        else
-            const l:SEARCH_RANGE = range(1, winnr('$'))
-        endif
-
-        const l:SEARCH_TEXT = <sid>EscapeString(
-                \ substitute(l:CURRENT_LINE, '\v^\s*(\S.{-})\s*$', '\1', ''), 0)
-        const l:CURRENT_WINDOW = winnr()
-
-        for l:win in l:SEARCH_RANGE
-            execute l:win .. 'wincmd w'
-            if (l:win !=# l:CURRENT_WINDOW) && search(l:SEARCH_TEXT, 'cw')
-                let @/ = l:SEARCH_TEXT
-                return
-            endif
-        endfor
-        execute l:CURRENT_WINDOW .. 'wincmd w'
-    endfunction
-
-
-    if has_key(l:dict_func, a:helper)
-        call l:dict_func[a:helper]()
-    endif
-endfunction
-
-
 function! s:LoadFileTypePlugin(file_type) abort
     if exists('b:LoadFileTypePlugin_DONE')
         if b:LoadFileTypePlugin_DONE ==# a:file_type
@@ -1002,21 +946,8 @@ function! s:SetBufferKeyMap(file_type) abort
     endfunction
 
 
-    function! l:dict_func['outl']() abort
-        nnoremap <buffer> <silent> <cr>
-                \ :call <sid>OutlineHelper('SearchLine', 0, 0)<cr>
-        vnoremap <buffer> <silent> <cr>
-                \ y:call <sid>OutlineHelper('SearchLine', 1, 0)<cr>
-
-        nnoremap <buffer> <silent> <c-cr>
-                \ :call <sid>OutlineHelper('SearchLine', 0, 1)<cr>
-        vnoremap <buffer> <silent> <c-cr>
-                \ y:call <sid>OutlineHelper('SearchLine', 1, 1)<cr>
-    endfunction
-
-
     function! l:dict_func['npad']() abort
-        call self['outl']()
+        "call self['outl']()
         nnoremap <buffer> <silent> <s-cr>
                 \ :silent call <sid>NotePadHelper('SaveLoadText')<cr>
     endfunction
