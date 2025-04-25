@@ -217,8 +217,9 @@ endif
 try
     execute 'colorscheme ' .. s:COLOR_SCHEME
 catch /^Vim\%((\a\+)\)\=:E185/
-    colorscheme default
+    colorscheme desert
 endtry
+set background=light
 
 
 " +--------- Settings Triggered by Auto-Commands ---------+ {{{3
@@ -227,8 +228,6 @@ augroup vimrc_setting
     autocmd!
     " Maximize window
     autocmd GUIEnter * call <sid>MaximizeWindow(s:IS_WINDOWS, s:IS_GUI)
-    " Set background
-    autocmd VimEnter * let &background = <sid>MyBackground()
     " Switch IME
     autocmd InsertLeave * call <sid>SwitchIme(0)
     autocmd InsertEnter * call <sid>SwitchIme(1)
@@ -342,26 +341,9 @@ vnoremap <silent> <unique> <tab> y:silent call <sid>QuickSearch(1)<cr>
 
 " Jump to a window
 nnoremap <silent> <unique> <leader><space> :call <sid>JumpToPreviousWindow()<cr>
-nnoremap <silent> <unique> <leader>jh
-        \ :call <sid>JumpToScratchBuffer('npad', 0)<cr>
-nnoremap <silent> <unique> <leader>jH
-        \ :call <sid>JumpToScratchBuffer('npad', 1)<cr>
 
 nnoremap <silent> <unique> <leader>jk :call <sid>JumpToWindowByPosition(0)<cr>
 nnoremap <silent> <unique> <leader>jj :call <sid>JumpToWindowByPosition(1)<cr>
-
-
-" This key binding is hard-coded in `s:InitDesktop()`.
-nnoremap <silent> <unique> <F1> :silent call <sid>InitDesktop()<cr>
-
-
-" `[xz]?` - Split windows in the same tab or a new tab.
-" `?[xz]` - Left width: 90 (x), 85 (z).
-nnoremap <silent> <unique> <leader>xx :call <sid>SplitWindow(0, 0)<cr>
-nnoremap <silent> <unique> <leader>xz :call <sid>SplitWindow(1, 0)<cr>
-
-nnoremap <silent> <unique> <leader>zx :call <sid>SplitWindow(0, 1)<cr>
-nnoremap <silent> <unique> <leader>zz :call <sid>SplitWindow(1, 1)<cr>
 
 
 " Add a foldmarker. This map might be overwritten by a specific file type.
@@ -708,80 +690,6 @@ function! s:SetBufferKeyMap(file_type) abort
 endfunction
 
 
-function! s:CreateScratchBuffer(file_type = '') abort
-    const l:TAB_PAGE = tabpagenr()
-    tabnew
-    const l:BUFFER_NUMBER = bufnr()
-    setlocal buftype=nofile
-    setlocal bufhidden=hide
-    setlocal noswapfile
-    setlocal nobuflisted
-    setlocal statusline=%!g:MyStatusLine(1)
-
-    if a:file_type !=# ''
-        execute 'let &filetype = "' .. a:file_type .. '"'
-    endif
-
-    tabclose
-    execute 'tabnext ' .. l:TAB_PAGE
-    return l:BUFFER_NUMBER
-endfunction
-
-
-" Return a list of scratch buffers ordered by buffer numbers.
-" [[buffer_number, file_type], ...]
-function! s:ListScratchBuffer(file_type = '') abort
-    let l:scratch_list = []
-    let l:dict_func = {}
-
-
-    function! l:dict_func['_MatchBuffer'](input, match_this) abort
-        return (a:input ==# '') || (a:input ==# a:match_this)
-    endfunction
-
-
-    for l:i in getbufinfo()
-        let l:buffer_number = l:i['bufnr']
-        if getbufvar(l:buffer_number, '&buftype') !=# 'nofile'
-            continue
-        endif
-
-        let l:file_type = getbufvar(l:buffer_number, '&filetype')
-        if l:dict_func['_MatchBuffer'](a:file_type, l:file_type)
-            call add(l:scratch_list, [l:buffer_number, l:file_type,])
-        endif
-    endfor
-
-    return l:scratch_list
-endfunction
-
-
-function! s:MyBackground() abort
-    const l:LIGHT = 'light'
-    const l:DARK = 'dark'
-
-    " Do not switch background.
-    " Always use light background. Auto completion menu is barely visible in
-    " terminal with dark background.
-    return l:LIGHT
-    "return s:IS_GUI ? l:LIGHT : l:DARK
-
-    "if s:SWITCH_BACKGROUND ==# 1
-    "    return l:LIGHT
-    "elseif s:SWITCH_BACKGROUND ==# 2
-    "    return l:DARK
-    "endif
-
-    "if s:IS_GUI
-    "    const l:HOUR = str2nr(strftime('%H'))
-    "    if (l:HOUR ># s:TURN_ON_LIGHT) && (l:HOUR <# s:TURN_OFF_LIGHT)
-    "        return l:LIGHT
-    "    endif
-    "endif
-    "return l:DARK
-endfunction
-
-
 function! s:QuickSearch(add_to_register) abort
     let l:dict_func = {}
 
@@ -850,6 +758,7 @@ function! s:QuickSearch(add_to_register) abort
     endfunction
 
 
+    " NOTE: This function no longer works.
     function! l:dict_func['_YankAllText'](pattern) abort
         const l:this_buffer = bufnr()
         const l:TEMP_SAVE = @a
@@ -957,84 +866,6 @@ function! s:GetTimeStamp(show_mode) abort
         return strftime('%Y-%m-%d, %a, %H:%M')
     endif
     return strftime('%Y-%m-%d, %H:%M:%S')
-endfunction
-
-
-" This function should only be called once when pressing <F1>.
-function! s:InitDesktop() abort
-    if len(s:OPEN_DESKTOP) ># 0
-        for l:i in s:OPEN_DESKTOP
-            call <sid>LoadProject(l:i)
-        endfor
-        tabnext 1
-        redraw!
-    endif
-    nunmap <F1>
-    nnoremap <silent> <unique> <F1> <nop>
-endfunction
-
-
-" `a:project_dict` is a list of dictionaries.
-" [
-"     {
-"         'LOCAL_DIR': '',
-"         'WIN_LAYOUT': -1,
-"         'NEW_TAB': 0,
-"         'SHOW_LINE': -1,
-"         'SHOW_FILE': '',
-"         'ARG_EDIT': ['', ...],
-"     },
-"     {...},
-" ]
-
-function! s:LoadProject(project_dict) abort
-    const l:LOCAL_DIR = get(a:project_dict, 'LOCAL_DIR', '')
-    const l:WIN_LAYOUT = get(a:project_dict, 'WIN_LAYOUT', -1)
-    const l:NEW_TAB = get(a:project_dict, 'NEW_TAB', 0)
-    const l:ARG_EDIT = get(a:project_dict, 'ARG_EDIT', [])
-    const l:SHOW_FILE = get(a:project_dict, 'SHOW_FILE', '')
-    const l:SHOW_LINE = get(a:project_dict, 'SHOW_LINE', -1)
-
-    const l:SAVE_DIR = getcwd()
-    if l:LOCAL_DIR !=# ''
-        execute 'cd ' .. l:LOCAL_DIR
-    endif
-
-    call <sid>SplitWindow(l:WIN_LAYOUT, l:NEW_TAB)
-
-    arglocal!
-    for l:i in l:ARG_EDIT
-        execute 'argedit ' .. l:i
-    endfor
-    if l:SHOW_FILE !=# ''
-        execute 'argedit ' .. l:SHOW_FILE
-    endif
-    last
-    %argdelete
-
-    call <sid>TryJumpToMark('m', l:SHOW_LINE)
-    execute 'cd ' .. l:SAVE_DIR
-endfunction
-
-
-function! s:TryJumpToMark(mark, height = 0) abort
-    if line("'" .. a:mark) <# 1
-        return
-    endif
-
-    const l:HALF_WIN_HEIGHT = winheight('') / 2
-    execute 'normal! `' .. a:mark
-
-    if a:height ==# 0
-        if winline() ># l:HALF_WIN_HEIGHT
-            execute 'normal! zz'
-        endif
-    elseif a:height ==# 1
-        execute 'normal! zt'
-    elseif (a:height ># 1) && (a:height <# l:HALF_WIN_HEIGHT)
-        execute 'normal! zt'
-        execute 'normal! ' .. a:height .. ''
-    endif
 endfunction
 
 
@@ -1203,78 +1034,6 @@ function! s:SaveRestoreView(restore)
         call l:dict_func['_SaveView']()
     else
         call l:dict_func['_RestoreView']()
-    endif
-endfunction
-
-
-function! s:SplitWindow(layout, new_tab = 0)
-    const l:INVALID_LAYOUT = -1
-    const l:LEFT_COLUMN_WIDTH_NARROW = 85
-    const l:LEFT_COLUMN_WIDTH = 90
-    const l:RIGHT_BOTTOM_HEIGHT = 10
-    const l:BUFFER_LIST_FILETYPE = 'bufl'
-    const l:OUTLINE_FILE = <sid>GetTempFile('outl')
-    const l:LOC_FILE = <sid>GetTempFile('loc')
-
-    if a:new_tab
-        tab split
-    endif
-    if (a:layout ># l:INVALID_LAYOUT) && (winnr('$') ># 1)
-        wincmd o
-    endif
-
-    if a:layout ==# 0
-        " Left window
-        wincmd v
-        execute 'vertical resize ' .. l:LEFT_COLUMN_WIDTH
-        " Right upper window, [Note Pad]
-        2wincmd w
-        call <sid>JumpToScratchBuffer('npad', 1)
-        " Right lower window, [Outline]
-        wincmd s
-        3wincmd w
-        execute 'edit ' .. l:OUTLINE_FILE
-        execute 'resize ' .. l:RIGHT_BOTTOM_HEIGHT
-        " Back to window 1
-        1wincmd w
-
-    elseif a:layout ==# 1
-        wincmd v
-        execute 'vertical resize ' .. l:LEFT_COLUMN_WIDTH_NARROW
-        2wincmd w
-        execute 'edit ' .. l:LOC_FILE
-        1wincmd w
-    endif
-endfunction
-
-
-" 1. Find the first matched scratch buffer. If failed, create a new one.
-" 2-1. `a:overwrite ==# 0`: Jump to a window that has the buffer, or open it in
-" a new horizontal window.
-" 2-2. `a:overwrite ==# 1`: Always open the buffer in current window.
-" 2-3. `a:overwrite ==# 2`: Jump to a window that has the buffer, or open it in
-" current window.
-function! s:JumpToScratchBuffer(file_type = '', overwrite = 0) abort
-    const l:SCRATCH_LIST = <sid>ListScratchBuffer(a:file_type)
-    if len(l:SCRATCH_LIST) ># 0
-        const l:BUFFER_NUMBER = l:SCRATCH_LIST[0][0]
-    else
-        const l:BUFFER_NUMBER = <sid>CreateScratchBuffer(a:file_type)
-    endif
-
-    if a:overwrite ==# 1
-        execute 'buffer ' .. l:BUFFER_NUMBER
-    else
-        const l:WINDOW_NUMBER = bufwinnr(l:BUFFER_NUMBER)
-        if l:WINDOW_NUMBER ># 0
-            execute l:WINDOW_NUMBER .. 'wincmd w'
-        else
-            if a:overwrite ==# 0
-                execute 'sbuffer ' .. l:BUFFER_NUMBER
-            else
-                execute 'buffer ' .. l:BUFFER_NUMBER
-            endif
-        endif
     endif
 endfunction
 

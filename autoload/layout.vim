@@ -4,7 +4,8 @@ import autoload 'temp_file.vim' as TF
 
 
 export const DEFAULT: number = 0
-export const LOC: number = 1
+export const WIN_LUD: number = 1
+export const LOC: number = 2
 
 
 export def IsValidWindowNumber(win_nr: number): bool
@@ -25,32 +26,34 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
     endif
 
     if layout ==# DEFAULT
-        silent wincmd o
-        # Left window
-        wincmd v
-        execute 'vertical resize ' .. LEFT_COLUMN_WIDTH
-        # Right upper window, [Note Pad]
-        :2wincmd w
-        # TODO: Implement JumpToScratchBuffer() later.
-        #call <sid>JumpToScratchBuffer('npad', 1)
-        # Right lower window, [Outline]
-        wincmd s
-        :3wincmd w
-        execute 'edit ' .. OUTLINE_FILE
-        execute 'resize ' .. RIGHT_BOTTOM_HEIGHT
-        # Back to window 1
-        :1wincmd w
+        VerticalSplit(LEFT_COLUMN_WIDTH)
+        TF.GoToTempBuffer(TF.NPAD)
+
+    elseif layout ==# WIN_LUD
+        VerticalSplit(LEFT_COLUMN_WIDTH)
+        TF.GoToTempBuffer(TF.NPAD)
+        HorizontalSplit(RIGHT_BOTTOM_HEIGHT)
 
     elseif layout ==# LOC
-        silent wincmd o
-        wincmd v
-        execute 'vertical resize ' .. LEFT_COLUMN_WIDTH_NARROW
-        :2wincmd w
+        VerticalSplit(LEFT_COLUMN_WIDTH_NARROW)
         execute 'edit ' .. LOC_FILE
-        :1wincmd w
-
-    else
-        return
     endif
+
+    :1wincmd w
+enddef
+
+
+def VerticalSplit(width: number): void
+    wincmd o
+    wincmd v
+    execute 'vertical resize ' .. width
+    :2wincmd w
+enddef
+
+
+def HorizontalSplit(height: number): void
+    wincmd s
+    :3wincmd w
+    execute 'resize ' .. height
 enddef
 

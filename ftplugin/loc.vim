@@ -12,7 +12,7 @@ if expand('%%:t') ==# TMP_FILE
 endif
 
 
-augroup localization
+augroup temp_loc
     autocmd!
     execute 'autocmd BufWinEnter ' .. TMP_FILE .. 'setlocal nobuflisted'
     execute 'autocmd BufEnter ' .. TMP_FILE .. 'silent edit'

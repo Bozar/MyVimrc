@@ -25,9 +25,9 @@ nnoremap <buffer> <silent> d
         \ :call <sid>BL.RefreshBufferList()<cr>
 
 
-augroup buffer_list
+augroup temp_bufl
     autocmd!
-    autocmd BufWinEnter <buffer> setlocal nobuflisted
+    autocmd BufEnter <buffer> setlocal nobuflisted
     autocmd BufEnter <buffer> silent BL.RefreshBufferList()
 augroup END
 

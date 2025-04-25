@@ -1,6 +1,9 @@
 vim9script
 
 
+# Temp file name
+export const DEFAULT_NAME: string = 'tmp'
+
 # Temp file type
 export const LOC: string = 'loc'
 export const NPAD: string = 'npad'
@@ -8,7 +11,8 @@ export const BUFL: string = 'bufl'
 
 
 export def GoToTempWindow(
-        file_extension: string, file_name: string = 'tmp'
+        file_extension: string, file_name: string = DEFAULT_NAME,
+        is_new_win: bool = true
         ): void
     const FILE_NAME: string = GetTempFileName(file_extension, file_name)
     const WIN_NUMBER: number = GetTempWindowNumber(FILE_NAME)
@@ -16,14 +20,16 @@ export def GoToTempWindow(
     if WIN_NUMBER ># 0
         execute ':' .. WIN_NUMBER .. 'wincmd w'
     else
-        split
+        if is_new_win
+            split
+        endif
         execute 'edit ' .. FILE_NAME
     endif
 enddef
 
 
 export def GoToTempBuffer(
-        file_extension: string, file_name: string = 'tmp'
+        file_extension: string, file_name: string = DEFAULT_NAME
         ): void
     const FILE_NAME: string = GetTempFileName(file_extension, file_name)
     execute 'edit ' .. FILE_NAME
@@ -31,7 +37,7 @@ enddef
 
 
 export def GetTempFileName(
-        file_extension: string, file_name: string = 'tmp',
+        file_extension: string, file_name: string = DEFAULT_NAME,
         has_path: bool = v:true
         ): string
     const FILE_NAME: string = file_name .. '.' .. file_extension
