@@ -347,15 +347,8 @@ nnoremap <silent> <unique> <leader>jh
 nnoremap <silent> <unique> <leader>jH
         \ :call <sid>JumpToScratchBuffer('npad', 1)<cr>
 
-nnoremap <silent> <unique> <leader>ju
-        \ :call <sid>JumpToScratchBuffer('bufl', 2)<cr>
-nnoremap <silent> <unique> <leader>jU
-        \ :call <sid>JumpToScratchBuffer('bufl', 1)<cr>
-
 nnoremap <silent> <unique> <leader>jk :call <sid>JumpToWindowByPosition(0)<cr>
 nnoremap <silent> <unique> <leader>jj :call <sid>JumpToWindowByPosition(1)<cr>
-nnoremap <silent> <unique> <leader>jl
-        \ :call <sid>JumpToWindowByName(<sid>GetTempFile('outl', 1))<cr>
 
 
 " This key binding is hard-coded in `s:InitDesktop()`.

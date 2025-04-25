@@ -4,7 +4,9 @@ import autoload 'outline.vim' as OL
 
 
 setlocal statusline=%!g:MyStatusLine(3,2)
+setlocal bufhidden=hide
 setlocal noswapfile
+setlocal nobuflisted
 
 
 nnoremap <buffer> <silent> <cr>
@@ -20,6 +22,8 @@ vnoremap <buffer> <silent> <leader><cr>
 
 augroup outline
     autocmd!
+    autocmd BufWinEnter <buffer> setlocal nobuflisted
+    autocmd BufEnter <buffer> silent edit
     autocmd BufLeave <buffer> silent update
 augroup END
 

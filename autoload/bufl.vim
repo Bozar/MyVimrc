@@ -62,6 +62,7 @@ export def RefreshBufferList(): void
     :%delete
     :1put = GetBufferList()
     :1delete
+    update
 
     setlocal nomodifiable
     SLV.SaveLoadView(v:false)

@@ -6,7 +6,7 @@ import autoload 'temp_file.vim' as TF
 
 
 export def SaveLoadText(): void
-    const BACKUP_FILE: string = TF.GetTempFile('npad')
+    const BACKUP_FILE: string = TF.GetTempFileName('npad')
     unsilent const INPUT: string = input('[S]ave or [L]oad text? ')
 
     if INPUT ==# 's'

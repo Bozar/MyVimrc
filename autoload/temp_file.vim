@@ -1,19 +1,64 @@
 vim9script
 
 
-export def IsInTempFolder(): bool
-    return expand('%:h') ==# fnameescape(expand(GetTempDirectory()))
+# Temp file type
+export const LOC: string = 'loc'
+export const NPAD: string = 'npad'
+export const BUFL: string = 'bufl'
+
+
+export def GoToTempWindow(
+        file_extension: string, file_name: string = 'tmp'
+        ): void
+    const FILE_NAME: string = GetTempFileName(file_extension, file_name)
+    const WIN_NUMBER: number = GetTempWindowNumber(FILE_NAME)
+
+    if WIN_NUMBER ># 0
+        execute ':' .. WIN_NUMBER .. 'wincmd w'
+    else
+        split
+        execute 'edit ' .. FILE_NAME
+    endif
 enddef
 
 
-export def GetTempFile(file_type: string, has_path: bool = v:true): string
-    const FILE_NAME: string = 'tmp.' .. file_type
+export def GoToTempBuffer(
+        file_extension: string, file_name: string = 'tmp'
+        ): void
+    const FILE_NAME: string = GetTempFileName(file_extension, file_name)
+    execute 'edit ' .. FILE_NAME
+enddef
+
+
+export def GetTempFileName(
+        file_extension: string, file_name: string = 'tmp',
+        has_path: bool = v:true
+        ): string
+    const FILE_NAME: string = file_name .. '.' .. file_extension
 
     if has_path
         return expand(GetTempDirectory() .. '/' .. FILE_NAME)
     else
         return FILE_NAME
     endif
+enddef
+
+
+def GetTempWindowNumber(file_name: string): number
+    const CURRENT_WIN: number = winnr()
+
+    var win_number: number = 0
+
+    for i: number in range(1, winnr('$'))
+        execute ':' .. i .. 'wincmd w'
+        if expand('%:p') ==# file_name
+            win_number = winnr()
+            break
+        endif
+    endfor
+
+    execute ':' .. CURRENT_WIN .. 'wincmd w'
+    return win_number
 enddef
 
 

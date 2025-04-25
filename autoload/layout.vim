@@ -17,8 +17,8 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
     const LEFT_COLUMN_WIDTH_NARROW: number = 85
     const LEFT_COLUMN_WIDTH: number = 90
     const RIGHT_BOTTOM_HEIGHT: number = 10
-    const OUTLINE_FILE: string = TF.GetTempFile('outl')
-    const LOC_FILE: string = TF.GetTempFile('loc')
+    const OUTLINE_FILE: string = TF.GetTempFileName('outl')
+    const LOC_FILE: string = TF.GetTempFileName('loc')
 
     if is_new_tab
         tab split

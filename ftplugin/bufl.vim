@@ -1,10 +1,14 @@
 vim9script
 
-import autoload 'buffer_list.vim' as BL
+import autoload 'bufl.vim' as BL
 
 
 setlocal nonumber
 setlocal statusline=%!g:MyStatusLine(3,3)
+# :h special-buffers
+setlocal bufhidden=hide
+setlocal noswapfile
+setlocal nobuflisted
 
 
 nnoremap <buffer> <silent> <cr>
@@ -23,6 +27,7 @@ nnoremap <buffer> <silent> d
 
 augroup buffer_list
     autocmd!
-    autocmd BufEnter <buffer> BL.RefreshBufferList()
+    autocmd BufWinEnter <buffer> setlocal nobuflisted
+    autocmd BufEnter <buffer> silent BL.RefreshBufferList()
 augroup END
 
