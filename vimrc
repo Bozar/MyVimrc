@@ -392,7 +392,7 @@ augroup auto_edit
     autocmd!
     autocmd BufEnter * call <sid>AutoHideBuffer()
     " :h autocmd-nested
-    autocmd BufLeave * ++nested silent call <sid>AutoSaveTempFile()
+    "autocmd BufLeave * ++nested silent call <sid>AutoSaveTempFile()
 augroup END
 
 
@@ -562,19 +562,6 @@ function! s:AutoHideBuffer() abort
     if <sid>IsScratchBuffer()
         setlocal nobuflisted
     endif
-endfunction
-
-
-function! s:AutoSaveTempFile() abort
-    if <sid>IsInTempFolder()
-        update
-    endif
-endfunction
-
-
-function! s:IsInTempFolder() abort
-    return expand('%:p') =~# <sid>EscapeString(
-            \ expand(<sid>GetTempDirctory()), 1)
 endfunction
 
 

@@ -2,13 +2,10 @@ vim9script
 
 import autoload 'outline.vim' as OL
 import autoload 'notepad.vim' as NP
-import autoload 'temp_file.vim' as TF
 
 
 setlocal statusline=%!g:MyStatusLine(3,0)
-if TF.IsInTempFolder()
-    setlocal noswapfile
-endif
+setlocal noswapfile
 
 
 nnoremap <buffer> <silent> <leader>ff

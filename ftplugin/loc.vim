@@ -1,9 +1,17 @@
 vim9script
 
-import autoload 'temp_file.vim' as TF
+
+const TMP_FILE: string = 'tmp.loc'
 
 
-if TF.IsInTempFolder()
+if expand('%%:t') ==# TMP_FILE
     setlocal statusline=%!g:MyStatusLine(3,4)
+    setlocal noswapfile
 endif
+
+
+augroup localization
+    autocmd!
+    execute 'autocmd BufLeave ' .. TMP_FILE .. ' silent update'
+augroup END
 
