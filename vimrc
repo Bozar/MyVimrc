@@ -47,7 +47,6 @@ if s:INIT_FLAG ==# 0
     const s:RUNTIME_PATH = get(s:PRIVATE_DATA, 'RUNTIME_PATH', [])
     const s:WORKING_DIRECTORY = get(s:PRIVATE_DATA, 'WORKING_DIRECTORY', '')
     const s:LOC_FILE = get(s:PRIVATE_DATA, 'LOC_FILE', [])
-    const s:OPEN_DESKTOP = get(s:PRIVATE_DATA, 'OPEN_DESKTOP', [])
 
     unlet s:PRIVATE_DATA
 

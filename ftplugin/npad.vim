@@ -24,6 +24,7 @@ augroup temp_npad
     autocmd!
     autocmd BufEnter <buffer> setlocal nobuflisted
     autocmd BufEnter <buffer> silent edit
+    autocmd BufLeave <buffer> setlocal nobuflisted
     autocmd BufLeave <buffer> silent update
 augroup END
 

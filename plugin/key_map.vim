@@ -3,6 +3,7 @@ vim9script
 
 import autoload 'temp_file.vim' as TF
 import autoload 'layout.vim' as LT
+import autoload 'session.vim' as SS
 
 
 nnoremap <silent> <unique> <leader>jl
@@ -31,4 +32,15 @@ nnoremap <silent> <unique> <leader>zc
         \ :silent call <sid>LT.SplitWindow(<sid>LT.WIN_LUD, v:true)<cr>
 nnoremap <silent> <unique> <leader>zz
         \ :silent call <sid>LT.SplitWindow(<sid>LT.LOC, v:true)<cr>
+
+
+# <f.> {{{1
+
+# * <f1> is mapped to <Nop> in SS.LoadSession.
+# * DO NOT use `:silent call ...`. There will be a prompt message when a swap
+#   file exists.
+nnoremap <silent> <unique> <f1>
+        \ :call <sid>SS.LoadSession('<f1>')<cr>
+nnoremap <silent> <unique> <f5>
+        \ :silent call <sid>SS.SaveSession()<cr>
 
