@@ -1,6 +1,7 @@
 vim9script
 
 import autoload 'lib_vim.vim' as LV
+import autoload 'layout.vim' as LT
 
 
 export def SearchText(is_visual: bool, has_prompt: bool): void
@@ -26,7 +27,7 @@ export def SearchText(is_visual: bool, has_prompt: bool): void
     # <leader><cr>
     if has_prompt
         unsilent goto_window = str2nr(input(PROMPT))
-        if LV.IsValidWindowNumber(goto_window)
+        if LT.IsValidWindowNumber(goto_window)
             search_range = range(goto_window, goto_window)
         else
             return

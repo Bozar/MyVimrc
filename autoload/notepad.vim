@@ -1,7 +1,7 @@
 vim9script
 
 
-import autoload 'save_load_view.vim' as SL
+import autoload 'save_load_view.vim' as SLV
 import autoload 'temp_file.vim' as TF
 
 
@@ -10,7 +10,7 @@ export def SaveLoadText(): void
     unsilent const INPUT: string = input('[S]ave or [L]oad text? ')
 
     if INPUT ==# 's'
-        SL.SaveLoadView(v:true)
+        SLV.SaveLoadView(v:true)
         const SAVE_BUFFER = bufnr()
         const SAVE_TEXT = getline(1, '$')
         execute 'edit! ' .. BACKUP_FILE
@@ -18,7 +18,7 @@ export def SaveLoadText(): void
         :.+1,$g/^/delete
         write
         execute ':buffer ' .. SAVE_BUFFER
-        SL.SaveLoadView(v:false)
+        SLV.SaveLoadView(v:false)
 
     elseif INPUT ==# 'l'
         if !filereadable(BACKUP_FILE)

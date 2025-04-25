@@ -391,7 +391,6 @@ command -bar -nargs=* InsertTimeStamp call <sid>InsertTimeStamp(<f-args>)
 augroup auto_edit
     autocmd!
     autocmd BufEnter * call <sid>AutoHideBuffer()
-    autocmd BufEnter * call <sid>AutoRefreshBuffer()
     " :h autocmd-nested
     autocmd BufLeave * ++nested silent call <sid>AutoSaveTempFile()
 augroup END
@@ -566,13 +565,6 @@ function! s:AutoHideBuffer() abort
 endfunction
 
 
-function! s:AutoRefreshBuffer() abort
-    if &filetype ==# 'bufl'
-        silent call <sid>BufferListHelper('RefreshBufferList')
-    endif
-endfunction
-
-
 function! s:AutoSaveTempFile() abort
     if <sid>IsInTempFolder()
         update
@@ -670,164 +662,6 @@ function! s:JumpToWindowByPosition(row) abort
 endfunction
 
 
-function! s:BufferListHelper(helper, ...) abort
-    let l:dict_func = {}
-    let l:dict_func['OPT_ARG'] = a:000
-    let l:dict_func['ARG_COUNT'] = a:0
-    lockvar! l:dict_func['OPT_ARG']
-    lockvar! l:dict_func['ARG_COUNT']
-
-
-    function! l:dict_func['_GetBufferList']() abort
-        let l:buffer_list = []
-        for l:i in getbufinfo({'buflisted': 1})
-            let l:buffer_number = l:i['bufnr']
-            let l:buffer_name = expand('#' .. l:buffer_number .. ':p:h:t')
-                    \ .. '/' .. expand('#' .. l:buffer_number .. ':t')
-            let l:buffer_changed = l:i['changed'] ? '+' : ''
-            call add(l:buffer_list, ' [' .. l:buffer_number .. l:buffer_changed
-                    \ .. '] ' .. l:buffer_name)
-        endfor
-        return l:buffer_list
-    endfunction
-
-
-    function! l:dict_func['_TryFixWinNumber'](this_win) abort
-        return <sid>IsValidWindowNumber(a:this_win) ? a:this_win : 1
-    endfunction
-
-
-    function! l:dict_func['_GetBufferNumber']() abort
-        const l:CURRENT_LINE = getline('.')
-        const l:PATTERN =    '\v^\s*\[(\d+)\D*\].*'
-        const l:GET_NUMBER = substitute(l:CURRENT_LINE, l:PATTERN, '\1', '')
-        if l:GET_NUMBER ==# l:CURRENT_LINE
-            return 0
-        endif
-
-        const l:BUFFER_NUMBER = str2nr(l:GET_NUMBER)
-        if !bufexists(l:BUFFER_NUMBER)
-            return 0
-        endif
-        return l:BUFFER_NUMBER
-    endfunction
-
-
-    function! l:dict_func['OpenByPrompt']() abort
-        unsilent const l:INPUT = input('[Open|Jump] to window? ')
-        const l:OPEN = str2nr(substitute(l:INPUT, '\v^\D*(\d+).*$', '\1', ''))
-        const l:JUMP = str2nr(substitute(l:INPUT, '\v^\D*\d+\D+(\d+).*$', '\1',
-                \ ''))
-        call <sid>BufferListHelper('OpenBuffer', l:OPEN, l:JUMP)
-    endfunction
-
-
-    function! l:dict_func['OpenTab']() abort
-        const l:BUFFER_NUMBER = self['_GetBufferNumber']()
-        if l:BUFFER_NUMBER <# 1
-            return
-        endif
-        const l:TAB_PAGE = tabpagenr()
-
-        call <sid>SaveRestoreView(0)
-        call <sid>SplitWindow(0, 1)
-        tabmove $
-        execute 'buffer ' .. l:BUFFER_NUMBER
-        execute 'tabnext ' .. l:TAB_PAGE
-        call <sid>SaveRestoreView(1)
-    endfunction
-
-
-    function! l:dict_func['OpenTabInBatch']() abort
-        for l:i in range(line("'<"), line("'>"))
-            execute l:i
-            call self['OpenTab']()
-        endfor
-    endfunction
-
-
-    " a1: l:OPEN_WINDOW = 1
-    " a2: l:JUMP_WINDOW = 1
-    function! l:dict_func['OpenBuffer']() abort
-        const l:BUFFER_NUMBER = self['_GetBufferNumber']()
-        if l:BUFFER_NUMBER <# 1
-            return
-        endif
-
-        if self['ARG_COUNT'] <# 1
-            const l:OPEN_WINDOW = 1
-            const l:JUMP_WINDOW = 1
-        elseif self['ARG_COUNT'] <# 2
-            const l:OPEN_WINDOW = self['_TryFixWinNumber'](self['OPT_ARG'][0])
-            const l:JUMP_WINDOW = self['_TryFixWinNumber'](self['OPT_ARG'][0])
-        else
-            const l:OPEN_WINDOW = self['_TryFixWinNumber'](self['OPT_ARG'][0])
-            const l:JUMP_WINDOW = self['_TryFixWinNumber'](self['OPT_ARG'][1])
-        endif
-
-        execute l:OPEN_WINDOW .. 'wincmd w'
-        execute 'buffer ' .. l:BUFFER_NUMBER
-        execute l:JUMP_WINDOW .. 'wincmd w'
-    endfunction
-
-
-    " nomodifiable: cannot insert text; readonly: cannot save file.
-    " https://stackoverflow.com/questions/16680615/
-    function! l:dict_func['RefreshBufferList']() abort
-        call <sid>SaveRestoreView(0)
-        setlocal modifiable
-        1,$delete
-        1put = self['_GetBufferList']()
-        1delete
-        setlocal nomodifiable
-        call <sid>SaveRestoreView(1)
-    endfunction
-
-
-    function! l:dict_func['UpdateBuffer']() abort
-        const l:BUFFER_NUMBER = self['_GetBufferNumber']()
-        if (l:BUFFER_NUMBER <# 1) || getbufvar(l:BUFFER_NUMBER, '&readonly')
-            return
-        endif
-        call <sid>SaveRestoreView(0)
-        const l:SAVE_BUFFER = bufnr()
-        execute l:BUFFER_NUMBER .. 'bufdo update'
-        execute 'buffer ' .. l:SAVE_BUFFER
-        call <sid>SaveRestoreView(1)
-    endfunction
-
-
-    function! l:dict_func['UpdateBufferInBatch']() abort
-        for l:i in range(line("'<"), line("'>"))
-            execute l:i
-            call self['UpdateBuffer']()
-        endfor
-    endfunction
-
-
-    function! l:dict_func['DeleteBuffer']() abort
-        const l:BUFFER_NUMBER = self['_GetBufferNumber']()
-        if (l:BUFFER_NUMBER <# 1)
-            return
-        endif
-        execute 'bdelete ' .. l:BUFFER_NUMBER
-    endfunction
-
-
-    function! l:dict_func['DeleteBufferInBatch']() abort
-        for l:i in range(line("'<"), line("'>"))
-            execute l:i
-            call self['DeleteBuffer']()
-        endfor
-    endfunction
-
-
-    if has_key(l:dict_func, a:helper)
-        call l:dict_func[a:helper]()
-    endif
-endfunction
-
-
 function! s:SetBufferKeyMap(file_type) abort
     let l:dict_func = {}
 
@@ -885,30 +719,6 @@ function! s:SetBufferKeyMap(file_type) abort
         vnoremap <buffer> <silent> <f7>
                 \ y:call <sid>LocalizationHelper('MapSearchKey', 1, 2)<cr>
 
-    endfunction
-
-
-    function! l:dict_func['bufl']() abort
-        nnoremap <buffer> <silent> <cr>
-                \ :call <sid>BufferListHelper('OpenBuffer', 1, 1)<cr>
-        nnoremap <buffer> <silent> o
-                \ :call <sid>BufferListHelper('OpenByPrompt')<cr>
-
-        nnoremap <buffer> <silent> i :call <sid>BufferListHelper('OpenTab')<cr>
-        vnoremap <buffer> <silent> i
-                \ y:call <sid>BufferListHelper('OpenTabInBatch')<cr>
-
-        nnoremap <buffer> <silent> u
-                \ :call <sid>BufferListHelper('UpdateBuffer')<cr>
-        vnoremap <buffer> <silent> u
-                \ <esc>:call <sid>BufferListHelper('UpdateBufferInBatch')<cr>
-
-        nnoremap <buffer> <silent> d
-                \ :call <sid>BufferListHelper('DeleteBuffer')<cr>
-                \ :call <sid>BufferListHelper('RefreshBufferList')<cr>
-        vnoremap <buffer> <silent> d
-                \ <esc>:call <sid>BufferListHelper('DeleteBufferInBatch')<cr>
-                \ :call <sid>BufferListHelper('RefreshBufferList')<cr>
     endfunction
 
 
@@ -2117,16 +1927,8 @@ endfunction
 " +========= SCRATCH PAD =========+
 " +--------- ### ---------+
 
-"belowright copen
-
 " getftype()
 "
 "lcd d:\GitHub\GhostInTheSwamp\
 "echo system('git show-branch')
-
-" :h **
-" :h function-list
-
-" s:BufferListHelper(helper, ...) abort
-" Add an option to move a buffer to the top?
 
