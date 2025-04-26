@@ -1,6 +1,7 @@
 vim9script
 
 import autoload 'npad.vim' as NP
+import autoload 'temp_file.vim' as TF
 
 
 setlocal statusline=%!g:MyStatusLine(3,1)
@@ -19,6 +20,9 @@ nnoremap <buffer> <silent> <leader><cr>
 vnoremap <buffer> <silent> <leader><cr>
         \ y:call <sid>NP.SearchText(v:true, v:true)<cr>
 
+
+nnoremap <buffer> <silent> <leader>ff
+        \ :call <sid>TF.SaveLoadText()<cr>
 
 augroup temp_npad
     autocmd!

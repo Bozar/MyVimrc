@@ -9,6 +9,9 @@ export const LOC: string = 'loc'
 export const NPAD: string = 'npad'
 export const BUFL: string = 'bufl'
 
+const SAVE_LOAD_PROMPT: string = '[S]ave or [L]oad text? '
+const BACKUP_EXTENSION: string = '.bak'
+
 
 export def GoToTempWindow(
         file_extension: string, file_name: string = DEFAULT_NAME,
@@ -46,6 +49,23 @@ export def GetTempFileName(
         return expand(GetTempDirectory() .. '/' .. FILE_NAME)
     else
         return FILE_NAME
+    endif
+enddef
+
+
+export def SaveLoadText(): void
+    unsilent const INPUT: string = input(SAVE_LOAD_PROMPT)
+    const BACKUP_FILE: string = expand('%') .. BACKUP_EXTENSION
+        
+    if INPUT ==# 's'
+        execute 'write! ' .. BACKUP_FILE
+        :%delete
+    elseif INPUT ==# 'l'
+        if filereadable(BACKUP_FILE)
+            :%delete
+            :0put = readfile(BACKUP_FILE)
+            :1
+        endif
     endif
 enddef
 
