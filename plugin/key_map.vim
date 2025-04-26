@@ -12,6 +12,8 @@ nnoremap <silent> <unique> <leader>fe :Explore<cr>
 nnoremap <silent> <unique> <leader>fc :execute 'Explore ' .. getcwd()<cr>
 
 nnoremap <silent> <unique> <leader>ff :update<cr>
+nnoremap <silent> <unique> <leader>fF
+        \ :silent call <sid>SS.SaveSession()<cr>
 nnoremap <silent> <unique> <leader>fa :wa<cr>
 nnoremap <silent> <unique> <leader>fx :xa<cr>
 
