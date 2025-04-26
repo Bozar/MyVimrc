@@ -4,8 +4,7 @@ import autoload 'temp_file.vim' as TF
 
 
 export const DEFAULT: number = 0
-export const WIN_LUD: number = 1
-export const LOC: number = 2
+export const LOC: number = 1
 
 
 export def IsValidWindowNumber(win_nr: number): bool
@@ -28,11 +27,8 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
     if layout ==# DEFAULT
         VerticalSplit(LEFT_COLUMN_WIDTH)
         TF.GoToTempBuffer(TF.NPAD)
-
-    elseif layout ==# WIN_LUD
-        VerticalSplit(LEFT_COLUMN_WIDTH)
-        TF.GoToTempBuffer(TF.NPAD)
         HorizontalSplit(RIGHT_BOTTOM_HEIGHT)
+        TF.GoToTempBuffer(TF.BUFL)
 
     elseif layout ==# LOC
         VerticalSplit(LEFT_COLUMN_WIDTH_NARROW)

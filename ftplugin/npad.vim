@@ -3,7 +3,7 @@ vim9script
 import autoload 'npad.vim' as NP
 
 
-setlocal statusline=%!g:MyStatusLine(3,0)
+setlocal statusline=%!g:MyStatusLine(3,1)
 setlocal bufhidden=hide
 setlocal noswapfile
 setlocal nobuflisted

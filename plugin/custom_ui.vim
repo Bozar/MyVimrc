@@ -10,7 +10,7 @@ vim9script
 #     3: show custom text.
 # custom_text: Only available when show_mode ==# 3.
 #     0: [Date]
-#     1: [Note Pad]
+#     1: [Notepad]
 #     2: [Outline]
 #     3: [Buffer List]
 #     4: [Loc Output]
@@ -72,7 +72,7 @@ def g:MyStatusLine(show_mode: number, custom_text: number = 0): string
     elseif show_mode ==# 3
         const CUSTOM_LIST: list<string> = [
             strftime('[%Y-%m-%d, %a]'),
-            '[Note Pad]',
+            '[Notepad]',
             '[Outline]',
             '[Buffer List]',
             '[Loc Output]',
