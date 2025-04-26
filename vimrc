@@ -236,97 +236,10 @@ augroup END
 " +========= Key Mappings =========+ {{{2
 " +--------- ### ---------+ {{{3
 
-noremap! <unique> <c-s> *
-
-
-" Yank to the end of line
-nnoremap <unique> Y y$
-
-
-" `Entire line` text object
-" https://www.reddit.com/r/vim/comments/6gjt02/fastest_way_to_copy_entire_line_without_the/
-xnoremap <unique> il ^og_
-onoremap <silent> <unique> il :normal vil<CR>
-
-
-" Jump to the marked position instead of line
-noremap <unique> ' `
-
-
-" Search backward.
-nnoremap <unique> , ?
-vnoremap <unique> , ?
-
-
-" Switch case
-nnoremap <unique> ` ~
-vnoremap <unique> ` ~
-
-
-" 0/-: First/last non-blank character in a line
-" ^: First character in a line
-noremap <unique> 0 ^
-noremap <unique> - g_
-noremap <unique> ^ 0
-
-
-" Enter command-line mode.
-nnoremap <unique> ; :
-vnoremap <unique> ; :
-
-" :h command-line-window
-nnoremap <unique> <leader>; q:
-vnoremap <unique> <leader>; q:
-
-nnoremap <unique> <leader>/ q/
-
-
-" Move in a line.
-nnoremap <unique> <c-n> ;
-nnoremap <unique> <c-p> ,
-
-vnoremap <unique> <c-n> ;
-vnoremap <unique> <c-p> ,
-
-
-" Move between lines.
-nnoremap <unique> <c-j> gj
-nnoremap <unique> <c-k> gk
-
-vnoremap <unique> <c-j> gj
-vnoremap <unique> <c-k> gk
-
-
-" Insert brackets.
-noremap! <unique> ( ()<left>
-noremap! <unique> [ []<left>
-noremap! <unique> { {}<left>
-
-noremap! <unique> “” “”<left>
-noremap! <unique> ‘’ ‘’<left>
-noremap! <unique> （ （）<left>
-noremap! <unique> 《 《》<left>
-
-
 " +--------- Custom actions ---------+ {{{3
-
-nnoremap <silent> <unique> <leader>fe :Explore<cr>
-nnoremap <silent> <unique> <leader>ff :update<cr>
-nnoremap <silent> <unique> <leader>fa :wa<cr>
-nnoremap <silent> <unique> <leader>fx :xa<cr>
-nnoremap <silent> <unique> <leader>fr :resize 10<cr>
-
 
 nnoremap <silent> <unique> <leader>fv :silent call <sid>ForkVim()<cr>
 nnoremap <silent> <unique> <leader>fg :silent call <sid>FormatText()<cr>
-
-
-nnoremap <silent> <unique> <leader>fh :call <sid>SwitchSetting('hlsearch')<cr>
-nnoremap <silent> <unique> <leader>fm :call <sid>SwitchSetting('modifiable')<cr>
-
-
-nnoremap <silent> <unique> <leader>fl :left 0<cr>
-vnoremap <silent> <unique> <leader>fl :left 0<cr>
 
 
 nnoremap <silent> <unique> <c-s-PageDown> :call <sid>MoveTabPage(1)<cr>
@@ -358,16 +271,6 @@ command -bar -nargs=? ConvertFoldMarker
         \ silent call <sid>ConvertFoldMarker(<f-args>)
 
 command -bar -nargs=* InsertTimeStamp call <sid>InsertTimeStamp(<f-args>)
-
-
-" +--------- Auto Commands ---------+ {{{3
-
-augroup auto_edit
-    autocmd!
-    autocmd BufEnter * call <sid>AutoHideBuffer()
-    " :h autocmd-nested
-    "autocmd BufLeave * ++nested silent call <sid>AutoSaveTempFile()
-augroup END
 
 
 " +========= Plugins =========+ {{{2
@@ -529,18 +432,6 @@ function! s:SetConstant(constant_name, value, do_not_overwrite = 0) abort
         endif
     endif
     execute 'const ' .. a:constant_name .. ' = ' .. string(a:value)
-endfunction
-
-
-function! s:AutoHideBuffer() abort
-    if <sid>IsScratchBuffer()
-        setlocal nobuflisted
-    endif
-endfunction
-
-
-function! s:IsScratchBuffer() abort
-    return &buftype ==# 'nofile'
 endfunction
 
 
@@ -898,26 +789,6 @@ function! s:LoadAbbreviationDict(file_type) abort
         execute 'iabbrev <silent> <buffer> ' .. l:i .. ' '
                 \ .. l:ABBREVIATION[l:i]
     endfor
-endfunction
-
-
-function! s:SwitchSetting(setting) abort
-    let l:dict_func = {}
-
-
-    function! l:dict_func['hlsearch']() abort
-        setlocal hlsearch!
-    endfunction
-
-
-    function! l:dict_func['modifiable']() abort
-        setlocal modifiable!
-    endfunction
-
-
-    if has_key(l:dict_func, a:setting)
-        call l:dict_func[a:setting]()
-    endif
 endfunction
 
 

@@ -14,8 +14,9 @@ endif
 
 augroup temp_loc
     autocmd!
-    execute 'autocmd BufWinEnter ' .. TMP_FILE .. 'setlocal nobuflisted'
+    execute 'autocmd BufEnter ' .. TMP_FILE .. 'setlocal nobuflisted'
     execute 'autocmd BufEnter ' .. TMP_FILE .. 'silent edit'
+    execute 'autocmd BufLeave ' .. TMP_FILE .. 'setlocal nobuflisted'
     execute 'autocmd BufLeave ' .. TMP_FILE .. ' silent update'
 augroup END
 
