@@ -1,6 +1,6 @@
 vim9script
 
-import autoload 'lib_vim.vim' as LV
+import autoload 'search.vim' as SCH
 import autoload 'layout.vim' as LT
 
 
@@ -36,7 +36,7 @@ export def SearchText(is_visual: bool, has_prompt: bool): void
         search_range = range(1, winnr('$'))
     endif
 
-    search_text = LV.GetPlainSearchText(trim(current_line))
+    search_text = SCH.GetPlainSearchText(trim(current_line))
     current_window = winnr()
 
     for i: number in search_range
