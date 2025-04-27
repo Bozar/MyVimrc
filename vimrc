@@ -247,13 +247,6 @@ nnoremap <silent> <unique> <c-s-PageUp> :call <sid>MoveTabPage(0)<cr>
 nnoremap <silent> <unique> <c-End> :call <sid>CloseTabPage()<cr>
 
 
-" Jump to a window
-nnoremap <silent> <unique> <leader><space> :call <sid>JumpToPreviousWindow()<cr>
-
-nnoremap <silent> <unique> <leader>jk :call <sid>JumpToWindowByPosition(0)<cr>
-nnoremap <silent> <unique> <leader>jj :call <sid>JumpToWindowByPosition(1)<cr>
-
-
 " +========= Commands =========+ {{{2
 " +--------- ### ---------+ {{{3
 
@@ -459,41 +452,6 @@ function! s:CloseTabPage() abort
     if tabpagenr('$') ># 1
         tabclose
     endif
-endfunction
-
-
-function! s:JumpToPreviousWindow() abort
-    if winnr('$') ==# 1
-        return
-    endif
-
-    const l:CURRENT_WINDOW = winnr()
-    wincmd p
-    if winnr() !=# l:CURRENT_WINDOW
-        return
-    endif
-
-    const l:JUMP_TO_WINDOW = str2nr(input('Jump to window? '))
-     if !<sid>IsValidWindowNumber(l:JUMP_TO_WINDOW)
-         return
-     endif
-    execute l:JUMP_TO_WINDOW .. 'wincmd w'
-endfunction
-
-
-" 0: top left, 1: bottom left
-function! s:JumpToWindowByPosition(row) abort
-    if a:row ==# 0
-        const l:NEXT_WINDOW = 1
-    elseif a:row ==# 1
-        1wincmd w
-        const l:NEXT_WINDOW = winnr('99j')
-        wincmd p
-    else
-        const l:NEXT_WINDOW = 1
-    endif
-
-    execute l:NEXT_WINDOW .. 'wincmd w'
 endfunction
 
 

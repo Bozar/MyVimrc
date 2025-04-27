@@ -55,6 +55,14 @@ nnoremap <silent> <unique> <leader>jh
         \ :silent 1wincmd w<cr>
         \ :silent belowright copen<cr>
 
+nnoremap <silent> <unique> <leader><space>
+        \ :silent call <sid>LT.GoToPreviousWindow()<cr>
+nnoremap <silent> <unique> <leader>jk
+        \ :silent call <sid>LT.GoToLeftTopBottomWindow(v:true)<cr>
+nnoremap <silent> <unique> <leader>jj
+        \ :silent call <sid>LT.GoToLeftTopBottomWindow(v:false)<cr>
+
+
 # x. {{{1
 
 nnoremap <silent> <unique> <leader>xx

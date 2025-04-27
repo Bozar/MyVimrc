@@ -52,6 +52,39 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
 enddef
 
 
+export def GoToPreviousWindow(): void
+    if winnr('$') ==# 1
+        return
+    endif
+
+    const CURRENT_WINDOW: number = winnr()
+    wincmd p
+    if winnr() !=# CURRENT_WINDOW
+        return
+    endif
+
+    const GOTO_WINDOW: number = str2nr(input('Goto window? '))
+     if !IsValidWindowNumber(GOTO_WINDOW)
+         return
+     endif
+    execute ':' .. GOTO_WINDOW .. 'wincmd w'
+enddef
+
+
+export def GoToLeftTopBottomWindow(is_left_top: bool): void
+    var win_nr: number
+
+    if is_left_top
+        win_nr = 1
+    else
+        :1wincmd w
+        win_nr = winnr('99j')
+        wincmd p
+    endif
+    execute ':' .. win_nr .. 'wincmd w'
+enddef
+
+
 def VerticalSplit(width: number): void
     wincmd v
     execute 'vertical resize ' .. width
