@@ -13,6 +13,3 @@ nnoremap <buffer> <silent> <leader>dc
 vnoremap <buffer> <silent> <leader>dc
         \ <esc>:silent call <sid>MD.InsertCodeBlock(1)<cr>
 
-nnoremap <buffer> <silent> <leader>df
-        \ :silent call <sid>MD.InsertTitle()<cr>
-

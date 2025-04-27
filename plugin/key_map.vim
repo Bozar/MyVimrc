@@ -6,6 +6,7 @@ import autoload 'layout.vim' as LT
 import autoload 'session.vim' as SS
 import autoload 'quick_search.vim' as QS
 import autoload 'command.vim' as CMD
+import autoload 'fold_marker.vim' as FM
 
 
 # f. {{{1
@@ -14,6 +15,8 @@ nnoremap <silent> <unique> <leader>fe :Explore<cr>
 nnoremap <silent> <unique> <leader>fE :execute 'Explore ' .. getcwd()<cr>
 nnoremap <silent> <unique> <leader>fc
         \ :call <sid>CMD.ExecuteCurrentLine()<cr>
+nnoremap <silent> <unique> <leader>fd
+        \ :call <sid>FM.EditFoldMarker(&filetype)<cr>
 
 nnoremap <silent> <unique> <leader>ff :update<cr>
 nnoremap <silent> <unique> <leader>fF

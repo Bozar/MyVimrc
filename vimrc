@@ -254,18 +254,11 @@ nnoremap <silent> <unique> <leader>jk :call <sid>JumpToWindowByPosition(0)<cr>
 nnoremap <silent> <unique> <leader>jj :call <sid>JumpToWindowByPosition(1)<cr>
 
 
-" Add a foldmarker. This map might be overwritten by a specific file type.
-nnoremap <silent> <unique> <leader>df :silent call <sid>InsertFoldMarker()<cr>
-
-
 " +========= Commands =========+ {{{2
 " +--------- ### ---------+ {{{3
 
 command -bar -nargs=0 CountCjkCharacter call <sid>CountCjkCharacter()
 command -bar -nargs=? FormatText silent call <sid>FormatText(<f-args>)
-command -bar -nargs=? ConvertFoldMarker
-        \ silent call <sid>ConvertFoldMarker(<f-args>)
-
 command -bar -nargs=* InsertTimeStamp call <sid>InsertTimeStamp(<f-args>)
 
 
@@ -400,12 +393,6 @@ lockvar! s:ABBREVIATION_DICT
 
 " +========= Library Functions =========+ {{{2
 " +--------- ### ---------+ {{{3
-
-function! s:InsertFoldMarker() abort
-    execute 's/$/ {{{'
-    execute 'normal! $'
-endfunction
-
 
 function! s:IsValidWindowNumber(window) abort
     if (a:window <# 1) || (a:window ># winnr('$'))
@@ -941,93 +928,6 @@ function! s:FormatText(line_space = 2) abort
         call l:dict_func['_DeleteTrailSpace']()
         call l:dict_func['_DeleteBlankLine'](a:line_space)
     endif
-    call <sid>SaveRestoreView(1)
-endfunction
-
-
-function! s:ConvertFoldMarker(fold_marker_type = '') abort
-    let l:dict_func = {}
-
-
-    function! l:dict_func['_GetFoldMarkerType'](command_arg) abort
-        let l:fold_marker_type = ''
-
-        if a:command_arg ==# 'm'
-            let l:fold_marker_type = 'm'
-        elseif a:command_arg ==# 't'
-            let l:fold_marker_type = 't'
-        else
-            " Convert to text file style fold markers.
-            if &filetype ==# 'markdown'
-                let l:fold_marker_type = 't'
-            " Convert to markdown file style fold markers.
-            elseif &filetype ==# 'text'
-                let l:fold_marker_type = 'm'
-            endif
-        endif
-
-        return l:fold_marker_type
-    endfunction
-
-
-    function! l:dict_func['_ConvertToMarkdown']() abort
-        const l:FOLD_PATTERN = '\v \{{3}\d*$'
-
-        if !search(l:FOLD_PATTERN, 'cw')
-            return
-        endif
-
-        " Convert from text file.
-        setlocal foldmethod=marker
-
-        execute 'g/' .. l:FOLD_PATTERN .. '/s/^/ /'
-        execute 'g/' .. l:FOLD_PATTERN .. '/s/^/\=repeat("#", foldlevel("."))'
-        execute '%s/' .. l:FOLD_PATTERN .. '//'
-    endfunction
-
-
-    function! l:dict_func['_ConvertToText']() abort
-        const l:FOLD_PATTERN = '\v^#+ '
-
-        if !search(l:FOLD_PATTERN, 'cw')
-            return
-        endif
-
-        " Convert from markdown file.
-        setlocal foldmethod=expr
-        setlocal foldexpr=MarkdownFold()
-
-        execute 'g/' .. l:FOLD_PATTERN .. '/s/$/ {{{/'
-        execute 'g/' .. l:FOLD_PATTERN .. '/s/$/\=foldlevel(".")/'
-        execute '%s/' .. l:FOLD_PATTERN .. '//'
-    endfunction
-
-
-    const l:FOLD_MARKER_TYPE = l:dict_func['_GetFoldMarkerType'](
-            \ a:fold_marker_type)
-    if l:FOLD_MARKER_TYPE ==# ''
-        return
-    endif
-
-    call <sid>SaveRestoreView(0)
-    const l:SAVE_FOLD_ENABLE = &foldenable
-    const l:SAVE_FOLD_METHOD = &foldmethod
-    const l:SAVE_FOLD_EXPR = &foldexpr
-
-    setlocal foldenable
-    if l:FOLD_MARKER_TYPE ==# 'm'
-        call l:dict_func['_ConvertToMarkdown']()
-    elseif l:FOLD_MARKER_TYPE ==# 't'
-        call l:dict_func['_ConvertToText']()
-    endif
-
-    if l:SAVE_FOLD_ENABLE
-        setlocal foldenable
-    else
-        setlocal nofoldenable
-    endif
-    execute 'setlocal foldmethod=' .. l:SAVE_FOLD_METHOD
-    execute 'setlocal foldexpr=' .. l:SAVE_FOLD_EXPR
     call <sid>SaveRestoreView(1)
 endfunction
 

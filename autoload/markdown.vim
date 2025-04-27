@@ -13,14 +13,3 @@ export def InsertCodeBlock(map_mode: number): void
     endif
 enddef
 
-
-export def InsertTitle(): void
-    const TITLE_PATTERN: string = '\v^#+ '
-
-    if getline('.') =~# TITLE_PATTERN
-        execute ':s/' .. TITLE_PATTERN .. '//'
-    else
-        execute ':s/^/# /'
-    endif
-enddef
-
