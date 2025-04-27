@@ -10,11 +10,12 @@ const OVERWRITE_A: string = 'a'
 const OVERWRITE_B: string = 'b'
 const OVERWRITE_F: string = 'f'
 const SWAP_AB: string = 's'
-const DELETE_B: string = 'd'
+const ERASE_B: string = 'e'
 const COPY_COMMAND: string = 'c'
 const REPLACE_PATTERN: string = 'r'
 const COLLECT_TEXT: string = 't'
 const GREP_PATTERN: string = 'g'
+const CFDO: string = 'd'
 
 
 # Function variables cannot shadown script ones: ':h E1006'.
@@ -45,6 +46,12 @@ enddef
 export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
     const RAW_REGISTER: string = GetRawText(@")
     const ESCAPED_REGISTER: string = EscapeVeryNoMagic(RAW_REGISTER)
+    const ORDERED_COMMANDS: list<string> = [
+        REPLACE_PATTERN,
+        COLLECT_TEXT,
+        GREP_PATTERN,
+        CFDO,
+    ]
 
     var command: string = ''
 
@@ -71,30 +78,37 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
     escaped_search_pattern = EscapeVeryNoMagic(search_pattern)
     escaped_substitute_text = EscapeSubstitution(substitute_text)
 
+    const IS_COPY: bool = (INPUT =~# COPY_COMMAND)
+    const THIS_CMD: string = FilterCommand(INPUT, ORDERED_COMMANDS)
+
     # Save only one command.
-    if INPUT =~# REPLACE_PATTERN
+    if THIS_CMD ==# REPLACE_PATTERN
         command = GetCmdSubstitute(
                 escaped_search_pattern, escaped_substitute_text
                 )
-    elseif INPUT =~# COLLECT_TEXT
+    elseif THIS_CMD ==# COLLECT_TEXT
         command = GetCmdYank(escaped_search_pattern)
-    elseif INPUT =~# GREP_PATTERN
+    elseif THIS_CMD ==# GREP_PATTERN
         command = GetCmdGrep(escaped_search_pattern, grep_path)
+    elseif THIS_CMD ==# CFDO
+        command = GetCmdCfdo(escaped_search_pattern, escaped_substitute_text)
     else
         command = ''
     endif
 
     # Copy or execute only one command.
-    if INPUT =~# COPY_COMMAND
+    if IS_COPY
         @" = command
     elseif escaped_search_pattern !=# EscapeVeryNoMagic('')
         SLV.SaveLoadView(v:true)
-        if INPUT =~# REPLACE_PATTERN
+        if THIS_CMD ==# REPLACE_PATTERN
             unsilent execute ':' .. command
-        elseif INPUT =~# COLLECT_TEXT
+        elseif THIS_CMD ==# COLLECT_TEXT
             ExeCmdYank(command)
-        elseif INPUT =~# GREP_PATTERN
+        elseif THIS_CMD ==# GREP_PATTERN
             silent execute ':' .. command
+        elseif THIS_CMD ==# CFDO
+            unsilent execute ':' .. command
         endif
         SLV.SaveLoadView(v:false)
     endif
@@ -147,14 +161,14 @@ def GetPrompt(
         pattern: string, text: string, path: string, raw_register: string
         ): string
     const INPUT: string = ''
-            .. '-----------------------------------------------' .. EOL
+            .. '-------------------------------------------------' .. EOL
             .. '[A] Pattern: [' .. pattern .. ']' .. EOL
             .. '[B] Text: [' .. text .. ']' .. EOL
             .. '[F] File path: [' .. path .. ']' .. EOL
             .. '[@"]: [' .. raw_register .. ']' .. EOL
-            .. '-----------------------------------------------' .. EOL
-            .. 'Overwrite [A|B|F], [S]wap A & B, [D]elete B,' .. EOL
-            .. '> [C]opy command, [R]place, [G]rep, Collec[T]: '
+            .. '-------------------------------------------------' .. EOL
+            .. 'Overwrite [A|B|F], [S]wap A & B, [E]rase B,' .. EOL
+            .. '> [C]opy, [R]eplace, Collec[T], [G]rep, Cf[D]o: '
     return INPUT
 enddef
 
@@ -181,7 +195,7 @@ def SetVariable(input: string, raw_register: string): void
     endif
 
     # Clear [substitute_text]
-    if input =~# DELETE_B
+    if input =~# ERASE_B
         substitute_text = ''
     endif
 enddef
@@ -213,5 +227,22 @@ enddef
 def GetCmdGrep(pattern: string, path: string): string
     const COMMAND: string = 'vim /' .. pattern .. '/j ' .. path 
     return COMMAND
+enddef
+
+
+def GetCmdCfdo(pattern: string, text: string): string
+    const PATTERN_TEXT: string = pattern .. '/' .. text
+    const COMMAND: string = 'cfdo :%s/' .. PATTERN_TEXT .. '/gc'
+    return COMMAND
+enddef
+
+
+def FilterCommand(input: string, ordered_commands: list<string>): string
+    for i: string in ordered_commands
+        if input =~# i
+            return i
+        endif
+    endfor
+    return ''
 enddef
 

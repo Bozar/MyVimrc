@@ -34,7 +34,7 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
 
     elseif layout ==# LOC
         VerticalSplit(LEFT_COLUMN_WIDTH_NARROW)
-        execute 'edit ' .. LOC_FILE
+        TF.OpenTempFile(LOC_FILE)
 
     elseif layout ==# QUICK_FIX
         VerticalSplit(LEFT_COLUMN_WIDTH)

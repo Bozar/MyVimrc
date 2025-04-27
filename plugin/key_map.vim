@@ -97,6 +97,7 @@ inoremap <silent> <unique> <f1> <Nop>
 
 noremap! <unique> ,, *
 noremap! <unique> ,. _
+noremap! <unique> ,< <><left>
 
 noremap! <unique> ( ()<left>
 noremap! <unique> [ []<left>

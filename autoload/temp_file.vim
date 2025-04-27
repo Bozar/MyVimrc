@@ -26,7 +26,7 @@ export def GoToTempWindow(
         if is_new_win
             split
         endif
-        execute 'edit ' .. FILE_NAME
+        OpenTempFile(FILE_NAME)
     endif
 enddef
 
@@ -35,7 +35,7 @@ export def GoToTempBuffer(
         file_extension: string, file_name: string = DEFAULT_NAME
         ): void
     const FILE_NAME: string = GetTempFileName(file_extension, file_name)
-    execute 'edit ' .. FILE_NAME
+    OpenTempFile(FILE_NAME)
 enddef
 
 
@@ -66,6 +66,17 @@ export def SaveLoadText(): void
             :0put = readfile(BACKUP_FILE)
             :1
         endif
+    endif
+enddef
+
+
+export def OpenTempFile(full_file_name: string): void
+    const BUF_NR: number = bufnr(full_file_name)
+
+    if BUF_NR ># 0
+        execute ':' .. BUF_NR .. 'buffer'
+    else
+        execute 'edit ' .. full_file_name
     endif
 enddef
 
