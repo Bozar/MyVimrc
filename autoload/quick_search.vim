@@ -6,11 +6,22 @@ import autoload 'save_load_view.vim' as SLV
 
 const EOL: string = "\n"
 
+const OVERWRITE_A: string = 'a'
+const OVERWRITE_B: string = 'b'
+const OVERWRITE_F: string = 'f'
+const SWAP_AB: string = 's'
+const DELETE_B: string = 'd'
+const COPY_COMMAND: string = 'c'
+const REPLACE_PATTERN: string = 'r'
+const COLLECT_TEXT: string = 't'
+const GREP_PATTERN: string = 'g'
+
 
 # Function variables cannot shadown script ones: ':h E1006'.
 # https://www.reddit.com/r/vim/comments/1favdyy/
 var substitute_text: string = ''
 var search_pattern: string = ''
+var grep_path: string = ''
 
 var escaped_substitute_text: string = ''
 var escaped_search_pattern: string = ''
@@ -40,7 +51,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
     unsilent const INPUT: string = input(
             GetSearchResult(ESCAPED_REGISTER, is_lazy_search) .. EOL
             .. GetPrompt(
-                    escaped_search_pattern, escaped_substitute_text, 
+                    escaped_search_pattern, escaped_substitute_text, grep_path, 
                     RAW_REGISTER
                     )
             )
@@ -56,26 +67,30 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
     escaped_substitute_text = EscapeSubstitution(substitute_text)
 
     # Save only one command.
-    if INPUT =~# 'e'
+    if INPUT =~# REPLACE_PATTERN
         command = GetCmdSubstitute(
                 escaped_search_pattern, escaped_substitute_text
                 )
-    elseif INPUT =~# 'y'
+    elseif INPUT =~# COLLECT_TEXT
         command = GetCmdYank(escaped_search_pattern)
+    elseif INPUT =~# GREP_PATTERN
+        command = GetCmdGrep(escaped_search_pattern, grep_path)
     else
         command = ''
     endif
 
+    SLV.SaveLoadView(v:true)
     # Copy or execute only one command.
-    if INPUT =~# 'c'
+    if INPUT =~# COPY_COMMAND
         @" = command
     elseif escaped_search_pattern !=# EscapeVeryNoMagic('')
-        if INPUT =~# 'e'
-            ExeCmdSubstitute(command)
-        elseif INPUT =~# 'y'
+        if (INPUT =~# REPLACE_PATTERN) || (INPUT =~# GREP_PATTERN)
+            unsilent execute ':' .. command
+        elseif INPUT =~# COLLECT_TEXT
             ExeCmdYank(command)
         endif
     endif
+    SLV.SaveLoadView(v:false)
 enddef
 
 
@@ -121,48 +136,56 @@ def GetSearchResult(escaped_register: string, is_lazy_search: bool): string
 enddef
 
 
-def GetPrompt(pattern: string, text: string, raw_register: string): string
-    const INPUT: string = 'Pattern A: [' .. pattern .. ']' .. EOL
-            .. 'Text B: [' .. text .. ']' .. EOL
-            .. 'Register ": [' .. raw_register .. ']' .. EOL
-            .. 'Overwrite [A|B], [S]wap A & B, [D]elete B,' .. EOL
-            .. '> [C]opy|[E]xecute command, [Y]ank all '
+def GetPrompt(
+        pattern: string, text: string, path: string, raw_register: string
+        ): string
+    const INPUT: string = ''
+            .. '-----------------------------------------------' .. EOL
+            .. '[A] Pattern: [' .. pattern .. ']' .. EOL
+            .. '[B] Text: [' .. text .. ']' .. EOL
+            .. '[F] File path: [' .. path .. ']' .. EOL
+            .. '[@"]: [' .. raw_register .. ']' .. EOL
+            .. '-----------------------------------------------' .. EOL
+            .. 'Overwrite [A|B|F], [S]wap A & B, [D]elete B,' .. EOL
+            .. '> [C]opy command, [R]place, [G]rep, Collec[T]: '
     return INPUT
 enddef
 
 
 def SetVariable(input: string, raw_register: string): void
     # [register "] -> [search_pattern]
-    if input =~# 'a'
+    if input =~# OVERWRITE_A
         search_pattern = raw_register
     # [register "] -> [substitute_text]
     endif
-    if input =~# 'b'
+    if input =~# OVERWRITE_B
         substitute_text = raw_register
+    endif
+    # [register "] -> [grep_path]
+    if input =~# OVERWRITE_F
+        grep_path = raw_register
     endif
 
     # [substitute_text] <-> [search_pattern]
-    if input =~# 's'
+    if input =~# SWAP_AB
         const TEMP_SAVE: string = substitute_text
         substitute_text = search_pattern
         search_pattern = TEMP_SAVE
     endif
 
     # Clear [substitute_text]
-    if input =~# 'd'
+    if input =~# DELETE_B
         substitute_text = ''
     endif
 enddef
 
 
 def GetCmdSubstitute(pattern: string, text: string): string
-    const COMMAND: string = '%s/' .. pattern .. '/' .. text .. '/gce'
+    const PATTERN_TEXT: string = pattern .. '/' .. text
+    # Substitute whole text. Start from the current line.
+    const COMMAND: string = '.,$s/' .. PATTERN_TEXT .. '/gce|'
+            .. ':1,.s/' .. PATTERN_TEXT .. '/gce'
     return COMMAND
-enddef
-
-
-def ExeCmdSubstitute(command: string): void
-    ExecuteCommand(command)
 enddef
 
 
@@ -174,15 +197,14 @@ enddef
 
 def ExeCmdYank(command: string): void
     const SAVE_REG: string = @a
-    ExecuteCommand(command)
+    unsilent execute ':' .. command
     @" = @a
     @a = SAVE_REG
 enddef
 
 
-def ExecuteCommand(command: string): void
-    SLV.SaveLoadView(v:true)
-    unsilent execute ':' .. command
-    SLV.SaveLoadView(v:false)
+def GetCmdGrep(pattern: string, path: string): string
+    const COMMAND: string = 'vim /' .. pattern .. '/j ' .. path 
+    return COMMAND
 enddef
 
