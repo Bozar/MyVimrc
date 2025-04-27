@@ -5,6 +5,7 @@ import autoload 'temp_file.vim' as TF
 
 export const DEFAULT: number = 0
 export const LOC: number = 1
+export const QUICK_FIX: number = 2
 
 
 export def IsValidWindowNumber(win_nr: number): bool
@@ -24,6 +25,7 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
         tab split
     endif
 
+    wincmd o
     if layout ==# DEFAULT
         VerticalSplit(LEFT_COLUMN_WIDTH)
         TF.GoToTempBuffer(TF.NPAD)
@@ -33,14 +35,24 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
     elseif layout ==# LOC
         VerticalSplit(LEFT_COLUMN_WIDTH_NARROW)
         execute 'edit ' .. LOC_FILE
+
+    elseif layout ==# QUICK_FIX
+        VerticalSplit(LEFT_COLUMN_WIDTH)
+        TF.GoToTempBuffer(TF.NPAD)
+        HorizontalSplit(RIGHT_BOTTOM_HEIGHT)
+        TF.GoToTempBuffer(TF.BUFL)
+
     endif
 
     :1wincmd w
+    if layout ==# QUICK_FIX
+        belowright copen
+        :1wincmd w
+    endif
 enddef
 
 
 def VerticalSplit(width: number): void
-    wincmd o
     wincmd v
     execute 'vertical resize ' .. width
     :2wincmd w

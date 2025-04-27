@@ -49,6 +49,7 @@ nnoremap <silent> <unique> <leader>jU
         \ :silent call <sid>TF.GoToTempBuffer(<sid>TF.BUFL)<cr>
 
 nnoremap <silent> <unique> <leader>jh
+        \ :silent 1wincmd w<cr>
         \ :silent belowright copen<cr>
 
 # x. {{{1
@@ -57,11 +58,15 @@ nnoremap <silent> <unique> <leader>xx
         \ :silent call <sid>LT.SplitWindow(<sid>LT.DEFAULT, v:false)<cr>
 nnoremap <silent> <unique> <leader>xz
         \ :silent call <sid>LT.SplitWindow(<sid>LT.LOC, v:false)<cr>
+nnoremap <silent> <unique> <leader>xc
+        \ :silent call <sid>LT.SplitWindow(<sid>LT.QUICK_FIX, v:false)<cr>
 
 noremap <silent> <unique> <leader>zx
         \ :silent call <sid>LT.SplitWindow(<sid>LT.DEFAULT, v:true)<cr>
 nnoremap <silent> <unique> <leader>zz
         \ :silent call <sid>LT.SplitWindow(<sid>LT.LOC, v:true)<cr>
+nnoremap <silent> <unique> <leader>zc
+        \ :silent call <sid>LT.SplitWindow(<sid>LT.QUICK_FIX, v:true)<cr>
 
 
 # <f.> {{{1
