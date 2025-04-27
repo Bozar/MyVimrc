@@ -24,3 +24,9 @@ augroup temp_loc
     execute 'autocmd BufLeave ' .. TMP_FILE .. ' silent update'
 augroup END
 
+
+nnoremap <buffer> <silent> <leader>jh
+        \ :call <sid>TF.GoToTempWindow(
+        \       <sid>TF.LOC, <sid>TF.DEFAULT_NAME, v:false
+        \       )<cr>
+

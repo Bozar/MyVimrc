@@ -27,8 +27,13 @@ var escaped_substitute_text: string = ''
 var escaped_search_pattern: string = ''
 
 
+# If the text starts with '\[vVmMcC]', it is used as is.
 export def EscapeVeryNoMagic(text: string): string
-    return '\V\c' .. escape(text, '\/')
+    if text =~# '\v^\\[vVmMcC]'
+        return text
+    else
+        return '\V\c' .. escape(text, '\/')
+    endif
 enddef
 
 
@@ -79,18 +84,20 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
         command = ''
     endif
 
-    SLV.SaveLoadView(v:true)
     # Copy or execute only one command.
     if INPUT =~# COPY_COMMAND
         @" = command
     elseif escaped_search_pattern !=# EscapeVeryNoMagic('')
-        if (INPUT =~# REPLACE_PATTERN) || (INPUT =~# GREP_PATTERN)
+        SLV.SaveLoadView(v:true)
+        if INPUT =~# REPLACE_PATTERN
             unsilent execute ':' .. command
         elseif INPUT =~# COLLECT_TEXT
             ExeCmdYank(command)
+        elseif INPUT =~# GREP_PATTERN
+            silent execute ':' .. command
         endif
+        SLV.SaveLoadView(v:false)
     endif
-    SLV.SaveLoadView(v:false)
 enddef
 
 

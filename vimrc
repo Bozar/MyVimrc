@@ -508,9 +508,6 @@ function! s:SetBufferKeyMap(file_type) abort
                 \ :call <sid>LocalizationHelper('QuickCopy')<cr>
         inoremap <buffer> <silent> <c-cr> #CR#
 
-        nnoremap <buffer> <silent> <leader>jh
-                \ :call <sid>LocalizationHelper('JumpToOutputBuffer')<cr>
-
         nnoremap <buffer> <silent> <f1>
                 \ :call <sid>LocalizationHelper('MapSearchKey', 0, 0)<cr>
         vnoremap <buffer> <silent> <f1>
