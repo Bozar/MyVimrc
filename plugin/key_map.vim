@@ -10,7 +10,7 @@ import autoload 'quick_search.vim' as QS
 # f. {{{1
 
 nnoremap <silent> <unique> <leader>fe :Explore<cr>
-nnoremap <silent> <unique> <leader>fc :execute 'Explore ' .. getcwd()<cr>
+nnoremap <silent> <unique> <leader>fE :execute 'Explore ' .. getcwd()<cr>
 
 nnoremap <silent> <unique> <leader>ff :update<cr>
 nnoremap <silent> <unique> <leader>fF
@@ -45,6 +45,8 @@ nnoremap <silent> <unique> <leader>ju
 nnoremap <silent> <unique> <leader>jU
         \ :silent call <sid>TF.GoToTempBuffer(<sid>TF.BUFL)<cr>
 
+nnoremap <silent> <unique> <leader>jh
+        \ :silent belowright copen<cr>
 
 # x. {{{1
 
