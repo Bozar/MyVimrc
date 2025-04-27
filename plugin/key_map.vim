@@ -5,12 +5,15 @@ import autoload 'temp_file.vim' as TF
 import autoload 'layout.vim' as LT
 import autoload 'session.vim' as SS
 import autoload 'quick_search.vim' as QS
+import autoload 'command.vim' as CMD
 
 
 # f. {{{1
 
 nnoremap <silent> <unique> <leader>fe :Explore<cr>
 nnoremap <silent> <unique> <leader>fE :execute 'Explore ' .. getcwd()<cr>
+nnoremap <silent> <unique> <leader>fc
+        \ :call <sid>CMD.ExecuteCurrentLine()<cr>
 
 nnoremap <silent> <unique> <leader>ff :update<cr>
 nnoremap <silent> <unique> <leader>fF

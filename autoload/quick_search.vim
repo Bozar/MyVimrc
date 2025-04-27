@@ -26,9 +26,7 @@ export def EscapeSubstitution(text: string): string
 enddef
 
 
-export def SearchHub(
-        is_visual_mode: bool, is_lazy_search: bool = v:false
-        ): void
+export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
     const RAW_REGISTER: string = GetRawText(@")
     const ESCAPED_REGISTER: string = EscapeVeryNoMagic(RAW_REGISTER)
 
