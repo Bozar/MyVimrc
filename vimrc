@@ -247,10 +247,6 @@ nnoremap <silent> <unique> <c-s-PageUp> :call <sid>MoveTabPage(0)<cr>
 nnoremap <silent> <unique> <c-End> :call <sid>CloseTabPage()<cr>
 
 
-nnoremap <silent> <unique> <leader>fs :silent call <sid>QuickSearch(0)<cr>
-vnoremap <silent> <unique> <tab> y:silent call <sid>QuickSearch(1)<cr>
-
-
 " Jump to a window
 nnoremap <silent> <unique> <leader><space> :call <sid>JumpToPreviousWindow()<cr>
 
@@ -577,116 +573,6 @@ function! s:SetBufferKeyMap(file_type) abort
     if has_key(l:dict_func, a:file_type)
         call l:dict_func[a:file_type]()
     endif
-endfunction
-
-
-function! s:QuickSearch(add_to_register) abort
-    let l:dict_func = {}
-
-
-    function! l:dict_func['_SetVariable'](input, text) abort
-        if a:input =~# 'a'
-            call <sid>SetConstant('s:QuickSearch_PATTERN', a:text)
-        endif
-        if a:input =~# 'b'
-            call <sid>SetConstant('s:QuickSearch_STRING', a:text)
-        endif
-
-        if a:input =~# 's'
-            const l:TEMP_SAVE = s:QuickSearch_STRING
-            call <sid>SetConstant('s:QuickSearch_STRING', s:QuickSearch_PATTERN)
-            call <sid>SetConstant('s:QuickSearch_PATTERN', l:TEMP_SAVE)
-        endif
-
-        if a:input =~# 'd'
-            call <sid>SetConstant('s:QuickSearch_STRING', '')
-        endif
-    endfunction
-
-
-    function! l:dict_func['_QuickSubstitute'](input) abort
-        const l:NEW_PATTERN = <sid>EscapeString(s:QuickSearch_PATTERN, 0)
-        const l:NEW_STRING = <sid>EscapeString(s:QuickSearch_STRING, 1)
-        const l:COMMAND = '%s/' .. l:NEW_PATTERN .. '/' .. l:NEW_STRING
-                \ .. '/gce'
-
-        if a:input =~# 'c'
-            let @" = l:COMMAND
-        endif
-        if a:input =~# 'e'
-            call <sid>SaveRestoreView(0)
-            unsilent execute l:COMMAND
-            call <sid>SaveRestoreView(1)
-        endif
-    endfunction
-
-
-    function! l:dict_func['_GetPrompt']() abort
-        call <sid>SetConstant('s:QuickSearch_STRING', '', 1)
-        call <sid>SetConstant('s:QuickSearch_PATTERN', '', 1)
-
-        const l:PATTERN = <sid>EscapeString(s:QuickSearch_PATTERN, 0)
-        const l:SUBSTITUTE = <sid>EscapeString(s:QuickSearch_STRING, 1)
-        const l:EOL = "\n"
-        const l:INPUT = 'Pattern A: [' .. l:PATTERN .. ']' .. l:EOL
-                \ .. 'String B: [' .. l:SUBSTITUTE .. ']' .. l:EOL
-                \ .. 'Register ": [' .. @" .. ']' .. l:EOL
-                \ .. 'Overwrite [A|B], [S]wap A & B, [D]elete B,' .. l:EOL
-                \ .. '> [C]opy|[E]xecute command, [Y]ank all '
-        return l:INPUT
-    endfunction
-
-
-    function! l:dict_func['_GetSearchResult'](pattern) abort
-        const l:EOL = "\n"
-        const l:COMMAND_OUTPUT = execute('%s/' .. a:pattern .. '//gne')
-        const l:SEARCH_RESULT = (l:COMMAND_OUTPUT ==# '')
-                \ ? 'Match: 0, Line: 0' .. l:EOL
-                \ : substitute(l:COMMAND_OUTPUT, '\v^\D*(\d+)\D*(\d+)\D*$',
-                \ 'Match: \1, Line: \2', '') .. l:EOL
-        return l:SEARCH_RESULT
-    endfunction
-
-
-    " NOTE: This function no longer works.
-    function! l:dict_func['_YankAllText'](pattern) abort
-        const l:this_buffer = bufnr()
-        const l:TEMP_SAVE = @a
-        let @a = ''
-        execute 'g/' .. a:pattern .. '/normal! "Ayy'
-        call <sid>JumpToScratchBuffer('npad', 1)
-        $put = @a
-        execute 'buffer ' .. l:this_buffer
-        let @a = l:TEMP_SAVE
-    endfunction
-
-
-    " If `register "` has more than one lines, keep only the first one.
-    const l:RAW_PATTERN = substitute(@", '\v([^\n]*)\n*.*', '\1', '')
-    const l:ESCAPED_PATTERN = <sid>EscapeString(l:RAW_PATTERN, 0)
-    " Call from visual mode.
-    if a:add_to_register
-        normal! `<
-        let @/ = l:ESCAPED_PATTERN
-    endif
-    call <sid>SaveRestoreView(0)
-    unsilent const l:INPUT = input(
-            \ l:dict_func['_GetSearchResult'](l:ESCAPED_PATTERN)
-            \ .. l:dict_func['_GetPrompt']()
-            \ )
-    call <sid>SaveRestoreView(1)
-
-    if l:INPUT ==# ''
-        return
-    endif
-
-    call l:dict_func['_SetVariable'](l:INPUT, l:RAW_PATTERN)
-    if l:INPUT =~# 'y'
-        call <sid>SaveRestoreView(0)
-        call l:dict_func['_YankAllText'](l:ESCAPED_PATTERN)
-        call <sid>SaveRestoreView(1)
-    endif
-    call l:dict_func['_QuickSubstitute'](l:INPUT)
 endfunction
 
 

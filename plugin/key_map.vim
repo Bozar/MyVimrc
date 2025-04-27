@@ -4,6 +4,7 @@ vim9script
 import autoload 'temp_file.vim' as TF
 import autoload 'layout.vim' as LT
 import autoload 'session.vim' as SS
+import autoload 'quick_search.vim' as QS
 
 
 # f. {{{1
@@ -19,6 +20,13 @@ nnoremap <silent> <unique> <leader>fx :xa<cr>
 
 nnoremap <silent> <unique> <leader>fl :left 0<cr>
 vnoremap <silent> <unique> <leader>fl :left 0<cr>
+
+nnoremap <silent> <unique> <leader>fs
+        \ :silent call <sid>QS.SearchHub(v:false)<cr>
+vnoremap <silent> <unique> <leader>fs
+        \ y:silent call <sid>QS.SearchHub(v:true)<cr>
+vnoremap <silent> <unique> <tab>
+        \ y:silent call <sid>QS.SearchHub(v:true)<cr>
 
 nnoremap <silent> <unique> <leader>fh :setlocal hlsearch!<cr>
 
