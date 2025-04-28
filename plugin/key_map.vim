@@ -4,7 +4,7 @@ vim9script
 import autoload 'temp_file.vim' as TF
 import autoload 'layout.vim' as LT
 import autoload 'session.vim' as SS
-import autoload 'quick_search.vim' as QS
+import autoload 'power_search.vim' as PS
 import autoload 'quick_command.vim' as QC
 import autoload 'fold_marker.vim' as FM
 import autoload 'tab_page.vim' as TP
@@ -37,9 +37,9 @@ vnoremap <silent> <unique> <leader>fl
         \ :left 0<cr>
 
 nnoremap <silent> <unique> <leader><tab>
-        \ :silent call <sid>QS.SearchHub(v:false)<cr>
+        \ :silent call <sid>PS.SearchHub(v:false)<cr>
 vnoremap <silent> <unique> <tab>
-        \ y:silent call <sid>QS.SearchHub(v:true)<cr>
+        \ y:silent call <sid>PS.SearchHub(v:true)<cr>
 
 
 # j. {{{1

@@ -1,6 +1,6 @@
 vim9script
 
-import autoload 'quick_search.vim' as QS
+import autoload 'power_search.vim' as PS
 import autoload 'layout.vim' as LT
 
 
@@ -36,7 +36,7 @@ export def SearchText(is_visual: bool, has_prompt: bool): void
         search_range = range(1, winnr('$'))
     endif
 
-    search_text = QS.EscapeVeryNoMagic(trim(current_line))
+    search_text = PS.EscapeVeryNoMagic(trim(current_line))
     current_window = winnr()
 
     for i: number in search_range
