@@ -20,8 +20,6 @@ nnoremap <silent> <unique> <leader>fd
         \ :call <sid>FM.EditFoldMarker(&filetype)<cr>
 
 nnoremap <silent> <unique> <leader>ff :update<cr>
-nnoremap <silent> <unique> <leader>fF
-        \ :silent call <sid>SS.SaveSession()<cr>
 nnoremap <silent> <unique> <leader>fa :wa<cr>
 nnoremap <silent> <unique> <leader>fx :xa<cr>
 
@@ -84,7 +82,7 @@ nnoremap <silent> <unique> <leader>zc
 #   file exists.
 nnoremap <silent> <unique> <f1>
         \ :call <sid>SS.LoadSession('<f1>')<cr>
-nnoremap <silent> <unique> <f5>
+nnoremap <silent> <unique> <f12>
         \ :silent call <sid>SS.SaveSession()<cr>
 
 inoremap <silent> <unique> <f1> <Nop>
