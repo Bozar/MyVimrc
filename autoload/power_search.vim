@@ -2,6 +2,7 @@ vim9script
 
 
 import autoload 'save_load_state.vim' as SLS
+import autoload 'layout.vim' as LT
 
 
 const EOL: string = "\n"
@@ -116,6 +117,8 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
         # @" is protected by 'SLS.SaveLoadState'. Its content remains unchanged.
         if THIS_CMD ==# COLLECT_TEXT
             @" = save_yank
+        elseif THIS_CMD ==# GREP_PATTERN
+            LT.SplitWindow(LT.QUICK_FIX, false)
         endif
     endif
 enddef
