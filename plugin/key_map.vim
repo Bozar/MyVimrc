@@ -12,19 +12,29 @@ import autoload 'tab_page.vim' as TP
 
 # f. {{{1
 
-nnoremap <silent> <unique> <leader>fe :Explore<cr>
-nnoremap <silent> <unique> <leader>fE :execute 'Explore ' .. getcwd()<cr>
+nnoremap <silent> <unique> <leader>fe
+        \ :Explore<cr>
+nnoremap <silent> <unique> <leader>fE
+        \ :execute 'Explore ' .. getcwd()<cr>
+
 nnoremap <silent> <unique> <leader>fc
         \ :call <sid>QC.ExecuteCurrentLine()<cr>
 nnoremap <silent> <unique> <leader>fd
         \ :call <sid>FM.EditFoldMarker(&filetype)<cr>
+nnoremap <silent> <unique> <leader>fv
+        \ :call <sid>QC.ForkVim(<sid>QC.IS_GUI)<cr>
 
-nnoremap <silent> <unique> <leader>ff :update<cr>
-nnoremap <silent> <unique> <leader>fa :wa<cr>
-nnoremap <silent> <unique> <leader>fx :xa<cr>
+nnoremap <silent> <unique> <leader>ff
+        \ :update<cr>
+nnoremap <silent> <unique> <leader>fa
+        \ :wa<cr>
+nnoremap <silent> <unique> <leader>fx
+        \ :xa<cr>
 
-nnoremap <silent> <unique> <leader>fl :left 0<cr>
-vnoremap <silent> <unique> <leader>fl :left 0<cr>
+nnoremap <silent> <unique> <leader>fl
+        \ :left 0<cr>
+vnoremap <silent> <unique> <leader>fl
+        \ :left 0<cr>
 
 nnoremap <silent> <unique> <leader><tab>
         \ :silent call <sid>QS.SearchHub(v:false)<cr>

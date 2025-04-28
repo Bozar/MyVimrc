@@ -221,24 +221,11 @@ endtry
 set background=light
 
 
-" +--------- Settings Triggered by Auto-Commands ---------+ {{{3
-
-augroup vimrc_setting
-    autocmd!
-    " Maximize window
-    autocmd GUIEnter * call <sid>MaximizeWindow(s:IS_WINDOWS, s:IS_GUI)
-    " Switch IME
-    autocmd InsertLeave * call <sid>SwitchIme(0)
-    autocmd InsertEnter * call <sid>SwitchIme(1)
-augroup END
-
-
 " +========= Key Mappings =========+ {{{2
 " +--------- ### ---------+ {{{3
 
 " +--------- Custom actions ---------+ {{{3
 
-nnoremap <silent> <unique> <leader>fv :silent call <sid>ForkVim()<cr>
 nnoremap <silent> <unique> <leader>fg :silent call <sid>FormatText()<cr>
 
 
@@ -553,13 +540,6 @@ function! s:GetTimeStamp(show_mode) abort
 endfunction
 
 
-function! s:ForkVim() abort
-    if s:IS_GUI
-        !gvim
-    endif
-endfunction
-
-
 function! s:LoadSnippetDict(file_type) abort
     if !has_key(s:SNIPPET_DICT, a:file_type)
         return
@@ -678,29 +658,6 @@ function! s:SaveRestoreView(restore)
         call l:dict_func['_SaveView']()
     else
         call l:dict_func['_RestoreView']()
-    endif
-endfunction
-
-
-function! s:MaximizeWindow(is_win, is_gui) abort
-    if a:is_win
-        simalt ~x
-    elseif a:is_gui
-        set guiheadroom=0
-        winsize 123 31
-    endif
-endfunction
-
-
-function! s:SwitchIme(switch_on) abort
-    if s:IS_WINDOWS && s:IS_GUI
-        if a:switch_on
-            set noimdisable
-            set iminsert=2
-        else
-            set imdisable
-            set iminsert=0
-        endif
     endif
 endfunction
 
