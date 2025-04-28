@@ -13,6 +13,8 @@ setlocal nobuflisted
 
 nnoremap <buffer> <silent> <cr>
         \ :call <sid>BL.OpenWindow(1, 1)<cr>
+nnoremap <buffer> <silent> <leader><cr>
+        \ :call <sid>BL.SplitOpenWindow()<cr>
 nnoremap <buffer> <silent> o
         \ :call <sid>BL.OpenByPrompt()<cr>
 nnoremap <buffer> <silent> i

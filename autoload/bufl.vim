@@ -2,6 +2,7 @@ vim9script
 
 import autoload 'layout.vim' as LT
 import autoload 'save_load_state.vim' as SLS
+import autoload 'temp_file.vim' as TF
 
 
 export def OpenByPrompt(): void
@@ -50,6 +51,20 @@ export def OpenWindow(open_win: number, jump_win: number): void
     execute ':' .. OPEN .. 'wincmd w'
     execute 'buffer ' .. BUFFER_NUMBER
     execute ':' .. JUMP .. 'wincmd w'
+enddef
+
+
+export def SplitOpenWindow(): void
+    if winnr('$') ==# 3
+        :1wincmd w
+        split
+        TF.GoToTempWindow(TF.BUFL)
+        OpenWindow(2, 2)
+    elseif winnr('$') ==# 4
+        OpenWindow(2, 2)
+    else
+        OpenByPrompt()
+    endif
 enddef
 
 
