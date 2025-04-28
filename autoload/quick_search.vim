@@ -53,8 +53,6 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
         CFDO,
     ]
 
-    var command: string = ''
-
     ResetCursor(is_visual_mode, ESCAPED_REGISTER)
     SLS.SaveLoadState(v:true)
     # Set variables the first time for prompt message.
@@ -82,6 +80,8 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
     const THIS_CMD: string = FilterCommand(INPUT, ORDERED_COMMANDS)
 
     # Save only one command.
+    var command: string = ''
+
     if THIS_CMD ==# REPLACE_PATTERN
         command = GetCmdSubstitute(
                 escaped_search_pattern, escaped_substitute_text
@@ -97,6 +97,8 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
     endif
 
     # Copy or execute only one command.
+    var save_yank: string
+
     if IS_COPY
         @" = command
     elseif escaped_search_pattern !=# EscapeVeryNoMagic('')
@@ -104,13 +106,17 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
         if THIS_CMD ==# REPLACE_PATTERN
             unsilent execute ':' .. command
         elseif THIS_CMD ==# COLLECT_TEXT
-            ExeCmdYank(command)
+            save_yank = ExeCmdYank(command)
         elseif THIS_CMD ==# GREP_PATTERN
             ExeCmdCfdo(command)
         elseif THIS_CMD ==# CFDO
             unsilent execute ':' .. command
         endif
         SLS.SaveLoadState(v:false)
+        # @" is protected by 'SLS.SaveLoadState'. Its content remains unchanged.
+        if THIS_CMD ==# COLLECT_TEXT
+            @" = save_yank
+        endif
     endif
 enddef
 
@@ -217,11 +223,13 @@ def GetCmdYank(pattern: string): string
 enddef
 
 
-def ExeCmdYank(command: string): void
+def ExeCmdYank(command: string): string
     const SAVE_REG: string = @a
     unsilent execute ':' .. command
-    @" = @a
+
+    const SAVE_YANK: string = @a
     @a = SAVE_REG
+    return SAVE_YANK
 enddef
 
 
