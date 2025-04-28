@@ -1,7 +1,7 @@
 vim9script
 
 import autoload 'layout.vim' as LT
-import autoload 'save_load_view.vim' as SLV
+import autoload 'save_load_state.vim' as SLS
 
 
 export def OpenByPrompt(): void
@@ -28,12 +28,12 @@ export def OpenTab(): void
 
     const TAB_PAGE: number = tabpagenr()
 
-    SLV.SaveLoadView(v:true)
+    SLS.SaveLoadState(v:true)
     LT.SplitWindow(LT.DEFAULT, v:true)
     tabmove $
     execute 'buffer ' .. BUFFER_NUMBER
     execute 'tabnext ' .. TAB_PAGE
-    SLV.SaveLoadView(v:false)
+    SLS.SaveLoadState(v:false)
 enddef
 
 
@@ -56,7 +56,7 @@ enddef
 # nomodifiable: cannot insert text; readonly: cannot save file.
 # https://stackoverflow.com/questions/16680615/
 export def RefreshBufferList(): void
-    SLV.SaveLoadView(v:true)
+    SLS.SaveLoadState(v:true)
     setlocal modifiable
 
     :%delete
@@ -65,7 +65,7 @@ export def RefreshBufferList(): void
     update
 
     setlocal nomodifiable
-    SLV.SaveLoadView(v:false)
+    SLS.SaveLoadState(v:false)
 enddef
 
 
@@ -75,12 +75,12 @@ export def UpdateBuffer(): void
         return
     endif
 
-    SLV.SaveLoadView(v:true)
+    SLS.SaveLoadState(v:true)
     const SAVE_BUF_NR: number = bufnr()
 
     execute ':' .. BUFFER_NUMBER .. 'bufdo update'
     execute 'buffer ' .. SAVE_BUF_NR
-    SLV.SaveLoadView(v:false)
+    SLS.SaveLoadState(v:false)
 enddef
 
 

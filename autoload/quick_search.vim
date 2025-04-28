@@ -1,7 +1,7 @@
 vim9script
 
 
-import autoload 'save_load_view.vim' as SLV
+import autoload 'save_load_state.vim' as SLS
 
 
 const EOL: string = "\n"
@@ -56,7 +56,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
     var command: string = ''
 
     ResetCursor(is_visual_mode, ESCAPED_REGISTER)
-    SLV.SaveLoadView(v:true)
+    SLS.SaveLoadState(v:true)
     # Set variables the first time for prompt message.
     escaped_search_pattern = EscapeVeryNoMagic(search_pattern)
     escaped_substitute_text = EscapeSubstitution(substitute_text)
@@ -67,7 +67,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
                     RAW_REGISTER
                     )
             )
-    SLV.SaveLoadView(v:false)
+    SLS.SaveLoadState(v:false)
 
     if trim(INPUT) ==# ''
         return
@@ -100,7 +100,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
     if IS_COPY
         @" = command
     elseif escaped_search_pattern !=# EscapeVeryNoMagic('')
-        SLV.SaveLoadView(v:true)
+        SLS.SaveLoadState(v:true)
         if THIS_CMD ==# REPLACE_PATTERN
             unsilent execute ':' .. command
         elseif THIS_CMD ==# COLLECT_TEXT
@@ -110,7 +110,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
         elseif THIS_CMD ==# CFDO
             unsilent execute ':' .. command
         endif
-        SLV.SaveLoadView(v:false)
+        SLS.SaveLoadState(v:false)
     endif
 enddef
 
