@@ -404,21 +404,6 @@ function! s:SetBufferKeyMap(file_type) abort
 
 
     function! l:dict_func['loc']() abort
-        nnoremap <buffer> <silent> <cr>
-                \ :call <sid>LocalizationHelper('ResetCursorPosition')<cr>
-        nnoremap <buffer> <silent> <c-cr>
-                \ :call <sid>LocalizationHelper('QuickCopy')<cr>
-        inoremap <buffer> <silent> <c-cr> #CR#
-
-        nnoremap <buffer> <silent> <f1>
-                \ :call <sid>LocalizationHelper('MapSearchKey', 0, 0)<cr>
-        vnoremap <buffer> <silent> <f1>
-                \ y:call <sid>LocalizationHelper('MapSearchKey', 1, 0)<cr>
-
-        nnoremap <buffer> <silent> <f2>
-                \ :call <sid>LocalizationHelper('MapSearchKey', 0, 1)<cr>
-        vnoremap <buffer> <silent> <f2>
-                \ y:call <sid>LocalizationHelper('MapSearchKey', 1, 1)<cr>
         nnoremap <buffer> <silent> <s-f2>
                 \ :call <sid>LocalizationHelper('SearchGUID')<cr>
 

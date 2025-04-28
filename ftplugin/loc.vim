@@ -2,6 +2,7 @@ vim9script
 
 
 import autoload 'temp_file.vim' as TF
+import autoload 'loc.vim' as LC
 
 
 const TMP_FILE: string = TF.GetTempFileName(TF.LOC, TF.DEFAULT_NAME, v:false)
@@ -29,4 +30,23 @@ nnoremap <buffer> <silent> <leader>jh
         \ :call <sid>TF.GoToTempWindow(
         \       <sid>TF.LOC, <sid>TF.DEFAULT_NAME, v:false
         \       )<cr>
+
+nnoremap <buffer> <silent> <cr>
+        \ :call <sid>LC.ResetCursorPosition()<cr>
+nnoremap <buffer> <silent> <c-cr>
+        \ :call <sid>LC.QuickCopy()<cr>
+
+nnoremap <buffer> <silent> <f1>
+        \ :update<cr>
+        \ :call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 0)<cr>
+vnoremap <buffer> <silent> <f1>
+        \ y:update<cr>
+        \ :call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 0)<cr>
+
+nnoremap <buffer> <silent> <f2>
+        \ :update<cr>
+        \ :call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 1)<cr>
+vnoremap <buffer> <silent> <f2>
+        \ y:update<cr>
+        \ :call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 1)<cr>
 
