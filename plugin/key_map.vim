@@ -22,7 +22,7 @@ nnoremap <silent> <unique> <leader>fc
 nnoremap <silent> <unique> <leader>fd
         \ :call <sid>FM.EditFoldMarker(&filetype)<cr>
 nnoremap <silent> <unique> <leader>fv
-        \ :call <sid>QC.ForkVim(<sid>QC.IS_GUI)<cr>
+        \ :silent call <sid>QC.ForkVim(<sid>QC.IS_GUI)<cr>
 
 nnoremap <silent> <unique> <leader>ff
         \ :update<cr>
@@ -35,6 +35,8 @@ nnoremap <silent> <unique> <leader>fl
         \ :left 0<cr>
 vnoremap <silent> <unique> <leader>fl
         \ :left 0<cr>
+
+nnoremap <silent> <unique> <leader>fh :setlocal hlsearch!<cr>
 
 nnoremap <silent> <unique> <leader><tab>
         \ :silent call <sid>PS.SearchHub(v:false)<cr>
@@ -136,6 +138,11 @@ nnoremap <unique> ` ~
 vnoremap <unique> ` ~
 
 
+# Search backwards
+nnoremap <unique> , ?
+vnoremap <unique> , ?
+
+
 # 0/-: First/last non-blank character in a line
 # ^: First character in a line
 noremap <unique> 0 ^
@@ -168,10 +175,6 @@ nnoremap <unique> <c-k> gk
 
 vnoremap <unique> <c-j> gj
 vnoremap <unique> <c-k> gk
-
-
-# Switch setting
-nnoremap <silent> <unique> , :setlocal hlsearch!<cr>
 
 
 # Manage tab page

@@ -31,7 +31,7 @@ enddef
 
 export def ForkVim(is_gui: bool): void
     if is_gui
-        silent !gvim
+        !gvim
     endif
 enddef
 

@@ -167,14 +167,14 @@ def GetPrompt(
         pattern: string, text: string, path: string, raw_register: string
         ): string
     const INPUT: string = ''
-            .. '-------------------------------------------------' .. EOL
+            .. '--------------------------------------------' .. EOL
             .. '[A] Pattern: [' .. pattern .. ']' .. EOL
             .. '[B] Text: [' .. text .. ']' .. EOL
             .. '[F] File path: [' .. path .. ']' .. EOL
             .. '[@"]: [' .. raw_register .. ']' .. EOL
-            .. '-------------------------------------------------' .. EOL
+            .. '--------------------------------------------' .. EOL
             .. 'Overwrite [A|B|F], [S]wap A & B, [E]rase B,' .. EOL
-            .. '[C]opy, [R]eplace, Collec[T], [G]rep, Cf[D]o: ' .. EOL
+            .. '[C]opy, [R]eplace, Collec[T], [G]rep, Cf[D]o' .. EOL
             .. '> '
     return INPUT
 enddef
