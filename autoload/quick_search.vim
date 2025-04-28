@@ -63,7 +63,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
     unsilent const INPUT: string = input(
             GetSearchResult(ESCAPED_REGISTER, is_lazy_search) .. EOL
             .. GetPrompt(
-                    escaped_search_pattern, escaped_substitute_text, grep_path, 
+                    escaped_search_pattern, escaped_substitute_text, grep_path,
                     RAW_REGISTER
                     )
             )
@@ -106,7 +106,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
         elseif THIS_CMD ==# COLLECT_TEXT
             ExeCmdYank(command)
         elseif THIS_CMD ==# GREP_PATTERN
-            silent execute ':' .. command
+            ExeCmdCfdo(command)
         elseif THIS_CMD ==# CFDO
             unsilent execute ':' .. command
         endif
@@ -168,7 +168,8 @@ def GetPrompt(
             .. '[@"]: [' .. raw_register .. ']' .. EOL
             .. '-------------------------------------------------' .. EOL
             .. 'Overwrite [A|B|F], [S]wap A & B, [E]rase B,' .. EOL
-            .. '> [C]opy, [R]eplace, Collec[T], [G]rep, Cf[D]o: '
+            .. '[C]opy, [R]eplace, Collec[T], [G]rep, Cf[D]o: ' .. EOL
+            .. '> '
     return INPUT
 enddef
 
@@ -225,7 +226,7 @@ enddef
 
 
 def GetCmdGrep(pattern: string, path: string): string
-    const COMMAND: string = 'vim /' .. pattern .. '/j ' .. path 
+    const COMMAND: string = 'vim /' .. pattern .. '/j ' .. path
     return COMMAND
 enddef
 
@@ -234,6 +235,17 @@ def GetCmdCfdo(pattern: string, text: string): string
     const PATTERN_TEXT: string = pattern .. '/' .. text
     const COMMAND: string = 'cfdo :%s/' .. PATTERN_TEXT .. '/gc'
     return COMMAND
+enddef
+
+
+def ExeCmdCfdo(command: string): void
+    try
+        silent execute ':' .. command
+    catch /^Vim\%((\a\+)\)\=:E480:/ 
+        unsilent echom 'E480: Pattern not found.'
+    catch /^Vim\%((\a\+)\)\=:E683:/ 
+        unsilent echom 'E684: Invalid file path.'
+    endtry
 enddef
 
 
