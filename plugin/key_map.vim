@@ -7,6 +7,7 @@ import autoload 'session.vim' as SS
 import autoload 'quick_search.vim' as QS
 import autoload 'quick_command.vim' as QC
 import autoload 'fold_marker.vim' as FM
+import autoload 'tab_page.vim' as TP
 
 
 # f. {{{1
@@ -27,14 +28,10 @@ nnoremap <silent> <unique> <leader>fx :xa<cr>
 nnoremap <silent> <unique> <leader>fl :left 0<cr>
 vnoremap <silent> <unique> <leader>fl :left 0<cr>
 
-nnoremap <silent> <unique> <leader>fs
+nnoremap <silent> <unique> <leader><tab>
         \ :silent call <sid>QS.SearchHub(v:false)<cr>
-vnoremap <silent> <unique> <leader>fs
-        \ y:silent call <sid>QS.SearchHub(v:true)<cr>
 vnoremap <silent> <unique> <tab>
         \ y:silent call <sid>QS.SearchHub(v:true)<cr>
-
-nnoremap <silent> <unique> <leader>fh :setlocal hlsearch!<cr>
 
 
 # j. {{{1
@@ -126,11 +123,6 @@ onoremap <silent> <unique> il :normal vil<CR>
 noremap <unique> ' `
 
 
-# Search backward.
-nnoremap <unique> , ?
-vnoremap <unique> , ?
-
-
 # Switch case
 nnoremap <unique> ` ~
 vnoremap <unique> ` ~
@@ -168,4 +160,19 @@ nnoremap <unique> <c-k> gk
 
 vnoremap <unique> <c-j> gj
 vnoremap <unique> <c-k> gk
+
+
+# Switch setting
+nnoremap <silent> <unique> , :setlocal hlsearch!<cr>
+
+
+# Manage tab page
+nnoremap <silent> <unique> <left> gT
+nnoremap <silent> <unique> <right> gt
+nnoremap <silent> <unique> <up>
+        \ :silent call <sid>TP.MoveTabPage(v:false)<cr>
+nnoremap <silent> <unique> <down>
+        \ :silent call <sid>TP.MoveTabPage(v:true)<cr>
+nnoremap <silent> <unique> <leader>ft
+        \ :silent call <sid>TP.CloseTabPageToTheRight()<cr>
 

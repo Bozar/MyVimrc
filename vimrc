@@ -242,15 +242,9 @@ nnoremap <silent> <unique> <leader>fv :silent call <sid>ForkVim()<cr>
 nnoremap <silent> <unique> <leader>fg :silent call <sid>FormatText()<cr>
 
 
-nnoremap <silent> <unique> <c-s-PageDown> :call <sid>MoveTabPage(1)<cr>
-nnoremap <silent> <unique> <c-s-PageUp> :call <sid>MoveTabPage(0)<cr>
-nnoremap <silent> <unique> <c-End> :call <sid>CloseTabPage()<cr>
-
-
 " +========= Commands =========+ {{{2
 " +--------- ### ---------+ {{{3
 
-command -bar -nargs=0 CountCjkCharacter call <sid>CountCjkCharacter()
 command -bar -nargs=? FormatText silent call <sid>FormatText(<f-args>)
 command -bar -nargs=* InsertTimeStamp call <sid>InsertTimeStamp(<f-args>)
 
@@ -427,34 +421,6 @@ function! s:LoadFileTypePlugin(file_type) abort
 endfunction
 
 
-function! s:MoveTabPage(move_right) abort
-    const l:CURRENT_TAB = tabpagenr()
-    const l:LAST_TAB = tabpagenr('$')
-
-    if a:move_right
-        if l:CURRENT_TAB <# l:LAST_TAB
-            const l:NEXT_TAB = '+1'
-        else
-            const l:NEXT_TAB = '0'
-        endif
-    else
-        if l:CURRENT_TAB ># 1
-            const l:NEXT_TAB = '-1'
-        else
-            const l:NEXT_TAB = '$'
-        endif
-    endif
-    execute 'tabmove ' .. l:NEXT_TAB
-endfunction
-
-
-function! s:CloseTabPage() abort
-    if tabpagenr('$') ># 1
-        tabclose
-    endif
-endfunction
-
-
 function! s:SetBufferKeyMap(file_type) abort
     let l:dict_func = {}
 
@@ -617,26 +583,6 @@ function! s:LoadAbbreviationDict(file_type) abort
         execute 'iabbrev <silent> <buffer> ' .. l:i .. ' '
                 \ .. l:ABBREVIATION[l:i]
     endfor
-endfunction
-
-
-" :h digraph-table
-function s:CountCjkCharacter()
-    const l:PATTERN = '\v\C[^\x00-\xff]'
-    const l:MESSAGE = 'CJK character(s): '
-    const l:OUTPUT =    '\v\C^\D*(\d+).*'
-    let l:count = '0'
-
-    if search(l:PATTERN, 'n') ==# 0
-        echom l:MESSAGE .. l:count
-        return
-    endif
-
-    call <sid>SaveRestoreView(0)
-    const l:COUNT = substitute(execute('silent %s/' .. l:PATTERN .. '//gn'),
-            \ l:OUTPUT, '\1', '')
-    echom l:MESSAGE .. l:COUNT
-    call <sid>SaveRestoreView(1)
 endfunction
 
 
