@@ -1,6 +1,9 @@
 vim9script
 
 
+import autoload 'layout.vim' as LT
+
+
 export const IS_GUI: bool = has('gui_running')
 export const IS_WINDOWS: bool = has('win32') || has('win32unix')
 

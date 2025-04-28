@@ -221,18 +221,9 @@ endtry
 set background=light
 
 
-" +========= Key Mappings =========+ {{{2
-" +--------- ### ---------+ {{{3
-
-" +--------- Custom actions ---------+ {{{3
-
-nnoremap <silent> <unique> <leader>fg :silent call <sid>FormatText()<cr>
-
-
 " +========= Commands =========+ {{{2
 " +--------- ### ---------+ {{{3
 
-command -bar -nargs=? FormatText silent call <sid>FormatText(<f-args>)
 command -bar -nargs=* InsertTimeStamp call <sid>InsertTimeStamp(<f-args>)
 
 
@@ -659,134 +650,6 @@ function! s:SaveRestoreView(restore)
     else
         call l:dict_func['_RestoreView']()
     endif
-endfunction
-
-
-function! s:FormatText(line_space = 2) abort
-    let l:dict_func = {}
-
-
-    function! l:dict_func['_DeleteTrailSpace']() abort
-        const l:SPACE = '\v\s+$'
-        if search(l:SPACE, 'cnw')
-            execute '%s/' .. l:SPACE .. '//g'
-        endif
-    endfunction
-
-
-    function! l:dict_func['_DeleteBlankLine'](line_space = 0) abort
-        " If the placeholder is a non-blank string, use these search patterns.
-        " You may also need to check if the placeholder already exists in a
-        " file.
-
-        "const l:BLANK_PATTERN = '\v^\s*$'
-        "const l:TEXT_PATTERN = '\v\S+\s*$'
-        "const l:PLACEHOLDER = '####'
-        const l:BLANK_PATTERN = '\v^$'
-        const l:TEXT_PATTERN = '\v\S+$'
-        const l:PLACEHOLDER = ' '
-
-        const l:DELETE_TRAIL = '\V' .. l:PLACEHOLDER .. '\+\v$'
-        const l:LAST_LINE = line('$')
-
-        " Comment this line if the placeholder is a non-blank string and you
-        " want to keep existing trailing spaces as is.
-        call self['_DeleteTrailSpace']()
-
-        if !search(l:BLANK_PATTERN, 'cwn')
-            return
-        elseif a:line_space ==# 0
-            execute 'g/' .. l:BLANK_PATTERN .. '/delete'
-            return
-        elseif (a:line_space <# 0) || (1 + a:line_space ># l:LAST_LINE)
-            return
-        endif
-
-        " 1. Search text lines forwards, starting from the beginning.
-        " 2. For every text line, mark itself and following `a:line_space`
-        " lines.
-        execute 1
-        if !search(l:TEXT_PATTERN, 'c', l:LAST_LINE - a:line_space)
-            return
-        endif
-        const l:FIRST_LINE = line('.')
-        execute l:FIRST_LINE .. ',$-' .. a:line_space .. 'g/' .. l:TEXT_PATTERN
-                \ .. '/.,.+' .. a:line_space .. 's/$/' .. l:PLACEHOLDER .. '/'
-
-        " 3. Mark leading blank lines.
-        if l:FIRST_LINE ># a:line_space
-            execute l:FIRST_LINE - a:line_space .. ',' l:FIRST_LINE .. 's/$/' ..
-                    \ l:PLACEHOLDER .. '/'
-        else
-            execute '1,' l:FIRST_LINE .. 's/$/' .. l:PLACEHOLDER .. '/'
-        endif
-
-        " 4. Delete unmarked blank lines.
-        if search(l:BLANK_PATTERN)
-            execute 'g/' .. l:BLANK_PATTERN .. '/delete'
-        endif
-        " 5. Delete trainling placeholders.
-        if search(l:DELETE_TRAIL)
-            execute '%s/' .. l:DELETE_TRAIL .. '//'
-        endif
-    endfunction
-
-
-    function! l:dict_func['_AddLastBlankLine']() abort
-        if getline(line('$')) =~# '\v^\s*$'
-            return
-        endif
-        $s/\v$/\r
-    endfunction
-
-
-    function! l:dict_func['outl']() abort
-        %left 0
-        call self['_DeleteTrailSpace']()
-        call self['_DeleteBlankLine'](2)
-        call self['_AddLastBlankLine']()
-    endfunction
-
-
-    function! l:dict_func['vim']() abort
-        call self['_DeleteTrailSpace']()
-        call self['_DeleteBlankLine'](2)
-        call self['_AddLastBlankLine']()
-    endfunction
-
-
-    function! l:dict_func['loc']() abort
-        setlocal fileencoding=utf-8
-        setlocal fileformat=unix
-        %s/\r//ge
-        call <sid>LocalizationHelper('JoinLine')
-    endfunction
-
-
-    function! l:dict_func['markdown']() abort
-        call self['_DeleteTrailSpace']()
-        call self['_DeleteBlankLine'](3)
-        call self['_AddLastBlankLine']()
-    endfunction
-
-
-    function! l:dict_func['text']() abort
-        call self['_DeleteTrailSpace']()
-        call self['_DeleteBlankLine'](3)
-        call self['_AddLastBlankLine']()
-    endfunction
-
-
-    const l:FILE_TYPE = &filetype
-    call <sid>SaveRestoreView(0)
-    call <sid>InsertTimeStamp()
-    if has_key(l:dict_func, l:FILE_TYPE)
-        call l:dict_func[l:FILE_TYPE]()
-    else
-        call l:dict_func['_DeleteTrailSpace']()
-        call l:dict_func['_DeleteBlankLine'](a:line_space)
-    endif
-    call <sid>SaveRestoreView(1)
 endfunction
 
 

@@ -8,6 +8,7 @@ import autoload 'power_search.vim' as PS
 import autoload 'quick_command.vim' as QC
 import autoload 'fold_marker.vim' as FM
 import autoload 'tab_page.vim' as TP
+import autoload 'format_text.vim' as FT
 
 
 # f. {{{1
@@ -23,6 +24,8 @@ nnoremap <silent> <unique> <leader>fd
         \ :call <sid>FM.EditFoldMarker(&filetype)<cr>
 nnoremap <silent> <unique> <leader>fv
         \ :silent call <sid>QC.ForkVim(<sid>QC.IS_GUI)<cr>
+nnoremap <silent> <unique> <leader>fg
+        \ :silent call <sid>FT.AutoFormat()<cr>
 
 nnoremap <silent> <unique> <leader>ff
         \ :update<cr>
