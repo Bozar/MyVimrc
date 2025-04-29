@@ -49,4 +49,13 @@ nnoremap <buffer> <silent> <f2>
 vnoremap <buffer> <silent> <f2>
         \ y:update<cr>
         \ :call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 1)<cr>
+nnoremap <buffer> <silent> <s-f2>
+        \ :call <sid>LC.SearchGUID()<cr>
+
+nnoremap <buffer> <silent> <f3>
+        \ :call <sid>LC.FilterSearchResult(<sid>LC.MAP_NORMAL)<cr>
+vnoremap <buffer> <silent> <f3>
+        \ y:call <sid>LC.FilterSearchResult(<sid>LC.MAP_VISUAL)<cr>
+nnoremap <buffer> <silent> <s-f3>
+        \ :call <sid>LC.FilterSearchResult(<sid>LC.MAP_SHIFT)<cr>
 

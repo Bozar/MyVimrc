@@ -63,7 +63,7 @@ def RemoveExtraLine(line_space: number, placeholder: string): void
         endif
     endfor
     if search(PATTERN_MARKED_LINE, 'cwn') ># 0
-        execute 'g/\V' .. placeholder .. '\$/d'
+        execute 'g/\V' .. placeholder .. '\$/d _'
     endif
 enddef
 
