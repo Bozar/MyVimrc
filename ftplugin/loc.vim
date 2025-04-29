@@ -59,3 +59,11 @@ vnoremap <buffer> <silent> <f3>
 nnoremap <buffer> <silent> <s-f3>
         \ :call <sid>LC.FilterSearchResult(<sid>LC.MAP_SHIFT)<cr>
 
+nnoremap <buffer> <silent> <f4>
+        \ :call <sid>LC.CopySnippet(<sid>LC.MAP_NORMAL)<cr>
+vnoremap <buffer> <silent> <f4>
+        \ y:call <sid>LC.CopySnippet(<sid>LC.MAP_VISUAL)<cr>
+
+nnoremap <buffer> <silent> <f5>
+        \ :silent call <sid>LC.AddSnippet()<cr>
+
