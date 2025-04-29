@@ -67,3 +67,19 @@ vnoremap <buffer> <silent> <f4>
 nnoremap <buffer> <silent> <f5>
         \ :silent call <sid>LC.AddSnippet()<cr>
 
+nnoremap <buffer> <silent> <f6>
+        \ :call <sid>LC.RemoveLabel(<sid>LC.MAP_NORMAL, v:false)<cr>
+vnoremap <buffer> <silent> <f6>
+        \ <esc>:call <sid>LC.RemoveLabel(<sid>LC.MAP_VISUAL, v:false)<cr>
+nnoremap <buffer> <silent> <s-f6>
+        \ :call <sid>LC.RemoveLabel(<sid>LC.MAP_NORMAL, v:true)<cr>
+vnoremap <buffer> <silent> <s-f6>
+        \ <esc>:call <sid>LC.RemoveLabel(<sid>LC.MAP_VISUAL, v:true)<cr>
+
+nnoremap <buffer> <silent> <f7>
+        \ :update<cr>
+        \ :call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 2)<cr>
+vnoremap <buffer> <silent> <f7>
+        \ y:update<cr>
+        \ :call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 2)<cr>
+

@@ -2,6 +2,7 @@ vim9script
 
 
 import autoload 'save_load_state.vim' as SLS
+import autoload 'loc.vim' as LC
 
 
 const DEFAULT_LINE_SPACE: string = '2'
@@ -10,10 +11,10 @@ const DEFAULT_PLACEHOLDER: string = ' '
 const FILE_TYPE_LOC: string = 'loc'
 
 
-# 1. Trailing spaces will be REMOVED if 'placeholder' matches pattern '\v\s+'. 
-#   Otherwise, 'file_type' decides how to handle them.
-# 2. 'placeholder' is a string that will be added to the end of a line.
-# 3. How to pass all arguments: FormatText 2 text \ \|
+# 1. 'placeholder' is a string that will be added to the end of a line. It is
+#   one <space> by default. In this case, be sure to call RemoveTrailSpace()
+#   before RemoveExtraLine().
+# 2. How to pass an <space>: FormatText 2 text \ \|
 export def AutoFormat(
         line_space: string = DEFAULT_LINE_SPACE,
         file_type: string = &filetype,
@@ -22,9 +23,6 @@ export def AutoFormat(
     const NR_LINE_SPACE: number = str2nr(line_space)
 
     SLS.SaveLoadState(v:true)
-    if placeholder =~# '\v\s+'
-        RemoveTrailSpace()
-    endif
     if file_type ==# FILE_TYPE_LOC
         FormatLoc()
     else
@@ -87,7 +85,6 @@ def FormatLoc(): void
     setlocal fileencoding=utf-8
     setlocal fileformat=unix
     :%s/\r//ge
-    # TODO: Implement JoinLine.
-    #call <sid>LocalizationHelper('JoinLine')
+    LC.JoinLine()
 enddef
 

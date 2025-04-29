@@ -19,6 +19,11 @@ const LABEL_CR: string = '#CR#'
 
 const PATTERN_MARK: string = '\v\C' .. LABEL_MARK
 const PATTERN_END: string = '\v\C\t' .. LABEL_END .. '$'
+const PATTERN_MARK_OR_END: string = '\v\C\t(' .. LABEL_MARK .. '|'
+        .. LABEL_END .. ')'
+const PATTERN_CR: string = '\v\C' .. LABEL_CR
+# 1a2b3c-d4e5f6-...-7x8y9z
+const PATTERN_GUID: string = '\v^((\a|\d)+-)+(\a|\d)+$'
 
 # #MARK# -- SOURCE -- TARGET
 const PATTERN_LONG_LINE: string = PATTERN_MARK .. '\t[^\t]+\t'
@@ -97,15 +102,19 @@ enddef
 
 
 export def SearchGUID(): void
-    const CURRENT_LINE: string = getline(line('.'))
+    const split_line: list<string> = split(getline(line('.')), '\t')
+    # At least three parts: SOURCE -- TARGET -- [OPTIONAL] -- GUID
+    if len(split_line) <# 3
+        return
+    endif
     # A line ends with '-0a1b3c...'.
-    const GUID: string = substitute(CURRENT_LINE, '\v^.*-((\a|\d)+)$', '\1', '')
+    const GUID: string = split_line[-1]
 
-    if GUID ==# CURRENT_LINE
+    if GUID !~# PATTERN_GUID
         return
     endif
     @" = GUID
-    SearchPattern(MAP_NORMAL, 1)
+    SearchPattern(MAP_VISUAL, 1)
 enddef
 
 
@@ -123,11 +132,13 @@ export def FilterSearchResult(map_mode: number): void
     else
         const ESCAPE_PATTERN: string = PS.EscapeVeryNoMagic(PATTERN)
         # ':h :v', ':h E538'
-        execute 'g/' .. ESCAPE_PATTERN .. '/d _'
-        const IS_MATCH_ALL: bool = (search('.', 'cw') ==# 0)
-        undo
-        if !IS_MATCH_ALL
-            execute 'g!/' .. ESCAPE_PATTERN .. '/d _'
+        if search(ESCAPE_PATTERN, 'cw') ># 0
+            execute 'g/' .. ESCAPE_PATTERN .. '/d _'
+            const IS_MATCH_ALL: bool = (search('.', 'cw') ==# 0)
+            undo
+            if !IS_MATCH_ALL
+                execute 'g!/' .. ESCAPE_PATTERN .. '/d _'
+            endif
         endif
     endif
     :1
@@ -149,6 +160,18 @@ export def AddSnippet(): void
     elseif HasFullSnippet()
         AddSnippetTarget()
     endif
+enddef
+
+
+export def RemoveLabel(map_mode: number, is_remove_all: bool): void
+    const COMMAND_RANGE: string = (map_mode ==# MAP_NORMAL) ? ':.' : ":'<, '>"
+
+    SLS.SaveLoadState(v:true)
+    if is_remove_all
+        execute COMMAND_RANGE .. 's/' .. PATTERN_MARK_OR_END .. '//ge'
+    endif
+    execute COMMAND_RANGE .. 's/' .. PATTERN_CR .. '/\r/ge'
+    SLS.SaveLoadState(v:false)
 enddef
 
 
@@ -217,6 +240,18 @@ def AddSnippetTarget(): void
 enddef
 
 
+export def JoinLine(): void
+    if (search(PATTERN_END, 'cw') ==# 0)
+            || (search(PATTERN_BROKEN_LINE, 'cw') ==# 0)
+        return
+    endif
+    execute 'g/' .. PATTERN_BROKEN_LINE .. '/' .. ':.,/' .. PATTERN_END .. '/-1'
+            .. 's/\v$/' .. LABEL_CR .. '/'
+    execute ':%s/\v\C(' .. LABEL_CR .. ')+$/' .. LABEL_CR .. '/ge'
+    execute 'g/' .. LABEL_CR .. '$/' .. ':.,/' .. PATTERN_END .. '/' .. 'join!'
+enddef
+
+
 def HasFullSnippet(): bool
     return (snippet_source !=# '') && (snippet_target !=# '')
 enddef
@@ -270,29 +305,4 @@ def CopySnippetVisual(reg_text: string): void
         snippet_target = TEMP_SAVE
     endif
 enddef
-
-
-def JoinLine(): void
-    if (search(PATTERN_END, 'cw') ==# 0)
-            || (search(PATTERN_BROKEN_LINE, 'cw') ==# 0)
-        return
-    endif
-    execute 'g/' .. PATTERN_BROKEN_LINE .. '/' .. '.,/' .. PATTERN_END .. '/-1'
-            .. 's/\v$/' .. LABEL_CR .. '/'
-    execute '%s/\v\C(' .. LABEL_CR .. ')+$/' .. LABEL_CR .. '/ge'
-    execute 'g/' .. LABEL_CR .. '$/' .. '.,/' .. PATTERN_END .. '/' .. 'join!'
-enddef
-
-
-#export def (): void
-#enddef
-
-
-#export def (): void
-#enddef
-
-
-#export def (): void
-#enddef
-
 
