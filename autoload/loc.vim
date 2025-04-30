@@ -102,7 +102,7 @@ export def SearchPattern(map_mode: number, search_file_index: number): void
             .. ' > ' .. OUTPUT_FILE
 
     system(COMMAND)
-    TF.GoToTempWindow(TF.LOC)
+    TF.GotoTempWindow(TF.LOC)
     @" = DEBUG ? COMMAND : PATTERN
 enddef
 
@@ -127,7 +127,7 @@ enddef
 export def FilterSearchResult(map_mode: number): void
     const PATTERN: string = (map_mode ==# MAP_NORMAL) ? expand('<cword>') : @"
 
-    TF.GoToTempWindow(TF.LOC)
+    TF.GotoTempWindow(TF.LOC)
     JoinLine()
     update
 

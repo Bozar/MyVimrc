@@ -58,7 +58,7 @@ export def SplitOpenWindow(): void
     if winnr('$') ==# 3
         :1wincmd w
         split
-        TF.GoToTempWindow(TF.BUFL)
+        TF.GotoTempWindow(TF.BUFL)
         OpenWindow(2, 2)
     elseif winnr('$') ==# 4
         OpenWindow(2, 2)

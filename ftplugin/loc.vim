@@ -27,7 +27,7 @@ augroup END
 
 
 nnoremap <buffer> <silent> <leader>jh
-        \ :call <sid>TF.GoToTempWindow(
+        \ :call <sid>TF.GotoTempWindow(
         \       <sid>TF.LOC, <sid>TF.DEFAULT_NAME, v:false
         \       )<cr>
 

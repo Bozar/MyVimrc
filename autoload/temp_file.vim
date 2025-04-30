@@ -16,7 +16,7 @@ const SAVE_LOAD_PROMPT: string = '[S]ave or [L]oad text? '
 const BACKUP_EXTENSION: string = '.bak'
 
 
-export def GoToTempWindow(
+export def GotoTempWindow(
         file_extension: string, file_name: string = DEFAULT_NAME,
         is_new_win: bool = true
         ): void
@@ -34,7 +34,7 @@ export def GoToTempWindow(
 enddef
 
 
-export def GoToTempBuffer(
+export def GotoTempBuffer(
         file_extension: string, file_name: string = DEFAULT_NAME
         ): void
     const FILE_NAME: string = GetTempFileName(file_extension, file_name)

@@ -50,27 +50,27 @@ vnoremap <silent> <unique> <tab>
 # j. {{{1
 
 nnoremap <silent> <unique> <leader>jl
-        \ :silent call <sid>TF.GoToTempWindow(<sid>TF.NPAD)<cr>
+        \ :silent call <sid>TF.GotoTempWindow(<sid>TF.NPAD)<cr>
 nnoremap <silent> <unique> <leader>jL
-        \ :silent call <sid>TF.GoToTempBuffer(<sid>TF.NPAD)<cr>
+        \ :silent call <sid>TF.GotoTempBuffer(<sid>TF.NPAD)<cr>
 
 nnoremap <silent> <unique> <leader>ju
-        \ :silent call <sid>TF.GoToTempWindow(
+        \ :silent call <sid>TF.GotoTempWindow(
         \       <sid>TF.BUFL, <sid>TF.DEFAULT_NAME, v:false
         \       )<cr>
 nnoremap <silent> <unique> <leader>jU
-        \ :silent call <sid>TF.GoToTempBuffer(<sid>TF.BUFL)<cr>
+        \ :silent call <sid>TF.GotoTempBuffer(<sid>TF.BUFL)<cr>
 
 nnoremap <silent> <unique> <leader>jh
         \ :silent 1wincmd w<cr>
         \ :silent belowright copen<cr>
 
 nnoremap <silent> <unique> <leader><space>
-        \ :silent call <sid>LT.GoToPreviousWindow()<cr>
+        \ :silent call <sid>LT.GotoPreviousWindow()<cr>
 nnoremap <silent> <unique> <leader>jk
-        \ :silent call <sid>LT.GoToLeftTopBottomWindow(v:true)<cr>
+        \ :silent call <sid>LT.GotoLeftTopBottomWindow(v:true)<cr>
 nnoremap <silent> <unique> <leader>jj
-        \ :silent call <sid>LT.GoToLeftTopBottomWindow(v:false)<cr>
+        \ :silent call <sid>LT.GotoLeftTopBottomWindow(v:false)<cr>
 
 
 # x. {{{1

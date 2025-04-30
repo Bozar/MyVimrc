@@ -39,9 +39,9 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
     wincmd o
     if layout ==# DEFAULT
         VerticalSplit(LEFT_COLUMN_WIDTH)
-        TF.GoToTempBuffer(TF.NPAD)
+        TF.GotoTempBuffer(TF.NPAD)
         HorizontalSplit(RIGHT_BOTTOM_HEIGHT)
-        TF.GoToTempBuffer(TF.BUFL)
+        TF.GotoTempBuffer(TF.BUFL)
 
     elseif layout ==# LOC
         VerticalSplit(LEFT_COLUMN_WIDTH_NARROW)
@@ -49,9 +49,9 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
 
     elseif layout ==# QUICK_FIX
         VerticalSplit(LEFT_COLUMN_WIDTH)
-        TF.GoToTempBuffer(TF.NPAD)
+        TF.GotoTempBuffer(TF.NPAD)
         HorizontalSplit(RIGHT_BOTTOM_HEIGHT)
-        TF.GoToTempBuffer(TF.BUFL)
+        TF.GotoTempBuffer(TF.BUFL)
 
     endif
 
@@ -63,7 +63,7 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
 enddef
 
 
-export def GoToPreviousWindow(): void
+export def GotoPreviousWindow(): void
     if !IsMovableWindow()
         return
     endif
@@ -86,7 +86,7 @@ export def GoToPreviousWindow(): void
 enddef
 
 
-export def GoToLeftTopBottomWindow(is_left_top: bool): void
+export def GotoLeftTopBottomWindow(is_left_top: bool): void
     if !IsMovableWindow()
         return
     endif
