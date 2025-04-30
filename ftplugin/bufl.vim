@@ -20,8 +20,6 @@ nnoremap <buffer> <silent> o
 nnoremap <buffer> <silent> i
         \ :call <sid>BL.OpenTab()<cr>
 
-nnoremap <buffer> <silent> u
-        \ :call <sid>BL.UpdateBuffer()<cr>
 nnoremap <buffer> <silent> d
         \ :call <sid>BL.DeleteBuffer()<cr>
         \ :call <sid>BL.RefreshBufferList()<cr>

@@ -78,7 +78,7 @@ export def GotoPreviousWindow(): void
         return
     endif
 
-    const GOTO_WINDOW: number = str2nr(input('Goto window? '))
+    const GOTO_WINDOW: number = str2nr(input('Go to window? '))
      if !IsValidWindowNumber(GOTO_WINDOW)
          return
      endif

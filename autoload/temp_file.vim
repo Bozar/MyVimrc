@@ -18,7 +18,7 @@ const BACKUP_EXTENSION: string = '.bak'
 
 export def GotoTempWindow(
         file_extension: string, file_name: string = DEFAULT_NAME,
-        is_new_win: bool = true
+        is_new_win: bool = v:true
         ): void
     const FILE_NAME: string = GetTempFileName(file_extension, file_name)
     const WIN_NUMBER: number = GetTempWindowNumber(FILE_NAME)

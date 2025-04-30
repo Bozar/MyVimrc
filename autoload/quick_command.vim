@@ -32,6 +32,8 @@ export def SwitchIme(is_windows: bool, is_gui: bool, is_enter: bool): void
 enddef
 
 
+# It causes more trouble than benefit to fork gVim. The function is reserved
+# for reference.
 export def ForkVim(is_gui: bool): void
     if is_gui
         !gvim

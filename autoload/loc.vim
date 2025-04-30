@@ -10,7 +10,7 @@ export const MAP_NORMAL: number = 0
 export const MAP_VISUAL: number = 1
 export const MAP_SHIFT: number = 2
 
-const DEBUG: bool = false
+const DEBUG: bool = v:false
 const EOL: string = "\n"
 
 const LABEL_MARK: string = '#MARK#'
@@ -88,7 +88,7 @@ enddef
 export def SearchPattern(map_mode: number, search_file_index: number): void
     # If g:PRIVATE_DATA exists, make sure it has the right data structure.
     if !exists('g:PRIVATE_DATA')
-        echom 'ERROR: g:PRIVATE_DATA does not exist.'
+        echom 'g:PRIVATE_DATA does not exist.'
         return
     endif
 
@@ -101,9 +101,18 @@ export def SearchPattern(map_mode: number, search_file_index: number): void
     const COMMAND: string = 'grep -i ' .. ESCAPE_PATTERN .. ' ' .. SEARCH_FILE
             .. ' > ' .. OUTPUT_FILE
 
-    system(COMMAND)
-    TF.GotoTempWindow(TF.LOC)
-    @" = DEBUG ? COMMAND : PATTERN
+    if file_readable(expand(SEARCH_FILE))
+        system(COMMAND)
+        TF.GotoTempWindow(TF.LOC)
+    else
+        echom 'File not found: ' .. SEARCH_FILE
+    endif
+    if !!v:shell_error
+        echom 'Command failed: ' .. COMMAND
+        @" = COMMAND
+    else
+        @" = DEBUG ? COMMAND : PATTERN
+    endif
 enddef
 
 

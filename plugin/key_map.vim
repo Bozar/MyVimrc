@@ -22,8 +22,6 @@ nnoremap <silent> <unique> <leader>fc
         \ :call <sid>QC.ExecuteCurrentLine()<cr>
 nnoremap <silent> <unique> <leader>fd
         \ :call <sid>FM.EditFoldMarker(&filetype)<cr>
-nnoremap <silent> <unique> <leader>fv
-        \ :silent call <sid>QC.ForkVim(<sid>QC.IS_GUI)<cr>
 nnoremap <silent> <unique> <leader>fg
         \ :silent call <sid>FT.AutoFormat()<cr>
 

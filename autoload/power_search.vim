@@ -109,16 +109,16 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
         elseif THIS_CMD ==# COLLECT_TEXT
             save_yank = ExeCmdYank(command)
         elseif THIS_CMD ==# GREP_PATTERN
-            ExeCmdCfdo(command)
-        elseif THIS_CMD ==# CFDO
             unsilent execute ':' .. command
+        elseif THIS_CMD ==# CFDO
+            ExeCmdCfdo(command)
         endif
         SLS.SaveLoadState(v:false)
         # @" is protected by 'SLS.SaveLoadState'. Its content remains unchanged.
         if THIS_CMD ==# COLLECT_TEXT
             @" = save_yank
         elseif THIS_CMD ==# GREP_PATTERN
-            LT.SplitWindow(LT.QUICK_FIX, false)
+            LT.SplitWindow(LT.QUICK_FIX, v:false)
         endif
     endif
 enddef
@@ -244,7 +244,7 @@ enddef
 
 def GetCmdCfdo(pattern: string, text: string): string
     const PATTERN_TEXT: string = pattern .. '/' .. text
-    const COMMAND: string = 'cfdo :%s/' .. PATTERN_TEXT .. '/gc'
+    const COMMAND: string = 'cfdo :%s/' .. PATTERN_TEXT .. '/gce'
     return COMMAND
 enddef
 

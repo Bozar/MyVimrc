@@ -5,42 +5,46 @@ const COUNT: number = 0
 const FOLD: number = 1
 const WIN: number = 2
 const REGISTER: number = 3
+const BUF_NR: number = 4
+
+final SAVED_STATE: dict<any> = {}
+SAVED_STATE[COUNT] = 0
 
 
+# NOTE: SaveLoadState(v:true) & SaveLoadState(v:false) MUST BE called in pairs.
 export def SaveLoadState(is_save: bool): void
-    if !exists('b:SaveLoadState')
-        final b:SaveLoadState: dict<any> = {}
-        b:SaveLoadState[COUNT] = 0
-    endif
-
     if is_save
-        SaveView()
+        SaveState()
     else
-        LoadView()
+        LoadState()
     endif
 enddef
 
 
-def SaveView(): void
-    if b:SaveLoadState[COUNT] ==# 0
-        b:SaveLoadState[FOLD] = &foldenable
-        b:SaveLoadState[WIN] = winsaveview()
-        b:SaveLoadState[REGISTER] = @"
+def SaveState(): void
+    if SAVED_STATE[COUNT] ==# 0
+        SAVED_STATE[BUF_NR] = bufnr()
+        SAVED_STATE[FOLD] = &foldenable
+        SAVED_STATE[WIN] = winsaveview()
+        SAVED_STATE[REGISTER] = @"
         setlocal nofoldenable
     endif
-    b:SaveLoadState[COUNT] += 1
+    SAVED_STATE[COUNT] += 1
 enddef
 
 
-def LoadView(): void
-    if b:SaveLoadState[COUNT] ># 0
-        b:SaveLoadState[COUNT] -= 1
+def LoadState(): void
+    if SAVED_STATE[COUNT] ># 0
+        SAVED_STATE[COUNT] -= 1
     endif
-    if b:SaveLoadState[COUNT] ==# 0
-        &foldenable = b:SaveLoadState[FOLD]
-        winrestview(b:SaveLoadState[WIN])
-        @" = b:SaveLoadState[REGISTER]
-        unlet b:SaveLoadState
+    if SAVED_STATE[COUNT] ==# 0
+        if !bufexists(SAVED_STATE[BUF_NR])
+            return
+        endif
+        execute ':' .. SAVED_STATE[BUF_NR] .. 'buffer'
+        &foldenable = SAVED_STATE[FOLD]
+        winrestview(SAVED_STATE[WIN])
+        @" = SAVED_STATE[REGISTER]
     endif
 enddef
 

@@ -8,6 +8,7 @@ setlocal statusline=%!g:MyStatusLine(3,1)
 setlocal bufhidden=hide
 setlocal noswapfile
 setlocal nobuflisted
+setlocal foldmethod=marker
 
 
 nnoremap <buffer> <silent> <cr>

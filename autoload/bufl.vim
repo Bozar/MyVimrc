@@ -84,6 +84,8 @@ export def RefreshBufferList(): void
 enddef
 
 
+# The function is not mapped by any key. I should update files outside buffer
+# list to avoid mistakes.
 export def UpdateBuffer(): void
     const BUFFER_NUMBER: number = GetBufferNumber()
     if (BUFFER_NUMBER <# 1) || getbufvar(BUFFER_NUMBER, '&readonly')
