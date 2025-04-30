@@ -181,8 +181,10 @@ vnoremap <unique> <c-k> gk
 
 
 # Manage tab page
-nnoremap <silent> <unique> <left> gT
-nnoremap <silent> <unique> <right> gt
+nnoremap <silent> <unique> <left>
+        \ :silent call <sid>TP.GotoTabPage(v:false)<cr>
+nnoremap <silent> <unique> <right>
+        \ :silent call <sid>TP.GotoTabPage(v:true)<cr>
 nnoremap <silent> <unique> <up>
         \ :silent call <sid>TP.MoveTabPage(v:false)<cr>
 nnoremap <silent> <unique> <down>
