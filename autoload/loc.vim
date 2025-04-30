@@ -86,6 +86,12 @@ enddef
 
 
 export def SearchPattern(map_mode: number, search_file_index: number): void
+    # If g:PRIVATE_DATA exists, make sure it has the right data structure.
+    if !exists('g:PRIVATE_DATA')
+        echom 'ERROR: g:PRIVATE_DATA does not exist.'
+        return
+    endif
+
     const PATTERN: string = (map_mode ==# MAP_NORMAL) ? expand('<cword>') : @"
     const ESCAPE_PATTERN: string = shellescape(PATTERN, 1)
 
