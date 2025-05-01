@@ -7,6 +7,7 @@ const IS_GUI: bool = has('gui_running')
 const IS_WINDOWS: bool = has('win32') || has('win32unix')
 
 # https://github.com/lifepillar/vim-solarized8
+# Refer to the readme for `g:solarized_?` settings.
 const COLOR_SCHEME: string = 'solarized8'
 
 
@@ -16,6 +17,14 @@ endif
 # https://vi.stackexchange.com/questions/18932/
 try
     execute 'colorscheme ' .. COLOR_SCHEME
+    if COLOR_SCHEME ==# 'solarized8'
+        # No italics.
+        g:solarized_italics = 0
+        # Use red cursor if possible. Does not work in terminal. :(
+        g:solarized_old_cursor_style = 0
+        # Enable more syntax highlighting groups.
+        g:solarized_extra_hi_groups = 1
+    endif
     set background=light
 catch /^Vim\%((\a\+)\)\=:E185/
     colorscheme desert
