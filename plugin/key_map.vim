@@ -18,8 +18,6 @@ nnoremap <silent> <unique> <leader>fe
 nnoremap <silent> <unique> <leader>fE
         \ :execute 'Explore ' .. getcwd()<cr>
 
-nnoremap <silent> <unique> <leader>fc
-        \ :call <sid>QC.ExecuteCurrentLine()<cr>
 nnoremap <silent> <unique> <leader>fd
         \ :call <sid>FM.EditFoldMarker(&filetype)<cr>
 nnoremap <silent> <unique> <leader>fg

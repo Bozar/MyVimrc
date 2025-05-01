@@ -8,17 +8,6 @@ export const IS_GUI: bool = has('gui_running')
 export const IS_WINDOWS: bool = has('win32') || has('win32unix')
 
 
-export def ExecuteCurrentLine(): void
-    const COMMAND: string = getline('.')
-    const WIN_NUMBER: number = str2nr(input('Execute in window? '))
-
-    if LT.IsValidWindowNumber(WIN_NUMBER)
-        execute ':' .. WIN_NUMBER .. 'wincmd w'
-    endif
-    execute ':' .. COMMAND
-enddef
-
-
 export def SwitchIme(is_windows: bool, is_gui: bool, is_enter: bool): void
     if is_windows && is_gui
         if is_enter

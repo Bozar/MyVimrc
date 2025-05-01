@@ -21,9 +21,13 @@ nnoremap <buffer> <silent> <leader><cr>
 vnoremap <buffer> <silent> <leader><cr>
         \ y:call <sid>NP.SearchText(v:true, v:true)<cr>
 
-
 nnoremap <buffer> <silent> <leader>ff
         \ :call <sid>TF.SaveLoadText()<cr>
+nnoremap <buffer> <silent> <leader>fc
+        \ :call <sid>NP.ExecuteCurrentLine(v:true)<cr>
+vnoremap <buffer> <silent> <leader>fc
+        \ y:call <sid>NP.ExecuteCurrentLine(v:false)<cr>
+
 
 augroup temp_npad
     autocmd!

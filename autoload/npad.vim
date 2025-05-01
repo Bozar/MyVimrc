@@ -49,3 +49,15 @@ export def SearchText(is_visual: bool, has_prompt: bool): void
     execute ':' .. current_window .. 'wincmd w'
 enddef
 
+
+export def ExecuteCurrentLine(is_normal_mode: bool): void
+    const COMMAND: string = is_normal_mode ? getline('.') : @"
+    const WIN_NUMBER: number = str2nr(input('Execute in window? '))
+
+    if LT.IsValidWindowNumber(WIN_NUMBER)
+        execute ':' .. WIN_NUMBER .. 'wincmd w'
+    endif
+    execute ':' .. COMMAND
+enddef
+
+
