@@ -289,7 +289,10 @@ def CopySnippetNormal(split_line: list<string>): void
         snippet_source = split_line[0]
         snippet_target = split_line[1]
     else
-        for i: number in range(0, SPLIT_LENGTH)
+        # Beware that 'range()' behaves in two ways.
+        # range(10) -> 0, 1, ..., 9
+        # range(0, 10) -> 0, 1, ..., 10
+        for i: number in range(0, SPLIT_LENGTH - 1)
             if (split_line[i] ==# LABEL_MARK) && (i + 2 <=# SPLIT_LENGTH)
                 mark_index = i
                 break
@@ -298,6 +301,11 @@ def CopySnippetNormal(split_line: list<string>): void
         if mark_index >=# 0
             snippet_source = split_line[mark_index + 1]
             snippet_target = split_line[mark_index + 2]
+        # If LABEL_MARK does not exist, use the first two parts as source &
+        # target.
+        else
+            snippet_source = split_line[0]
+            snippet_target = split_line[1]
         endif
     endif
 enddef
