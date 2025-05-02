@@ -8,7 +8,8 @@ import autoload 'power_search.vim' as PS
 
 export const MAP_NORMAL: number = 0
 export const MAP_VISUAL: number = 1
-export const MAP_SHIFT: number = 2
+export const MAP_NORMAL_SHIFT: number = 2
+export const MAP_VISUAL_SHIFT: number = 3
 
 const DEBUG: bool = v:false
 const EOL: string = "\n"
@@ -140,7 +141,7 @@ export def FilterSearchResult(map_mode: number): void
     JoinLine()
     update
 
-    if map_mode ==# MAP_SHIFT
+    if map_mode ==# MAP_NORMAL_SHIFT
         if search(PATTERN_NO_TARGET, 'cw') ># 0
             execute 'g/' .. PATTERN_NO_TARGET .. '/d _'
         endif
@@ -149,10 +150,13 @@ export def FilterSearchResult(map_mode: number): void
         # ':h :v', ':h E538'
         if search(ESCAPE_PATTERN, 'cw') ># 0
             execute 'g/' .. ESCAPE_PATTERN .. '/d _'
-            const IS_MATCH_ALL: bool = (search('.', 'cw') ==# 0)
-            undo
-            if !IS_MATCH_ALL
-                execute 'g!/' .. ESCAPE_PATTERN .. '/d _'
+            # MAP_VISUAL_SHIFT: Delete selected pattern, which is done above.
+            if map_mode !=# MAP_VISUAL_SHIFT
+                const IS_MATCH_ALL: bool = (search('.', 'cw') ==# 0)
+                undo
+                if !IS_MATCH_ALL
+                    execute 'g!/' .. ESCAPE_PATTERN .. '/d _'
+                endif
             endif
         endif
     endif

@@ -3,6 +3,7 @@ vim9script
 
 import autoload 'temp_file.vim' as TF
 import autoload 'loc.vim' as LC
+import autoload 'npad.vim' as NP
 
 
 const TMP_FILE: string = TF.GetTempFileName(TF.LOC, TF.DEFAULT_NAME, v:false)
@@ -31,6 +32,11 @@ nnoremap <buffer> <silent> <leader>jh
         \       <sid>TF.LOC, <sid>TF.DEFAULT_NAME, v:false
         \       )<cr>
 
+nnoremap <buffer> <silent> <leader>fc
+        \ :call <sid>NP.ExecuteCurrentLine(v:true)<cr>
+vnoremap <buffer> <silent> <leader>fc
+        \ y:call <sid>NP.ExecuteCurrentLine(v:false)<cr>
+
 nnoremap <buffer> <silent> <cr>
         \ :call <sid>LC.ResetCursorPosition()<cr>
 nnoremap <buffer> <silent> <c-cr>
@@ -55,6 +61,7 @@ vnoremap <buffer> <silent> <f1>
         \ y:update<cr>
         \:call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 0)<cr>
 
+
 nnoremap <buffer> <silent> <f2>
         \ :update<cr>
         \:call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 1)<cr>
@@ -65,29 +72,38 @@ vnoremap <buffer> <silent> <f2>
 nnoremap <buffer> <silent> <s-f2>
         \ :call <sid>LC.SearchGUID()<cr>
 
+
 nnoremap <buffer> <silent> <f3>
         \ :call <sid>LC.FilterSearchResult(<sid>LC.MAP_NORMAL)<cr>
 vnoremap <buffer> <silent> <f3>
         \ y:call <sid>LC.FilterSearchResult(<sid>LC.MAP_VISUAL)<cr>
+
 nnoremap <buffer> <silent> <s-f3>
-        \ :call <sid>LC.FilterSearchResult(<sid>LC.MAP_SHIFT)<cr>
+        \ :call <sid>LC.FilterSearchResult(<sid>LC.MAP_NORMAL_SHIFT)<cr>
+vnoremap <buffer> <silent> <s-f3>
+        \ y:call <sid>LC.FilterSearchResult(<sid>LC.MAP_VISUAL_SHIFT)<cr>
+
 
 nnoremap <buffer> <silent> <f4>
         \ :call <sid>LC.CopySnippet(<sid>LC.MAP_NORMAL)<cr>
 vnoremap <buffer> <silent> <f4>
         \ y:call <sid>LC.CopySnippet(<sid>LC.MAP_VISUAL)<cr>
 
+
 nnoremap <buffer> <silent> <f5>
         \ :silent call <sid>LC.AddSnippet()<cr>
+
 
 nnoremap <buffer> <silent> <f6>
         \ :call <sid>LC.RemoveLabel(<sid>LC.MAP_NORMAL, v:false)<cr>
 vnoremap <buffer> <silent> <f6>
         \ <esc>:call <sid>LC.RemoveLabel(<sid>LC.MAP_VISUAL, v:false)<cr>
+
 nnoremap <buffer> <silent> <s-f6>
         \ :call <sid>LC.RemoveLabel(<sid>LC.MAP_NORMAL, v:true)<cr>
 vnoremap <buffer> <silent> <s-f6>
         \ <esc>:call <sid>LC.RemoveLabel(<sid>LC.MAP_VISUAL, v:true)<cr>
+
 
 nnoremap <buffer> <silent> <f7>
         \ :update<cr>
