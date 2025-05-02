@@ -88,15 +88,17 @@ nnoremap <silent> <unique> <leader>zc
 
 # <f.> {{{1
 
-# * <f1> is mapped to <Nop> in SS.LoadSession.
 # * DO NOT use `:silent call ...`. There will be a prompt message when a swap
 #   file exists.
 nnoremap <silent> <unique> <f1>
-        \ :call <sid>SS.LoadSession('<f1>')<cr>
+        \ :call <sid>SS.LoadSession()<cr>
+        \ :nnoremap <f1> <Nop><cr>
+inoremap <silent> <unique> <f1> <Nop>
+
 nnoremap <silent> <unique> <f12>
         \ :silent call <sid>SS.SaveSession()<cr>
-
-inoremap <silent> <unique> <f1> <Nop>
+nnoremap <silent> <unique> <leader><f12>
+        \ :silent call <sid>SS.SaveListedBuffer()<cr>
 
 
 # Insert character {{{1
@@ -125,6 +127,7 @@ nnoremap <unique> Y y$
 # `Entire line` text object
 # https://www.reddit.com/r/vim/comments/6gjt02/fastest_way_to_copy_entire_line_without_the/
 xnoremap <unique> il ^og_
+# Use 'normal' instead of 'normal!' because 'il' should be remapped.
 onoremap <silent> <unique> il :normal vil<CR>
 
 
