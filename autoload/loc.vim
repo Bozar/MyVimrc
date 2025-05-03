@@ -173,11 +173,16 @@ export def CopySnippet(map_mode: number): void
 enddef
 
 
-export def AddSnippet(): void
-    if search(PATTERN_HEADER_GLOSSARY, 'bcnW') ># 0
-        AddSnippetGlossary(getline('.'))
-    elseif HasFullSnippet()
-        AddSnippetTarget()
+export def AddSnippet(map_mode: number = MAP_NORMAL): void
+    if map_mode ==# MAP_NORMAL_SHIFT
+        unsilent echom 'Source: ' .. snippet_source
+        unsilent echom 'Target: ' .. snippet_target
+    elseif map_mode ==# MAP_NORMAL
+        if search(PATTERN_HEADER_GLOSSARY, 'bcnW') ># 0
+            AddSnippetGlossary(getline('.'))
+        elseif HasFullSnippet()
+            AddSnippetTarget()
+        endif
     endif
 enddef
 
@@ -245,15 +250,21 @@ def AddSnippetTarget(): void
     execute ':' START_LINE
     if search(ESCAPE_SOURCE, 'cnW', END_LINE) ># 0
         if INPUT =~# INPUT_I
-            execute COMMAND_INSERT
             save_command = COMMAND_INSERT
         elseif INPUT =~# INPUT_A
-            execute COMMAND_APPEND
             save_command = COMMAND_APPEND
         endif
     endif
+    # Do not execute command if INPUT contains INPUT_C character.
+    if INPUT !~# INPUT_C
+        if INPUT =~# INPUT_I
+            execute COMMAND_INSERT
+        elseif INPUT =~# INPUT_A
+            execute COMMAND_APPEND
+        endif
+    endif
     SLS.SaveLoadState(v:false)
-    if INPUT  =~# INPUT_C
+    if INPUT =~# INPUT_C
         @" = save_command
     endif
 enddef

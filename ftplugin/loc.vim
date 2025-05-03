@@ -92,6 +92,8 @@ vnoremap <buffer> <silent> <f4>
 
 nnoremap <buffer> <silent> <f5>
         \ :silent call <sid>LC.AddSnippet()<cr>
+nnoremap <buffer> <silent> <s-f5>
+        \ :silent call <sid>LC.AddSnippet(<sid>LC.MAP_NORMAL_SHIFT)<cr>
 
 
 nnoremap <buffer> <silent> <f6>
