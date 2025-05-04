@@ -301,12 +301,12 @@ enddef
 
 def CopySnippetVisual(reg_text: string): void
     unsilent const INPUT: string = input(
-            \ 'Source A: ' .. snippet_source .. EOL
-            \ .. 'Target B: ' .. snippet_target .. EOL
-            \ .. 'Register ": ' .. reg_text .. EOL
-            \ .. 'Overwrite [A|B], [S]wap A & B' .. EOL
-            \ .. '> '
-            \ )
+            'Source A: ' .. snippet_source .. EOL
+            .. 'Target B: ' .. snippet_target .. EOL
+            .. 'Register ": ' .. reg_text .. EOL
+            .. 'Overwrite [A|B], [S]wap A & B' .. EOL
+            .. '> '
+            )
 
     if INPUT =~# INPUT_A
         snippet_source = reg_text

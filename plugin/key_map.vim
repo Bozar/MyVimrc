@@ -59,7 +59,7 @@ nnoremap <silent> <unique> <leader>jU
 
 nnoremap <silent> <unique> <leader>jh
         \ :silent 1wincmd w<cr>
-        \ :silent belowright copen<cr>
+        \:silent belowright copen<cr>
 
 nnoremap <silent> <unique> <leader><space>
         \ :silent call <sid>LT.GotoPreviousWindow()<cr>
@@ -92,7 +92,7 @@ nnoremap <silent> <unique> <leader>zc
 #   file exists.
 nnoremap <silent> <unique> <f1>
         \ :call <sid>SS.LoadSession()<cr>
-        \ :nnoremap <f1> <Nop><cr>
+        \:nnoremap <f1> <Nop><cr>
 inoremap <silent> <unique> <f1> <Nop>
 
 nnoremap <silent> <unique> <f12>

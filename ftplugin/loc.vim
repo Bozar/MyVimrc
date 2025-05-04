@@ -36,19 +36,32 @@ nnoremap <buffer> <silent> <cr>
 nnoremap <buffer> <silent> <c-cr>
         \ :call <sid>LC.QuickCopy()<cr>
 
+# NOTE: There must be a space before the first line break, but no space before
+# following lines. Otherwise one or more extra spaces will be insterted.
+#
+# nno <f1>
+#       \:command_1<cr>
+# WRONG: nno <f1>:command_1<cr>
+#
+# nno <f1>
+#       \ :command_1<cr>
+#       \ :command_2<cr>
+# WRONG: nno <f1> :command_1<cr> :command_2<cr>
+
 nnoremap <buffer> <silent> <f1>
         \ :update<cr>
-        \ :call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 0)<cr>
+        \:call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 0)<cr>
 vnoremap <buffer> <silent> <f1>
         \ y:update<cr>
-        \ :call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 0)<cr>
+        \:call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 0)<cr>
 
 nnoremap <buffer> <silent> <f2>
         \ :update<cr>
-        \ :call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 1)<cr>
+        \:call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 1)<cr>
 vnoremap <buffer> <silent> <f2>
         \ y:update<cr>
-        \ :call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 1)<cr>
+        \:call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 1)<cr>
+
 nnoremap <buffer> <silent> <s-f2>
         \ :call <sid>LC.SearchGUID()<cr>
 
@@ -78,8 +91,8 @@ vnoremap <buffer> <silent> <s-f6>
 
 nnoremap <buffer> <silent> <f7>
         \ :update<cr>
-        \ :call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 2)<cr>
+        \:call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 2)<cr>
 vnoremap <buffer> <silent> <f7>
         \ y:update<cr>
-        \ :call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 2)<cr>
+        \:call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 2)<cr>
 
