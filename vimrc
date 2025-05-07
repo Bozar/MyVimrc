@@ -112,9 +112,8 @@ set guioptions=aPc
 set guicursor+=a:blinkon0
 
 
-# Map leader
 set notimeout
-map <unique> <space> <nop>
+set noesckeys
 g:mapleader = ' '
 
 

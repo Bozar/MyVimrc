@@ -37,7 +37,7 @@ vnoremap <silent> <unique> <leader>fl
 
 nnoremap <silent> <unique> <leader>fh :setlocal hlsearch!<cr>
 
-nnoremap <silent> <unique> <leader><tab>
+nnoremap <silent> <unique> <tab>
         \ :silent call <sid>PS.SearchHub(v:false)<cr>
 vnoremap <silent> <unique> <tab>
         \ y:silent call <sid>PS.SearchHub(v:true)<cr>
@@ -120,6 +120,10 @@ noremap! <unique> 【 【】<left>
 
 # Misc mapping {{{1
 
+# Because <tab> is mapped to power_search
+nnoremap <unique> <c-h> <tab>
+# Unmap <space>
+map <unique> <space> <nop>
 # Yank to the end of line
 nnoremap <unique> Y y$
 
