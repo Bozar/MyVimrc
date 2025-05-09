@@ -126,6 +126,8 @@ nnoremap <unique> <c-h> <tab>
 map <unique> <space> <nop>
 # Yank to the end of line
 nnoremap <unique> Y y$
+# Insert <tab> or <space> based on cursor position & preceeding characters.
+inoremap <silent> <unique> <tab> <esc>:call <sid>QC.InsertSmartTab()<cr>a
 
 
 # `Entire line` text object

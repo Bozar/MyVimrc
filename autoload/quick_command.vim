@@ -39,3 +39,23 @@ export def MaximizeWindow(is_win: bool, is_gui: bool): void
     endif
 enddef
 
+
+# This idea comes from 'Smart Tabs' plugin mentioned in an article:
+# https://dmitryfrank.com/articles/indent_with_tabs_align_with_spaces
+export def InsertSmartTab(): void
+    const SAVE_OPT: bool = &l:expandtab
+
+    # Insert leading <tab|space> based on user settings. Otherwise, ALWAYS
+    # insert <space> after non-blank characters.
+    if search('\v\S', 'bn', line('.')) !=# 0
+        setlocal expandtab
+    endif
+    if col('.') ==# 1
+        execute 'normal! I	'
+    else
+        execute 'normal! a	'
+    endif
+
+    &l:expandtab = SAVE_OPT
+enddef
+
