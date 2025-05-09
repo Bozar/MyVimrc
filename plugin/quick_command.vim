@@ -7,10 +7,14 @@ import autoload 'snippet.vim' as SNP
 
 
 augroup quick_command
-    autocmd GUIEnter * call QC.MaximizeWindow(QC.IS_WINDOWS, QC.IS_GUI)
-    autocmd InsertLeave * call QC.SwitchIme(QC.IS_WINDOWS, QC.IS_GUI, v:false)
-    autocmd InsertEnter * call QC.SwitchIme(QC.IS_WINDOWS, QC.IS_GUI, v:true)
-    autocmd FileType * call SNP.LoadSnippet(expand('<amatch>'))
+	autocmd GUIEnter * call QC.MaximizeWindow(QC.IS_WINDOWS, QC.IS_GUI)
+	autocmd InsertLeave * call QC.SwitchIme(
+			\QC.IS_WINDOWS, QC.IS_GUI, v:false
+	\)
+	autocmd InsertEnter * call QC.SwitchIme(
+			\QC.IS_WINDOWS, QC.IS_GUI, v:true
+	\)
+	autocmd FileType * call SNP.LoadSnippet(expand('<amatch>'))
 augroup END
 
 

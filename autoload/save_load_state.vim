@@ -13,38 +13,38 @@ SAVED_STATE[COUNT] = 0
 
 # NOTE: SaveLoadState(v:true) & SaveLoadState(v:false) MUST BE called in pairs.
 export def SaveLoadState(is_save: bool): void
-    if is_save
-        SaveState()
-    else
-        LoadState()
-    endif
+	if is_save
+		SaveState()
+	else
+		LoadState()
+	endif
 enddef
 
 
 def SaveState(): void
-    if SAVED_STATE[COUNT] ==# 0
-        SAVED_STATE[BUF_NR] = bufnr()
-        SAVED_STATE[FOLD] = &foldenable
-        SAVED_STATE[WIN] = winsaveview()
-        SAVED_STATE[REGISTER] = @"
-        setlocal nofoldenable
-    endif
-    SAVED_STATE[COUNT] += 1
+	if SAVED_STATE[COUNT] ==# 0
+		SAVED_STATE[BUF_NR] = bufnr()
+		SAVED_STATE[FOLD] = &foldenable
+		SAVED_STATE[WIN] = winsaveview()
+		SAVED_STATE[REGISTER] = @"
+		setlocal nofoldenable
+	endif
+	SAVED_STATE[COUNT] += 1
 enddef
 
 
 def LoadState(): void
-    if SAVED_STATE[COUNT] ># 0
-        SAVED_STATE[COUNT] -= 1
-    endif
-    if SAVED_STATE[COUNT] ==# 0
-        if !bufexists(SAVED_STATE[BUF_NR])
-            return
-        endif
-        execute ':' .. SAVED_STATE[BUF_NR] .. 'buffer'
-        &foldenable = SAVED_STATE[FOLD]
-        winrestview(SAVED_STATE[WIN])
-        @" = SAVED_STATE[REGISTER]
-    endif
+	if SAVED_STATE[COUNT] ># 0
+		SAVED_STATE[COUNT] -= 1
+	endif
+	if SAVED_STATE[COUNT] ==# 0
+		if !bufexists(SAVED_STATE[BUF_NR])
+			return
+		endif
+		execute ':' .. SAVED_STATE[BUF_NR] .. 'buffer'
+		&foldenable = SAVED_STATE[FOLD]
+		winrestview(SAVED_STATE[WIN])
+		@" = SAVED_STATE[REGISTER]
+	endif
 enddef
 

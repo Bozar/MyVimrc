@@ -9,7 +9,7 @@ setlocal foldexpr=g:MarkdownFold()
 
 
 nnoremap <buffer> <silent> <leader>dc
-        \ :silent call <sid>MD.InsertCodeBlock(0)<cr>
+		\ :silent call <sid>MD.InsertCodeBlock(0)<cr>
 vnoremap <buffer> <silent> <leader>dc
-        \ <esc>:silent call <sid>MD.InsertCodeBlock(1)<cr>
+		\ <esc>:silent call <sid>MD.InsertCodeBlock(1)<cr>
 

@@ -12,23 +12,23 @@ const COLOR_SCHEME: string = 'solarized8'
 
 
 if !IS_GUI
-    set termguicolors
+	set termguicolors
 endif
 # https://vi.stackexchange.com/questions/18932/
 try
-    execute 'colorscheme ' .. COLOR_SCHEME
-    if COLOR_SCHEME ==# 'solarized8'
-        # No italics.
-        g:solarized_italics = 0
-        # Use red cursor if possible. Does not work in terminal. :(
-        g:solarized_old_cursor_style = 0
-        # Enable more syntax highlighting groups.
-        g:solarized_extra_hi_groups = 1
-    endif
-    set background=light
+	execute 'colorscheme ' .. COLOR_SCHEME
+	if COLOR_SCHEME ==# 'solarized8'
+		# No italics.
+		g:solarized_italics = 0
+		# Use red cursor if possible. Does not work in terminal. :(
+		g:solarized_old_cursor_style = 0
+		# Enable more syntax highlighting groups.
+		g:solarized_extra_hi_groups = 1
+	endif
+	set background=light
 catch /^Vim\%((\a\+)\)\=:E185/
-    colorscheme desert
-    set background=dark
+	colorscheme desert
+	set background=dark
 endtry
 
 
@@ -79,9 +79,10 @@ set history=998
 set showcmd
 
 
-set softtabstop=4
-set shiftwidth=4
-set expandtab
+set tabstop=8
+set softtabstop=0
+set shiftwidth=0
+set noexpandtab
 set autoindent
 set shiftround
 
@@ -128,12 +129,12 @@ set matchpairs+=（:）
 
 # Font
 if IS_WINDOWS
-    set renderoptions=type:directx
-    set guifont=Consolas:h18:cANSI:qDRAFT
-    #set guifont=Fira_Code_Medium:h16:W500:cANSI:qDRAFT
-    set guifontwide=kaiti:h20:cGB2312:qDRAFT
+	set renderoptions=type:directx
+	set guifont=Consolas:h18:cANSI:qDRAFT
+	#set guifont=Fira_Code_Medium:h16:W500:cANSI:qDRAFT
+	set guifontwide=kaiti:h20:cGB2312:qDRAFT
 else
-    set guifont=DejaVu\ Sans\ \Mono\ 14
+	set guifont=DejaVu\ Sans\ \Mono\ 14
 endif
 
 

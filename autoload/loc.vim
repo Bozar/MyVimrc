@@ -21,7 +21,7 @@ const LABEL_CR: string = '#CR#'
 const PATTERN_MARK: string = '\v\C' .. LABEL_MARK
 const PATTERN_END: string = '\v\C\t' .. LABEL_END .. '$'
 const PATTERN_MARK_OR_END: string = '\v\C\t(' .. LABEL_MARK .. '|'
-        .. LABEL_END .. ')'
+		.. LABEL_END .. ')'
 const PATTERN_CR: string = '\v\C' .. LABEL_CR
 # 1a2b3c-d4e5f6-...-7x8y9z
 const PATTERN_GUID: string = '\v^((\a|\d)+-)+(\a|\d)+$'
@@ -39,11 +39,11 @@ const PATTERN_HEADER_GLOSSARY: string = 'Glossary {{{'
 const PATTERN_REPLACE_TARGET: string = '\v(\t)([^\t]{-})(\t)'
 
 const GLOSSARY_TAG: list<string> = [
-    'General',
-    'NPC',
-    'Location',
-    'Item',
-    'Skill \& Trait',
+	'General',
+	'NPC',
+	'Location',
+	'Item',
+	'Skill \& Trait',
 ]
 
 const INPUT_A: string = 'a'
@@ -58,289 +58,306 @@ var snippet_target: string = ''
 
 
 export def ResetCursorPosition(): void
-    const LINE_TEXT: string = getline('.')
-    const LINE_NR: number = line('.')
+	const LINE_TEXT: string = getline('.')
+	const LINE_NR: number = line('.')
 
-    if LINE_TEXT =~# PATTERN_LONG_LINE
-        execute 'normal! ^'
-        search(PATTERN_MARK, 'c', LINE_NR)
-        execute 'normal! 2f	l'
-    elseif LINE_TEXT =~# PATTERN_SHORT_LINE
-        execute 'normal! ^f	l'
-    endif
+	if LINE_TEXT =~# PATTERN_LONG_LINE
+		execute 'normal! ^'
+		search(PATTERN_MARK, 'c', LINE_NR)
+		execute 'normal! 2f	l'
+	elseif LINE_TEXT =~# PATTERN_SHORT_LINE
+		execute 'normal! ^f	l'
+	endif
 enddef
 
 
 export def QuickCopy(): void
-    var save_reg: string
+	var save_reg: string
 
-    SLS.SaveLoadState(v:true)
-    ResetCursorPosition()
+	SLS.SaveLoadState(v:true)
+	ResetCursorPosition()
 
-    execute 'normal! yt	'
-    # Reg " will be restored in the next step.
-    save_reg = @"
+	execute 'normal! yt	'
+	# Reg " will be restored in the next step.
+	save_reg = @"
 
-    SLS.SaveLoadState(v:false)
-    @" = save_reg
+	SLS.SaveLoadState(v:false)
+	@" = save_reg
 enddef
 
 
 export def SearchPattern(map_mode: number, search_file_index: number): void
-    # If g:PRIVATE_DATA exists, make sure it has the right data structure.
-    if !exists('g:PRIVATE_DATA')
-        echom 'g:PRIVATE_DATA does not exist.'
-        return
-    endif
+	# If g:PRIVATE_DATA exists, make sure it has the right data structure.
+	if !exists('g:PRIVATE_DATA')
+		echom 'g:PRIVATE_DATA does not exist.'
+		return
+	endif
 
-    const PATTERN: string = (map_mode ==# MAP_NORMAL) ? expand('<cword>') : @"
-    const ESCAPE_PATTERN: string = shellescape(PATTERN, 1)
+	const PATTERN: string = (map_mode ==# MAP_NORMAL)
+		? expand('<cword>')
+		: @"
+	const ESCAPE_PATTERN: string = shellescape(PATTERN, 1)
 
-    const SEARCH_FILE: string = g:PRIVATE_DATA['LOC_FILE'][search_file_index]
-    const OUTPUT_FILE: string = TF.GetTempFileName(TF.LOC)
+	const SEARCH_FILE: string = g:PRIVATE_DATA['LOC_FILE'][
+		search_file_index
+	]
+	const OUTPUT_FILE: string = TF.GetTempFileName(TF.LOC)
 
-    const COMMAND: string = 'grep -i ' .. ESCAPE_PATTERN .. ' ' .. SEARCH_FILE
-            .. ' > ' .. OUTPUT_FILE
+	const COMMAND: string = 'grep -i ' .. ESCAPE_PATTERN .. ' '
+			.. SEARCH_FILE .. ' > ' .. OUTPUT_FILE
 
-    if file_readable(expand(SEARCH_FILE))
-        system(COMMAND)
-        TF.GotoTempWindow(TF.LOC)
-    else
-        echom 'File not found: ' .. SEARCH_FILE
-    endif
-    if !!v:shell_error
-        echom 'Command failed: ' .. COMMAND
-        @" = COMMAND
-    else
-        @" = DEBUG ? COMMAND : PATTERN
-    endif
+	if file_readable(expand(SEARCH_FILE))
+		system(COMMAND)
+		TF.GotoTempWindow(TF.LOC)
+	else
+		echom 'File not found: ' .. SEARCH_FILE
+	endif
+	if !!v:shell_error
+		echom 'Command failed: ' .. COMMAND
+		@" = COMMAND
+	else
+		@" = DEBUG ? COMMAND : PATTERN
+	endif
 enddef
 
 
 export def SearchGUID(): void
-    const split_line: list<string> = split(getline(line('.')), '\t')
-    # At least three parts: SOURCE -- TARGET -- [OPTIONAL] -- GUID
-    if len(split_line) <# 3
-        return
-    endif
-    # A line ends with '-0a1b3c...'.
-    const GUID: string = split_line[-1]
+	const split_line: list<string> = split(getline(line('.')), '\t')
+	# At least three parts: SOURCE -- TARGET -- [OPTIONAL] -- GUID
+	if len(split_line) <# 3
+		return
+	endif
+	# A line ends with '-0a1b3c...'.
+	const GUID: string = split_line[-1]
 
-    if GUID !~# PATTERN_GUID
-        return
-    endif
-    @" = GUID
-    SearchPattern(MAP_VISUAL, 1)
+	if GUID !~# PATTERN_GUID
+		return
+	endif
+	@" = GUID
+	SearchPattern(MAP_VISUAL, 1)
 enddef
 
 
 export def FilterSearchResult(map_mode: number): void
-    const PATTERN: string = (map_mode ==# MAP_NORMAL) ? expand('<cword>') : @"
+	const PATTERN: string = (map_mode ==# MAP_NORMAL)
+		? expand('<cword>')
+		: @"
 
-    TF.GotoTempWindow(TF.LOC)
-    JoinLine()
-    update
+	TF.GotoTempWindow(TF.LOC)
+	JoinLine()
+	update
 
-    if map_mode ==# MAP_NORMAL_SHIFT
-        if search(PATTERN_NO_TARGET, 'cw') ># 0
-            execute 'g/' .. PATTERN_NO_TARGET .. '/d _'
-        endif
-    else
-        const ESCAPE_PATTERN: string = PS.EscapeVeryNoMagic(PATTERN)
-        # ':h :v', ':h E538'
-        if search(ESCAPE_PATTERN, 'cw') ># 0
-            execute 'g/' .. ESCAPE_PATTERN .. '/d _'
-            # MAP_VISUAL_SHIFT: Delete selected pattern, which is done above.
-            if map_mode !=# MAP_VISUAL_SHIFT
-                const IS_MATCH_ALL: bool = (search('.', 'cw') ==# 0)
-                undo
-                if !IS_MATCH_ALL
-                    execute 'g!/' .. ESCAPE_PATTERN .. '/d _'
-                endif
-            endif
-        endif
-    endif
-    :1
+	if map_mode ==# MAP_NORMAL_SHIFT
+		if search(PATTERN_NO_TARGET, 'cw') ># 0
+			execute 'g/' .. PATTERN_NO_TARGET .. '/d _'
+		endif
+	else
+		const ESCAPE_PATTERN: string = PS.EscapeVeryNoMagic(PATTERN)
+		# ':h :v', ':h E538'
+		if search(ESCAPE_PATTERN, 'cw') ># 0
+			execute 'g/' .. ESCAPE_PATTERN .. '/d _'
+			# MAP_VISUAL_SHIFT: Delete selected pattern, which is
+			# done above.
+			if map_mode !=# MAP_VISUAL_SHIFT
+				const IS_MATCH_ALL: bool =
+						(search('.', 'cw') ==# 0)
+				undo
+				if !IS_MATCH_ALL
+					execute 'g!/' .. ESCAPE_PATTERN
+							.. '/d _'
+				endif
+			endif
+		endif
+	endif
+	:1
 enddef
 
 
 export def CopySnippet(map_mode: number): void
-    if map_mode ==# MAP_NORMAL
-        CopySnippetNormal(split(getline('.'), '\t'))
-    elseif map_mode ==# MAP_VISUAL
-        CopySnippetVisual(@")
-    endif
+	if map_mode ==# MAP_NORMAL
+		CopySnippetNormal(split(getline('.'), '\t'))
+	elseif map_mode ==# MAP_VISUAL
+		CopySnippetVisual(@")
+	endif
 enddef
 
 
 export def AddSnippet(map_mode: number = MAP_NORMAL): void
-    if map_mode ==# MAP_NORMAL_SHIFT
-        unsilent echom 'Source: ' .. snippet_source
-        unsilent echom 'Target: ' .. snippet_target
-    elseif map_mode ==# MAP_NORMAL
-        if search(PATTERN_HEADER_GLOSSARY, 'bcnW') ># 0
-            AddSnippetGlossary(getline('.'))
-        elseif HasFullSnippet()
-            AddSnippetTarget()
-        endif
-    endif
+	if map_mode ==# MAP_NORMAL_SHIFT
+		unsilent echom 'Source: ' .. snippet_source
+		unsilent echom 'Target: ' .. snippet_target
+	elseif map_mode ==# MAP_NORMAL
+		if search(PATTERN_HEADER_GLOSSARY, 'bcnW') ># 0
+			AddSnippetGlossary(getline('.'))
+		elseif HasFullSnippet()
+			AddSnippetTarget()
+		endif
+	endif
 enddef
 
 
 export def RemoveLabel(map_mode: number, is_remove_all: bool): void
-    const COMMAND_RANGE: string = (map_mode ==# MAP_NORMAL) ? ':.' : ":'<, '>"
+	const COMMAND_RANGE: string = (map_mode ==# MAP_NORMAL)
+			? ':.'
+			: ":'<, '>"
 
-    SLS.SaveLoadState(v:true)
-    if is_remove_all
-        execute COMMAND_RANGE .. 's/' .. PATTERN_MARK_OR_END .. '//ge'
-    endif
-    execute COMMAND_RANGE .. 's/' .. PATTERN_CR .. '/\r/ge'
-    SLS.SaveLoadState(v:false)
+	SLS.SaveLoadState(v:true)
+	if is_remove_all
+		execute COMMAND_RANGE .. 's/' .. PATTERN_MARK_OR_END .. '//ge'
+	endif
+	execute COMMAND_RANGE .. 's/' .. PATTERN_CR .. '/\r/ge'
+	SLS.SaveLoadState(v:false)
 enddef
 
 
 def AddSnippetGlossary(current_line: string): void
-    const NORMAL_LENGTH: number = 3
-    var split_line: list<string> = split(current_line, '\t')
+	const NORMAL_LENGTH: number = 3
+	var split_line: list<string> = split(current_line, '\t')
 
-    if (current_line ==# '') && HasFullSnippet()
-        execute ':s/^/\r' .. snippet_source .. '\t' .. snippet_target .. '\t'
-                .. GLOSSARY_TAG[0]
-    elseif len(split_line) ==# NORMAL_LENGTH
-        const CURRENT_TAG: string = split_line[NORMAL_LENGTH - 1]
-        const CURRENT_INDEX: number = index(GLOSSARY_TAG, CURRENT_TAG)
+	if (current_line ==# '') && HasFullSnippet()
+		execute ':s/^/\r' .. snippet_source .. '\t' .. snippet_target
+				.. '\t' .. GLOSSARY_TAG[0]
+	elseif len(split_line) ==# NORMAL_LENGTH
+		const CURRENT_TAG: string = split_line[NORMAL_LENGTH - 1]
+		const CURRENT_INDEX: number = index(GLOSSARY_TAG, CURRENT_TAG)
 
-        var new_tag: string
+		var new_tag: string
 
-        if (CURRENT_INDEX ==# -1) || (CURRENT_INDEX + 1 >=# len(GLOSSARY_TAG))
-            new_tag = GLOSSARY_TAG[0]
-        else
-            new_tag = GLOSSARY_TAG[CURRENT_INDEX + 1]
-        endif
-        split_line[NORMAL_LENGTH - 1] = new_tag
-        execute ':s/\v^.*$/' .. (join(split_line, '\t'))
-    endif
+		if (CURRENT_INDEX ==# -1)
+				|| (CURRENT_INDEX + 1 >=# len(GLOSSARY_TAG))
+			new_tag = GLOSSARY_TAG[0]
+		else
+			new_tag = GLOSSARY_TAG[CURRENT_INDEX + 1]
+		endif
+		split_line[NORMAL_LENGTH - 1] = new_tag
+		execute ':s/\v^.*$/' .. (join(split_line, '\t'))
+	endif
 enddef
 
 
 def AddSnippetTarget(): void
-    const ESCAPE_SOURCE: string = PS.EscapeVeryNoMagic(snippet_source)
-    const ESCAPE_TARGET: string = PS.EscapeSubstitution(snippet_target)
+	const ESCAPE_SOURCE: string = PS.EscapeVeryNoMagic(snippet_source)
+	const ESCAPE_TARGET: string = PS.EscapeSubstitution(snippet_target)
 
-    unsilent const INPUT: string = input(''
-            .. 'Source: [' .. ESCAPE_SOURCE .. ']' .. EOL
-            .. 'Target: [' .. ESCAPE_TARGET .. ']' .. EOL
-            .. '[I]nsert|[A]ppend text, [C]opy command' .. EOL
-            .. '> '
-            )
+	unsilent const INPUT: string = input(''
+			.. 'Source: [' .. ESCAPE_SOURCE .. ']' .. EOL
+			.. 'Target: [' .. ESCAPE_TARGET .. ']' .. EOL
+			.. '[I]nsert|[A]ppend text, [C]opy command' .. EOL
+			.. '> '
+	)
 
-    SLS.SaveLoadState(v:true)
-    const START_LINE: number = line('.')
-    execute 'normal! ]z'
-    const END_LINE: number = line('.')
-    const COMMAND_INSERT: string = ':' .. START_LINE .. ',' .. END_LINE
-            .. 'g/' .. ESCAPE_SOURCE .. '/' .. 's/' .. PATTERN_REPLACE_TARGET
-            .. '/\1' .. ESCAPE_TARGET .. '\2\3/'
-    const COMMAND_APPEND: string = ':' .. START_LINE .. ',' .. END_LINE
-            .. 'g/' .. ESCAPE_SOURCE .. '/' .. 's/' .. PATTERN_REPLACE_TARGET
-            .. '/\1\2' .. ESCAPE_TARGET .. '\3/'
+	SLS.SaveLoadState(v:true)
+	const START_LINE: number = line('.')
+	execute 'normal! ]z'
+	const END_LINE: number = line('.')
+	const COMMAND_INSERT: string = ':' .. START_LINE .. ',' .. END_LINE
+			.. 'g/' .. ESCAPE_SOURCE .. '/'
+			.. 's/' .. PATTERN_REPLACE_TARGET
+			.. '/\1' .. ESCAPE_TARGET .. '\2\3/'
+	const COMMAND_APPEND: string = ':' .. START_LINE .. ',' .. END_LINE
+			.. 'g/' .. ESCAPE_SOURCE .. '/'
+			.. 's/' .. PATTERN_REPLACE_TARGET
+			.. '/\1\2' .. ESCAPE_TARGET .. '\3/'
 
-    var save_command: string = ''
+	var save_command: string = ''
 
-    execute ':' START_LINE
-    if search(ESCAPE_SOURCE, 'cnW', END_LINE) ># 0
-        if INPUT =~# INPUT_I
-            save_command = COMMAND_INSERT
-        elseif INPUT =~# INPUT_A
-            save_command = COMMAND_APPEND
-        endif
-    endif
-    # Do not execute command if INPUT contains INPUT_C character.
-    if INPUT !~# INPUT_C
-        if INPUT =~# INPUT_I
-            execute COMMAND_INSERT
-        elseif INPUT =~# INPUT_A
-            execute COMMAND_APPEND
-        endif
-    endif
-    SLS.SaveLoadState(v:false)
-    if INPUT =~# INPUT_C
-        @" = save_command
-    endif
+	execute ':' START_LINE
+	if search(ESCAPE_SOURCE, 'cnW', END_LINE) ># 0
+		if INPUT =~# INPUT_I
+			save_command = COMMAND_INSERT
+		elseif INPUT =~# INPUT_A
+			save_command = COMMAND_APPEND
+		endif
+	endif
+	# Do not execute command if INPUT contains INPUT_C character.
+	if INPUT !~# INPUT_C
+		if INPUT =~# INPUT_I
+			execute COMMAND_INSERT
+		elseif INPUT =~# INPUT_A
+			execute COMMAND_APPEND
+		endif
+	endif
+	SLS.SaveLoadState(v:false)
+	if INPUT =~# INPUT_C
+		@" = save_command
+	endif
 enddef
 
 
 export def JoinLine(): void
-    if (search(PATTERN_END, 'cw') ==# 0)
-            || (search(PATTERN_BROKEN_LINE, 'cw') ==# 0)
-        return
-    endif
-    execute 'g/' .. PATTERN_BROKEN_LINE .. '/' .. ':.,/' .. PATTERN_END .. '/-1'
-            .. 's/\v$/' .. LABEL_CR .. '/'
-    execute ':%s/\v\C(' .. LABEL_CR .. ')+$/' .. LABEL_CR .. '/ge'
-    execute 'g/' .. LABEL_CR .. '$/' .. ':.,/' .. PATTERN_END .. '/' .. 'join!'
+	if (search(PATTERN_END, 'cw') ==# 0)
+			|| (search(PATTERN_BROKEN_LINE, 'cw') ==# 0)
+		return
+	endif
+	execute 'g/' .. PATTERN_BROKEN_LINE .. '/'
+			.. ':.,/' .. PATTERN_END .. '/-1'
+			.. 's/\v$/' .. LABEL_CR .. '/'
+	execute ':%s/\v\C(' .. LABEL_CR .. ')+$/' .. LABEL_CR .. '/ge'
+	execute 'g/' .. LABEL_CR .. '$/'
+			.. ':.,/' .. PATTERN_END .. '/' .. 'join!'
 enddef
 
 
 def HasFullSnippet(): bool
-    return (snippet_source !=# '') && (snippet_target !=# '')
+	return (snippet_source !=# '') && (snippet_target !=# '')
 enddef
 
 
 def CopySnippetNormal(split_line: list<string>): void
-    const MIN_LENGTH: number = 2
-    const SHORT_LENGTH: number = 4
-    const SPLIT_LENGTH: number = len(split_line)
+	const MIN_LENGTH: number = 2
+	const SHORT_LENGTH: number = 4
+	const SPLIT_LENGTH: number = len(split_line)
 
-    var mark_index: number = -1
+	var mark_index: number = -1
 
-    if SPLIT_LENGTH <# MIN_LENGTH
-        return
-    elseif SPLIT_LENGTH <# SHORT_LENGTH
-        snippet_source = split_line[0]
-        snippet_target = split_line[1]
-    else
-        # Beware that 'range()' behaves in two ways.
-        # range(10) -> 0, 1, ..., 9
-        # range(0, 10) -> 0, 1, ..., 10
-        for i: number in range(0, SPLIT_LENGTH - 1)
-            if (split_line[i] ==# LABEL_MARK) && (i + 2 <=# SPLIT_LENGTH)
-                mark_index = i
-                break
-            endif
-        endfor
-        if mark_index >=# 0
-            snippet_source = split_line[mark_index + 1]
-            snippet_target = split_line[mark_index + 2]
-        # If LABEL_MARK does not exist, use the first two parts as source &
-        # target.
-        else
-            snippet_source = split_line[0]
-            snippet_target = split_line[1]
-        endif
-    endif
+	if SPLIT_LENGTH <# MIN_LENGTH
+		return
+	elseif SPLIT_LENGTH <# SHORT_LENGTH
+		snippet_source = split_line[0]
+		snippet_target = split_line[1]
+	else
+		# Beware that 'range()' behaves in two ways.
+		# range(10) -> 0, 1, ..., 9
+		# range(0, 10) -> 0, 1, ..., 10
+		for i: number in range(0, SPLIT_LENGTH - 1)
+			if (split_line[i] ==# LABEL_MARK)
+					&& (i + 2 <=# SPLIT_LENGTH)
+				mark_index = i
+				break
+			endif
+		endfor
+		if mark_index >=# 0
+			snippet_source = split_line[mark_index + 1]
+			snippet_target = split_line[mark_index + 2]
+		# If LABEL_MARK does not exist, use the first two parts as
+		# source & target.
+		else
+			snippet_source = split_line[0]
+			snippet_target = split_line[1]
+		endif
+	endif
 enddef
 
 
 def CopySnippetVisual(reg_text: string): void
-    unsilent const INPUT: string = input(
-            'Source A: ' .. snippet_source .. EOL
-            .. 'Target B: ' .. snippet_target .. EOL
-            .. 'Register ": ' .. reg_text .. EOL
-            .. 'Overwrite [A|B], [S]wap A & B' .. EOL
-            .. '> '
-            )
+	unsilent const INPUT: string = input(
+			'Source A: ' .. snippet_source .. EOL
+			.. 'Target B: ' .. snippet_target .. EOL
+			.. 'Register ": ' .. reg_text .. EOL
+			.. 'Overwrite [A|B], [S]wap A & B' .. EOL
+			.. '> '
+	)
 
-    if INPUT =~# INPUT_A
-        snippet_source = reg_text
-    endif
-    if INPUT =~# INPUT_B
-        snippet_target = reg_text
-    endif
-    if INPUT =~# INPUT_S
-        const TEMP_SAVE: string = snippet_source
-        snippet_source = snippet_target
-        snippet_target = TEMP_SAVE
-    endif
+	if INPUT =~# INPUT_A
+		snippet_source = reg_text
+	endif
+	if INPUT =~# INPUT_B
+		snippet_target = reg_text
+	endif
+	if INPUT =~# INPUT_S
+		const TEMP_SAVE: string = snippet_source
+		snippet_source = snippet_target
+		snippet_target = TEMP_SAVE
+	endif
 enddef
 

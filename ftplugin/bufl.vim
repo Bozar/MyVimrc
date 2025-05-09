@@ -12,22 +12,22 @@ setlocal nobuflisted
 
 
 nnoremap <buffer> <silent> <cr>
-        \ :call <sid>BL.OpenWindow(1, 1)<cr>
+		\ :call <sid>BL.OpenWindow(1, 1)<cr>
 nnoremap <buffer> <silent> <leader><cr>
-        \ :call <sid>BL.SplitOpenWindow()<cr>
+		\ :call <sid>BL.SplitOpenWindow()<cr>
 nnoremap <buffer> <silent> o
-        \ :call <sid>BL.OpenByPrompt()<cr>
+		\ :call <sid>BL.OpenByPrompt()<cr>
 nnoremap <buffer> <silent> i
-        \ :call <sid>BL.OpenTab()<cr>
+		\ :call <sid>BL.OpenTab()<cr>
 
 nnoremap <buffer> <silent> d
-        \ :call <sid>BL.DeleteBuffer()<cr>
-        \ :call <sid>BL.RefreshBufferList()<cr>
+		\ :call <sid>BL.DeleteBuffer()<cr>
+		\ :call <sid>BL.RefreshBufferList()<cr>
 
 
 augroup temp_bufl
-    autocmd!
-    autocmd BufEnter <buffer> setlocal nobuflisted
-    autocmd BufEnter <buffer> silent BL.RefreshBufferList()
+	autocmd!
+	autocmd BufEnter <buffer> setlocal nobuflisted
+	autocmd BufEnter <buffer> silent BL.RefreshBufferList()
 augroup END
 

@@ -14,91 +14,95 @@ import autoload 'format_text.vim' as FT
 # f. {{{1
 
 nnoremap <silent> <unique> <leader>fe
-        \ :Explore<cr>
+		\ :Explore<cr>
 nnoremap <silent> <unique> <leader>fE
-        \ :execute 'Explore ' .. getcwd()<cr>
+		\ :execute 'Explore ' .. getcwd()<cr>
 
 nnoremap <silent> <unique> <leader>fd
-        \ :call <sid>FM.EditFoldMarker(&filetype)<cr>
+		\ :call <sid>FM.EditFoldMarker(&filetype)<cr>
 nnoremap <silent> <unique> <leader>fg
-        \ :silent call <sid>FT.AutoFormat()<cr>
+		\ :silent call <sid>FT.AutoFormat()<cr>
 
 nnoremap <silent> <unique> <leader>ff
-        \ :update<cr>
+		\ :update<cr>
 nnoremap <silent> <unique> <leader>fa
-        \ :wa<cr>
+		\ :wa<cr>
 nnoremap <silent> <unique> <leader>fx
-        \ :xa<cr>
+		\ :xa<cr>
 
 nnoremap <silent> <unique> <leader>fl
-        \ :left 0<cr>
+		\ :left 0<cr>
 vnoremap <silent> <unique> <leader>fl
-        \ :left 0<cr>
+		\ :left 0<cr>
 
 nnoremap <silent> <unique> <leader>fh :setlocal hlsearch!<cr>
 
 nnoremap <silent> <unique> <tab>
-        \ :silent call <sid>PS.SearchHub(v:false)<cr>
+		\ :silent call <sid>PS.SearchHub(v:false)<cr>
 vnoremap <silent> <unique> <tab>
-        \ y:silent call <sid>PS.SearchHub(v:true)<cr>
+		\ y:silent call <sid>PS.SearchHub(v:true)<cr>
 
 
 # j. {{{1
 
 nnoremap <silent> <unique> <leader>jl
-        \ :silent call <sid>TF.GotoTempWindow(<sid>TF.NPAD)<cr>
+		\ :silent call <sid>TF.GotoTempWindow(<sid>TF.NPAD)<cr>
 nnoremap <silent> <unique> <leader>jL
-        \ :silent call <sid>TF.GotoTempBuffer(<sid>TF.NPAD)<cr>
+		\ :silent call <sid>TF.GotoTempBuffer(<sid>TF.NPAD)<cr>
 
 nnoremap <silent> <unique> <leader>ju
-        \ :silent call <sid>TF.GotoTempWindow(
-        \       <sid>TF.BUFL, <sid>TF.DEFAULT_NAME, v:false
-        \       )<cr>
+		\ :silent call <sid>TF.GotoTempWindow(
+		\		<sid>TF.BUFL, <sid>TF.DEFAULT_NAME, v:false
+		\		)<cr>
 nnoremap <silent> <unique> <leader>jU
-        \ :silent call <sid>TF.GotoTempBuffer(<sid>TF.BUFL)<cr>
+		\ :silent call <sid>TF.GotoTempBuffer(<sid>TF.BUFL)<cr>
 
 nnoremap <silent> <unique> <leader>jh
-        \ :silent 1wincmd w<cr>
-        \:silent belowright copen<cr>
+		\ :silent 1wincmd w<cr>
+		\:silent belowright copen<cr>
 
 nnoremap <silent> <unique> <leader><space>
-        \ :silent call <sid>LT.GotoPreviousWindow()<cr>
+		\ :silent call <sid>LT.GotoPreviousWindow()<cr>
 nnoremap <silent> <unique> <leader>jk
-        \ :silent call <sid>LT.GotoLeftTopBottomWindow(v:true)<cr>
+		\ :silent call <sid>LT.GotoLeftTopBottomWindow(v:true)<cr>
 nnoremap <silent> <unique> <leader>jj
-        \ :silent call <sid>LT.GotoLeftTopBottomWindow(v:false)<cr>
+		\ :silent call <sid>LT.GotoLeftTopBottomWindow(v:false)<cr>
 
 
 # x. {{{1
 
 nnoremap <silent> <unique> <leader>xx
-        \ :silent call <sid>LT.SplitWindow(<sid>LT.DEFAULT, v:false)<cr>
+		\ :silent call <sid>LT.SplitWindow(<sid>LT.DEFAULT, v:false)<cr>
 nnoremap <silent> <unique> <leader>xz
-        \ :silent call <sid>LT.SplitWindow(<sid>LT.LOC, v:false)<cr>
+		\ :silent call <sid>LT.SplitWindow(<sid>LT.LOC, v:false)<cr>
 nnoremap <silent> <unique> <leader>xc
-        \ :silent call <sid>LT.SplitWindow(<sid>LT.QUICK_FIX, v:false)<cr>
+		\ :silent call <sid>LT.SplitWindow(
+		\<sid>LT.QUICK_FIX, v:false
+		\)<cr>
 
 noremap <silent> <unique> <leader>zx
-        \ :silent call <sid>LT.SplitWindow(<sid>LT.DEFAULT, v:true)<cr>
+		\ :silent call <sid>LT.SplitWindow(<sid>LT.DEFAULT, v:true)<cr>
 nnoremap <silent> <unique> <leader>zz
-        \ :silent call <sid>LT.SplitWindow(<sid>LT.LOC, v:true)<cr>
+		\ :silent call <sid>LT.SplitWindow(<sid>LT.LOC, v:true)<cr>
 nnoremap <silent> <unique> <leader>zc
-        \ :silent call <sid>LT.SplitWindow(<sid>LT.QUICK_FIX, v:true)<cr>
+		\ :silent call <sid>LT.SplitWindow(
+		\<sid>LT.QUICK_FIX, v:true
+		\)<cr>
 
 
 # <f.> {{{1
 
 # * DO NOT use `:silent call ...`. There will be a prompt message when a swap
-#   file exists.
+#	file exists.
 nnoremap <silent> <unique> <f1>
-        \ :call <sid>SS.LoadSession()<cr>
-        \:nnoremap <f1> <Nop><cr>
+		\ :call <sid>SS.LoadSession()<cr>
+		\:nnoremap <f1> <Nop><cr>
 inoremap <silent> <unique> <f1> <Nop>
 
 nnoremap <silent> <unique> <f12>
-        \ :silent call <sid>SS.SaveSession()<cr>
+		\ :silent call <sid>SS.SaveSession()<cr>
 nnoremap <silent> <unique> <leader><f12>
-        \ :silent call <sid>SS.SaveListedBuffer()<cr>
+		\ :silent call <sid>SS.SaveListedBuffer()<cr>
 
 
 # Insert character {{{1
@@ -127,7 +131,7 @@ map <unique> <space> <nop>
 # Yank to the end of line
 nnoremap <unique> Y y$
 # Insert <tab> or <space> based on cursor position & preceeding characters.
-inoremap <silent> <unique> <tab> <esc>:call <sid>QC.InsertSmartTab()<cr>a
+#inoremap <silent> <unique> <tab> <esc>:call <sid>QC.InsertSmartTab()<cr>a
 
 
 # `Entire line` text object
@@ -187,13 +191,13 @@ vnoremap <unique> <c-k> gk
 
 # Manage tab page
 nnoremap <silent> <unique> <left>
-        \ :silent call <sid>TP.GotoTabPage(v:false)<cr>
+		\ :silent call <sid>TP.GotoTabPage(v:false)<cr>
 nnoremap <silent> <unique> <right>
-        \ :silent call <sid>TP.GotoTabPage(v:true)<cr>
+		\ :silent call <sid>TP.GotoTabPage(v:true)<cr>
 nnoremap <silent> <unique> <up>
-        \ :silent call <sid>TP.MoveTabPage(v:false)<cr>
+		\ :silent call <sid>TP.MoveTabPage(v:false)<cr>
 nnoremap <silent> <unique> <down>
-        \ :silent call <sid>TP.MoveTabPage(v:true)<cr>
+		\ :silent call <sid>TP.MoveTabPage(v:true)<cr>
 nnoremap <silent> <unique> <leader>zt
-        \ :silent call <sid>TP.CloseTabPageToTheRight()<cr>
+		\ :silent call <sid>TP.CloseTabPageToTheRight()<cr>
 

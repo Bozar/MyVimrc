@@ -14,56 +14,56 @@ export const PATTERN_DEFAULT_PLACEHOLDER: string = '\V\C' .. DEFAULT_PLACEHOLDER
 
 
 ABBREVIATION['vim'] = {
-    '==': '==#',
-    '!=': '!=#',
-    '>>': '>#',
-    '>=': '>=#',
-    '<<': '<#',
-    '<=': '<=#',
-    '=~': '=~#',
-    '!~': '!~#',
-    'is;': 'is#',
-    'isn;': 'isnot#',
-    'ex;': 'execute',
+	'==': '==#',
+	'!=': '!=#',
+	'>>': '>#',
+	'>=': '>=#',
+	'<<': '<#',
+	'<=': '<=#',
+	'=~': '=~#',
+	'!~': '!~#',
+	'is;': 'is#',
+	'isn;': 'isnot#',
+	'ex;': 'execute',
 }
 
 TEXT_BLOCK['vim'] = {
-    'vm;': [
-        'vim9script',
-        '',
-        "#import auto '%I%' as",
-        '',
-        '',
-    ],
-    'edf;': [
-        'export def %I%(): void',
-        '%S%#BODY',
-        'enddef',
-    ],
-    'df;': [
-        'def %I%(): void',
-        '%S%#BODY',
-        'enddef',
-    ],
-    'if;': [
-        'if %I%',
-        '#elseif',
-        '#else',
-        'endif',
-    ],
-    'for;': [
-        'for i: %P% in %I%',
-        'endfor',
-    ],
-    'whl;': [
-        'while %I%',
-        'endwhile',
-    ],
-    'con;': [
-        'const %I%: %P% =',
-    ],
-    'var;': [
-        'var %I%: %P% =',
-    ],
+	'vm;': [
+		'vim9script',
+		'',
+		"#import auto '%I%' as",
+		'',
+		'',
+	],
+	'edf;': [
+		'export def %I%(): void',
+		'%S%#BODY',
+		'enddef',
+	],
+	'df;': [
+		'def %I%(): void',
+		'%S%#BODY',
+		'enddef',
+	],
+	'if;': [
+		'if %I%',
+		'#elseif',
+		'#else',
+		'endif',
+	],
+	'for;': [
+		'for i: %P% in %I%',
+		'endfor',
+	],
+	'whl;': [
+		'while %I%',
+		'endwhile',
+	],
+	'con;': [
+		'const %I%: %P% =',
+	],
+	'var;': [
+		'var %I%: %P% =',
+	],
 }
 
