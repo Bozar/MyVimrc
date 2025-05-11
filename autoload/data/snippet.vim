@@ -5,13 +5,15 @@ export final ABBREVIATION: dict<any> = {}
 export final TEXT_BLOCK: dict<any> = {}
 
 export const INSERT_PLACEHOLDER: string = '%I%'
-export const SPACE_PLACEHOLDER: string = '%S%'
+export const INDENT_PLACEHOLDER: string = '%S%'
 export const DEFAULT_PLACEHOLDER: string = '%P%'
 
 export const PATTERN_INSERT_PLACEHOLDER: string = '\V\C' .. INSERT_PLACEHOLDER
-export const PATTERN_SPACE_PLACEHOLDER: string = '\V\C' .. SPACE_PLACEHOLDER
+export const PATTERN_INDENT_PLACEHOLDER: string = '\V\C' .. INDENT_PLACEHOLDER
 export const PATTERN_DEFAULT_PLACEHOLDER: string = '\V\C' .. DEFAULT_PLACEHOLDER
 
+
+# vim {{{1
 
 ABBREVIATION['vim'] = {
 	'==': '==#',
