@@ -69,3 +69,46 @@ TEXT_BLOCK['vim'] = {
 	],
 }
 
+
+# sh {{{1
+
+ABBREVIATION['sh'] = {
+	'lcl;': 'local',
+}
+
+TEXT_BLOCK['sh'] = {
+	'main;': [
+		'#! \\/usr\\/bin\\/bash',
+		'',
+		'',
+		'main() {',
+		'%S%%I%#BODY',
+		'}',
+		'',
+		'main \"$@\"',
+		'',
+	],
+	'if;': [
+		'if %I%; then',
+		'#elif ; then',
+		'#else',
+		'fi',
+	],
+	'for;': [
+		'for %I% in %P%; do',
+		'done',
+	],
+	'cse;': [
+		'case %I% in',
+		'%S%#%P%)',
+		'%S%#;;',
+		'%S%#*)',
+		'%S%#;;',
+		'esac',
+	],
+	'whl;': [
+		'while %I%; do',
+		'done',
+	],
+}
+
