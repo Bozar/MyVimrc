@@ -115,6 +115,10 @@ noremap! <unique> ( ()<left>
 noremap! <unique> [ []<left>
 noremap! <unique> { {}<left>
 
+noremap! <unique> "" ""<left>
+noremap! <unique> '' ''<left>
+noremap! <unique> `` ``<left>
+
 noremap! <unique> “” “”<left>
 noremap! <unique> ‘’ ‘’<left>
 noremap! <unique> （ （）<left>
