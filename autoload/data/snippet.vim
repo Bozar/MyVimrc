@@ -112,3 +112,32 @@ TEXT_BLOCK['sh'] = {
 	],
 }
 
+
+# gdscript {{{1
+
+TEXT_BLOCK['gdscript'] = {
+	'fu;': [
+		'func %I%() -> void:',
+	],
+	'sfu;': [
+		'static func %I%() -> void:',
+	],
+	'if;': [
+		'if %I%:',
+		'#elif:',
+		'#else:',
+	],
+	'for;': [
+		'for i: %P% in %I%:',
+	],
+	'whl;': [
+		'while %I%:',
+	],
+	'con;': [
+		'const %I%: %P% =',
+	],
+	'var;': [
+		'var %I%: %P% =',
+	],
+}
+
