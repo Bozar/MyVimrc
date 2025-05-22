@@ -29,8 +29,8 @@ def g:MyStatusLine(show_mode: number, custom_text: number = 0): string
 	# 1-1. Modified, readonly, help, preview
 	status_text ..= '%m%r%h%w'
 	# 1-2. Buffer number, window number
-	status_text ..= ' [%{winnr()}]'
-	#status_text ..= ' [%n-%{winnr()}]'
+	#status_text ..= ' [%{winnr()}]'
+	status_text ..= ' [%{winnr()}-%n]'
 	const LEFT_PART: string = status_text
 
 	# 2. Separation point
