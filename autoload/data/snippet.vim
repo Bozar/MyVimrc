@@ -30,19 +30,19 @@ ABBREVIATION['vim'] = {
 }
 
 TEXT_BLOCK['vim'] = {
-	'vm;': [
+	'jj;': [
 		'vim9script',
 		'',
 		"#import auto '%I%' as",
 		'',
 		'',
 	],
-	'edf;': [
+	'efu;': [
 		'export def %I%(): void',
 		'%S%#BODY',
 		'enddef',
 	],
-	'df;': [
+	'fu;': [
 		'def %I%(): void',
 		'%S%#BODY',
 		'enddef',
@@ -77,7 +77,7 @@ ABBREVIATION['sh'] = {
 }
 
 TEXT_BLOCK['sh'] = {
-	'main;': [
+	'jj;': [
 		'#! \\/usr\\/bin\\/bash',
 		'',
 		'',
