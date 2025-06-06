@@ -141,3 +141,40 @@ TEXT_BLOCK['gdscript'] = {
 	],
 }
 
+
+# golang {{{1
+
+TEXT_BLOCK['go'] = {
+	'jj;': [
+		'package %I%main',
+		'',
+		'import (',
+		')',
+		'',
+		'func main() {',
+		'}',
+	],
+	'if;': [
+		'if %I% {',
+		'} else if {',
+		'} else {',
+		'}',
+	],
+	'sw;': [
+		'switch %I% {',
+		'case :',
+		'default:',
+		'}',
+	],
+	'for;': [
+		'for %I% {',
+		'}',
+	],
+	'con;': [
+		'const %I% =',
+	],
+	'var;': [
+		'var %I% =',
+	],
+}
+
