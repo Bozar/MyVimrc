@@ -298,6 +298,14 @@ export def JoinLine(): void
 enddef
 
 
+export def AutoFormat(): void
+	setlocal fileencoding=utf-8
+	setlocal fileformat=unix
+	:%s/\r//ge
+	JoinLine()
+enddef
+
+
 def HasFullSnippet(): bool
 	return (snippet_source !=# '') && (snippet_target !=# '')
 enddef

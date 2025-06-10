@@ -23,11 +23,13 @@ export def AutoFormat(
 	const NR_LINE_SPACE: number = str2nr(line_space)
 
 	SLS.SaveLoadState(v:true)
+
 	if file_type ==# FILE_TYPE_LOC
-		FormatLoc()
+		LC.AutoFormat()
 	else
 		FormatDefaultText(NR_LINE_SPACE, placeholder)
 	endif
+
 	SLS.SaveLoadState(v:false)
 enddef
 
@@ -78,13 +80,5 @@ def FormatDefaultText(line_space: number, placeholder: string): void
 	RemoveTrailSpace()
 	RemoveExtraLine(line_space, placeholder)
 	AddLastBlankLine()
-enddef
-
-
-def FormatLoc(): void
-	setlocal fileencoding=utf-8
-	setlocal fileformat=unix
-	:%s/\r//ge
-	LC.JoinLine()
 enddef
 

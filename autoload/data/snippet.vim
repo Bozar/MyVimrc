@@ -37,7 +37,7 @@ TEXT_BLOCK['vim'] = {
 		'',
 		'',
 	],
-	'efu;': [
+	'fuu;': [
 		'export def %I%(): void',
 		'%S%#BODY',
 		'enddef',
@@ -98,7 +98,7 @@ TEXT_BLOCK['sh'] = {
 		'for %I% in %P%; do',
 		'done',
 	],
-	'cse;': [
+	'sw;': [
 		'case %I% in',
 		'%S%#%P%)',
 		'%S%#;;',
@@ -119,7 +119,7 @@ TEXT_BLOCK['gdscript'] = {
 	'fu;': [
 		'func %I%() -> void:',
 	],
-	'sfu;': [
+	'fuu;': [
 		'static func %I%() -> void:',
 	],
 	'if;': [
