@@ -21,7 +21,7 @@ nnoremap <silent> <unique> <leader>fE
 nnoremap <silent> <unique> <leader>fd
 		\ :call <sid>FM.EditFoldMarker(&filetype)<cr>
 nnoremap <silent> <unique> <leader>fg
-		\ :silent call <sid>FT.AutoFormat()<cr>
+		\ :call <sid>FT.AutoFormat()<cr>
 
 nnoremap <silent> <unique> <leader>ff
 		\ :update<cr>
