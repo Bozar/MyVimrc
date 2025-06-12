@@ -9,6 +9,7 @@ import autoload 'quick_command.vim' as QC
 import autoload 'fold_marker.vim' as FM
 import autoload 'tab_page.vim' as TP
 import autoload 'format_text.vim' as FT
+import autoload 'comment_text.vim' as CT
 
 
 # f. {{{1
@@ -34,6 +35,11 @@ nnoremap <silent> <unique> <leader>fl
 		\ :left 0<cr>
 vnoremap <silent> <unique> <leader>fl
 		\ :left 0<cr>
+
+nnoremap <silent> <unique> <leader>fc
+		\ :call <sid>CT.AutoComment(&filetype, v:true)<cr>
+vnoremap <silent> <unique> <leader>fc
+		\ <esc>:call <sid>CT.AutoComment(&filetype, v:false)<cr>
 
 nnoremap <silent> <unique> <leader>fh :setlocal hlsearch!<cr>
 

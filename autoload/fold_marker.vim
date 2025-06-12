@@ -1,9 +1,6 @@
 vim9script
 
 
-const FILETYPE_MARKDOWN: string = 'markdown'
-const FILETYPE_TEXT: string = 'text'
-
 const PATTERN_BRACKET: string = '\v\c\s+\{{3}\d*$'
 const PATTERN_MARKDOWN: string = '\v\c^\#+\s+'
 
@@ -12,7 +9,7 @@ export def EditFoldMarker(file_type: string): void
 	const FOLD_LEVEL: number = max([foldlevel('.'), 1])
 	const LINE_TEXT: string = getline('.')
 
-	if file_type ==# FILETYPE_MARKDOWN
+	if file_type ==# 'markdown'
 		EditMarkerMarkdown(LINE_TEXT, FOLD_LEVEL)
 	else
 		EditMarkerBracket(LINE_TEXT, FOLD_LEVEL)

@@ -9,9 +9,6 @@ import autoload 'go.vim' as GO
 const DEFAULT_LINE_SPACE: string = '2'
 const DEFAULT_PLACEHOLDER: string = ' '
 
-const FILE_TYPE_LOC: string = 'loc'
-const FILE_TYPE_GO: string = 'go'
-
 
 # 1. 'placeholder' is a string that will be added to the end of a line. It is
 #	one <space> by default. In this case, be sure to call RemoveTrailSpace()
@@ -26,9 +23,9 @@ export def AutoFormat(
 
 	SLS.SaveLoadState(v:true)
 
-	if file_type ==# FILE_TYPE_LOC
+	if file_type ==# 'loc'
 		LC.AutoFormat()
-	elseif (file_type ==# FILE_TYPE_GO) && GO.IsAvailable()
+	elseif (file_type ==# 'go') && GO.IsAvailable()
 		GO.AutoFormat()
 	else
 		FormatDefaultText(NR_LINE_SPACE, placeholder)
