@@ -23,15 +23,19 @@ vnoremap <buffer> <silent> <leader><cr>
 
 nnoremap <buffer> <silent> <leader>ff
 		\ :call <sid>TF.SaveLoadText()<cr>
+nnoremap <buffer> <silent> <leader>fd
+		\ :call <sid>NP.CdLine()<cr>
+nnoremap <buffer> <silent> <leader>fe
+		\ :call <sid>NP.EditLine()<cr>
 
 nnoremap <buffer> <silent> <leader>fc
 		\ :call <sid>NP.ExecuteLine(v:true)<cr>
 vnoremap <buffer> <silent> <leader>fc
 		\ y:call <sid>NP.ExecuteLine(v:false)<cr>
 
-nnoremap <buffer> <silent> <leader>fe
+nnoremap <buffer> <silent> <leader>fa
 		\ :call <sid>NP.ArgaddLine(v:true)<cr>
-vnoremap <buffer> <silent> <leader>fe
+vnoremap <buffer> <silent> <leader>fa
 		\ <esc>:call <sid>NP.ArgaddLine(v:false)<cr>
 
 

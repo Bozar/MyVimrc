@@ -52,12 +52,7 @@ enddef
 
 export def ExecuteLine(is_normal_mode: bool): void
 	const COMMAND: string = is_normal_mode ? getline('.') : @"
-	const WIN_NUMBER: number = str2nr(input('Execute in window? '))
-
-	if LT.IsValidWindowNumber(WIN_NUMBER)
-		execute ':' .. WIN_NUMBER .. 'wincmd w'
-	endif
-	execute ':' .. COMMAND
+	ExecuteCommand(COMMAND)
 enddef
 
 
@@ -79,5 +74,26 @@ export def ArgaddLine(is_normal_mode: bool): void
 		add(lines, getline(i))
 	endfor
 	execute ':%argdelete | argadd ' .. join(lines, ' ') .. '| :%argdelete'
+enddef
+
+
+export def CdLine(): void
+	execute 'cd ' .. getline('.')
+	pwd
+enddef
+
+
+export def EditLine(): void
+	ExecuteCommand('edit ' .. getline('.'))
+enddef
+
+
+def ExecuteCommand(command: string): void
+	const WIN_NUMBER: number = str2nr(input('Execute in window? '))
+
+	if LT.IsValidWindowNumber(WIN_NUMBER)
+		execute ':' .. WIN_NUMBER .. 'wincmd w'
+	endif
+	execute ':' .. command
 enddef
 
