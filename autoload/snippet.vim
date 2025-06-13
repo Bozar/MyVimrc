@@ -1,7 +1,7 @@
 vim9script
 
 import autoload 'save_load_state.vim' as SLS
-import autoload 'data/snippet.vim' as DT_SN
+import autoload 'snippet/data.vim' as DT
 
 
 # NOTE: ALWAYS USE NOREMAP OR NOREAB!
@@ -16,15 +16,15 @@ import autoload 'data/snippet.vim' as DT_SN
 export def LoadSnippet(file_type: string): void
 	var join_line: string
 
-	if has_key(DT_SN.ABBREVIATION, file_type)
-		for i: string in keys(DT_SN.ABBREVIATION[file_type])
+	if has_key(DT.ABBREVIATION, file_type)
+		for i: string in keys(DT.ABBREVIATION[file_type])
 			execute 'inoreabbrev <silent> <buffer> ' .. i .. ' '
-					.. DT_SN.ABBREVIATION[file_type][i]
+					.. DT.ABBREVIATION[file_type][i]
 		endfor
 	endif
-	if has_key(DT_SN.TEXT_BLOCK, file_type)
-		for i: string in keys(DT_SN.TEXT_BLOCK[file_type])
-			join_line = join(DT_SN.TEXT_BLOCK[file_type][i], '\r') 
+	if has_key(DT.TEXT_BLOCK, file_type)
+		for i: string in keys(DT.TEXT_BLOCK[file_type])
+			join_line = join(DT.TEXT_BLOCK[file_type][i], '\r') 
 			execute 'inoreabbrev <silent> <buffer> ' .. i
 					.. ' <esc>:call <sid>InsertTextBlock("'
 					.. join_line .. '")<cr>'
@@ -46,23 +46,23 @@ def InsertTextBlock(text_block: string): void
 
 	# Insert more spaces if required.
 	#const INSERT_SPACE: string = repeat(' ', &shiftwidth)
-	#execute INDENT_RANGE .. 's/' .. DT_SN.PATTERN_INDENT_PLACEHOLDER .. '/'
+	#execute INDENT_RANGE .. 's/' .. DT.PATTERN_INDENT_PLACEHOLDER .. '/'
 	#		.. INSERT_SPACE .. '/ge'
 
 	# Indent with <tab>.
-	execute INDENT_RANGE .. 's/' .. DT_SN.PATTERN_INDENT_PLACEHOLDER
+	execute INDENT_RANGE .. 's/' .. DT.PATTERN_INDENT_PLACEHOLDER
 		.. '/\t/ge'
 
 	# Move cursor.
 	execute ':' .. FIRST_LINE_NR
-	if search(DT_SN.PATTERN_INSERT_PLACEHOLDER, 'c', LAST_LINE_NR) ==# 0
+	if search(DT.PATTERN_INSERT_PLACEHOLDER, 'c', LAST_LINE_NR) ==# 0
 		return
 	endif
 	SLS.SaveLoadState(v:true)
-	execute ':s/' .. DT_SN.PATTERN_INSERT_PLACEHOLDER .. '//'
+	execute ':s/' .. DT.PATTERN_INSERT_PLACEHOLDER .. '//'
 	execute ':' .. FIRST_LINE_NR
-	if search(DT_SN.PATTERN_DEFAULT_PLACEHOLDER, 'c', LAST_LINE_NR) ># 0
-		@/ = DT_SN.PATTERN_DEFAULT_PLACEHOLDER
+	if search(DT.PATTERN_DEFAULT_PLACEHOLDER, 'c', LAST_LINE_NR) ># 0
+		@/ = DT.PATTERN_DEFAULT_PLACEHOLDER
 	endif
 	SLS.SaveLoadState(v:false)
 	# Move cursor left because a snippet is usually triggered by <space>
