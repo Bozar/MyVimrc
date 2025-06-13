@@ -50,7 +50,7 @@ export def SearchText(is_visual: bool, has_prompt: bool): void
 enddef
 
 
-export def ExecuteCurrentLine(is_normal_mode: bool): void
+export def ExecuteLine(is_normal_mode: bool): void
 	const COMMAND: string = is_normal_mode ? getline('.') : @"
 	const WIN_NUMBER: number = str2nr(input('Execute in window? '))
 
@@ -58,5 +58,26 @@ export def ExecuteCurrentLine(is_normal_mode: bool): void
 		execute ':' .. WIN_NUMBER .. 'wincmd w'
 	endif
 	execute ':' .. COMMAND
+enddef
+
+
+export def ArgaddLine(is_normal_mode: bool): void
+	var ln_0: number
+	var ln_1: number
+
+	if is_normal_mode
+		ln_0 = line('.')
+		ln_1 = line('.')
+	else
+		ln_0 = line("'<")
+		ln_1 = line("'>")
+	endif
+
+	var lines: list<string>
+
+	for i: number in range(ln_0, ln_1)
+		add(lines, getline(i))
+	endfor
+	execute ':%argdelete | argadd ' .. join(lines, ' ') .. '| :%argdelete'
 enddef
 
