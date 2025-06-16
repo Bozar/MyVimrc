@@ -23,8 +23,6 @@ vnoremap <buffer> <silent> <leader><cr>
 
 nnoremap <buffer> <silent> <leader>ff
 		\ :call <sid>TF.SaveLoadText()<cr>
-nnoremap <buffer> <silent> <leader>fd
-		\ :call <sid>NP.CdLine()<cr>
 nnoremap <buffer> <silent> <leader>fe
 		\ :call <sid>NP.EditLine()<cr>
 
@@ -37,6 +35,11 @@ nnoremap <buffer> <silent> <leader>fa
 		\ :call <sid>NP.ArgaddLine(v:true)<cr>
 vnoremap <buffer> <silent> <leader>fa
 		\ <esc>:call <sid>NP.ArgaddLine(v:false)<cr>
+
+nnoremap <buffer> <silent> <leader>fd
+		\ :call <sid>NP.CdLine(v:false)<cr>
+nnoremap <buffer> <silent> <leader>fD
+		\ :call <sid>NP.CdLine(v:true)<cr>
 
 
 augroup temp_npad
