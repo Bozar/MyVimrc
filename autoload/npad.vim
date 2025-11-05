@@ -77,13 +77,9 @@ export def ArgaddLine(is_normal_mode: bool): void
 enddef
 
 
-export def CdLine(is_previous: bool): void
+export def CdLine(): void
 	echom 'Old: ' .. getcwd()
-	if is_previous
-		cd -
-	else
-		execute 'cd ' .. getline('.')
-	endif
+	execute ':cd ' .. getline('.')
 	echom 'New: ' .. getcwd()
 enddef
 

@@ -37,9 +37,7 @@ vnoremap <buffer> <silent> <leader>fa
 		\ <esc>:call <sid>NP.ArgaddLine(v:false)<cr>
 
 nnoremap <buffer> <silent> <leader>fd
-		\ :call <sid>NP.CdLine(v:false)<cr>
-nnoremap <buffer> <silent> <leader>fD
-		\ :call <sid>NP.CdLine(v:true)<cr>
+		\ :call <sid>NP.CdLine()<cr>
 
 
 augroup temp_npad
