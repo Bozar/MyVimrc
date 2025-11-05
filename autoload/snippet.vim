@@ -13,18 +13,19 @@ import autoload 'snippet/data.vim' as DT
 # Actually, `trigger_key` is expanded as `<esc>:call <sid>MyFun()<cr>)`. An
 # extra right bracket is appended to the end because `(` is remapped to `()`.
 
-export def LoadSnippet(file_type: string): void
+export def LoadSnippet(file_type: string, file_extension: string): void
 	var join_line: string
+	var new_ft: string = get(DT.FIX_FILETYPE, file_extension, file_type)
 
-	if has_key(DT.ABBREVIATION, file_type)
-		for i: string in keys(DT.ABBREVIATION[file_type])
+	if has_key(DT.ABBREVIATION, new_ft)
+		for i: string in keys(DT.ABBREVIATION[new_ft])
 			execute 'inoreabbrev <silent> <buffer> ' .. i .. ' '
-					.. DT.ABBREVIATION[file_type][i]
+					.. DT.ABBREVIATION[new_ft][i]
 		endfor
 	endif
-	if has_key(DT.TEXT_BLOCK, file_type)
-		for i: string in keys(DT.TEXT_BLOCK[file_type])
-			join_line = join(DT.TEXT_BLOCK[file_type][i], '\r') 
+	if has_key(DT.TEXT_BLOCK, new_ft)
+		for i: string in keys(DT.TEXT_BLOCK[new_ft])
+			join_line = join(DT.TEXT_BLOCK[new_ft][i], '\r')
 			execute 'inoreabbrev <silent> <buffer> ' .. i
 					.. ' <esc>:call <sid>InsertTextBlock("'
 					.. join_line .. '")<cr>'

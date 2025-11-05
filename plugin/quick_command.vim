@@ -14,7 +14,9 @@ augroup quick_command
 	autocmd InsertEnter * call QC.SwitchIme(
 			\QC.IS_WINDOWS, QC.IS_GUI, v:true
 	\)
-	autocmd FileType * call SNP.LoadSnippet(expand('<amatch>'))
+	autocmd FileType * call SNP.LoadSnippet(
+			\expand('<amatch>'), expand('<afile>:e')
+	\)
 augroup END
 
 

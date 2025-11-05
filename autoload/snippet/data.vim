@@ -17,6 +17,7 @@ export const PATTERN_DEFAULT_PLACEHOLDER: string = '\V\C' .. DEFAULT_PLACEHOLDER
 
 export final ABBREVIATION: dict<any> = {}
 export final TEXT_BLOCK: dict<any> = {}
+export final FIX_FILETYPE: dict<any> = {}
 
 
 ABBREVIATION['vim'] = VI.ABBREVIATION
