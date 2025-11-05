@@ -3,6 +3,7 @@ vim9script
 
 import autoload 'save_load_state.vim' as SLS
 import autoload 'layout.vim' as LT
+import autoload 'snippet/data.vim' as DT
 
 
 const EOL: string = "\n"
@@ -19,7 +20,7 @@ const GREP_PATTERN: string = 'g'
 const CFDO: string = 'd'
 
 
-# Function variables cannot shadown script ones: ':h E1006'.
+# Function variables cannot shadow script ones: ':h E1006'.
 # https://www.reddit.com/r/vim/comments/1favdyy/
 var substitute_text: string = ''
 var search_pattern: string = ''
@@ -55,6 +56,11 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 	]
 
 	ResetCursor(is_visual_mode, ESCAPED_REGISTER)
+	if IsSearchPlaceholder(is_visual_mode)
+		SearchPlaceholder()
+		return
+	endif
+
 	SLS.SaveLoadState(v:true)
 	# Set variables the first time for prompt message.
 	escaped_search_pattern = EscapeVeryNoMagic(search_pattern)
@@ -274,5 +280,19 @@ def FilterCommand(input: string, ordered_commands: list<string>): string
 		endif
 	endfor
 	return ''
+enddef
+
+
+def IsSearchPlaceholder(is_visual_mode: bool): bool
+	if is_visual_mode
+		return v:false
+	endif
+	return search(DT.PATTERN_DEFAULT_PLACEHOLDER, 'cnw') ># 0
+enddef
+
+
+def SearchPlaceholder(): void
+	execute '@/ = "' .. EscapeSubstitution(DT.DEFAULT_PLACEHOLDER) .. '"'
+	execute 'normal! gn'
 enddef
 
