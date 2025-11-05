@@ -8,6 +8,7 @@ const LEADING_PATTERN: string = '\v^(\s*)'
 const FILE_TO_COMMENT: dict<string> = {
 	'vim': '#',
 	'gdscript': '#',
+	'sh': '#',
 	'go': '\/\/',
 }
 
@@ -31,10 +32,10 @@ export def AutoComment(file_type: string, is_normal: bool): void
 
 	SLS.SaveLoadState(v:true)
 	if HasComment(ln_0, ln_1, LEADING_PATTERN .. comment_string)
-		echom 'comment'
+		#echom 'comment'
 		DelComment(ln_0, ln_1, LEADING_PATTERN, comment_string)
 	else
-		echom 'no comment'
+		#echom 'no comment'
 		AddComment(ln_0, ln_1, LEADING_PATTERN, comment_string)
 	endif
 	SLS.SaveLoadState(v:false)
