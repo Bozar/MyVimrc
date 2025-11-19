@@ -5,10 +5,10 @@ export const ABBREVIATION: dict<any> = {}
 
 
 export const TEXT_BLOCK: dict<any> = {
-	'var;': [
+	'vv;': [
 		'local %I%'
 	],
-	'con;': [
+	'vc;': [
 		'readonly %I%'
 	],
 	'jj;': [
@@ -40,7 +40,7 @@ export const TEXT_BLOCK: dict<any> = {
 		'%S%#;;',
 		'esac',
 	],
-	'whl;': [
+	'wh;': [
 		'while %I%; do',
 		'done',
 	],

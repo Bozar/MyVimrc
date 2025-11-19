@@ -32,10 +32,10 @@ export const TEXT_BLOCK: dict<any> = {
 		'for %I% {',
 		'}',
 	],
-	'con;': [
+	'vc;': [
 		'const %I% =',
 	],
-	'var;': [
+	'vv;': [
 		'var %I% =',
 	],
 	'fu;': [

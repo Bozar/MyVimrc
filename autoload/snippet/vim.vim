@@ -44,14 +44,14 @@ export const TEXT_BLOCK: dict<any> = {
 		'for i: %P% in %I%',
 		'endfor',
 	],
-	'whl;': [
+	'wh;': [
 		'while %I%',
 		'endwhile',
 	],
-	'con;': [
+	'vc;': [
 		'const %I%: %P% =',
 	],
-	'var;': [
+	'vv;': [
 		'var %I%: %P% =',
 	],
 }

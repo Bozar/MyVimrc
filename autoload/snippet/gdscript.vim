@@ -19,13 +19,13 @@ export const TEXT_BLOCK: dict<any> = {
 	'for;': [
 		'for i: %P% in %I%:',
 	],
-	'whl;': [
+	'wh;': [
 		'while %I%:',
 	],
-	'con;': [
+	'vc;': [
 		'const %I%: %P% =',
 	],
-	'var;': [
+	'vv;': [
 		'var %I%: %P% =',
 	],
 }
