@@ -5,6 +5,8 @@ import autoload 'snippet/vim.vim' as VI
 import autoload 'snippet/sh.vim' as SH
 import autoload 'snippet/gdscript.vim' as GD
 import autoload 'snippet/go.vim' as GO
+import autoload 'snippet/c.vim' as C
+import autoload 'snippet/header.vim' as HD
 
 
 export const INSERT_PLACEHOLDER: string = '%I%'
@@ -23,6 +25,9 @@ export final TEXT_BLOCK: dict<any> = {}
 export final FIX_FILETYPE: dict<any> = {}
 
 
+FIX_FILETYPE['h'] = 'header'
+
+
 ABBREVIATION['vim'] = VI.ABBREVIATION
 TEXT_BLOCK['vim'] = VI.TEXT_BLOCK
 
@@ -34,4 +39,10 @@ ABBREVIATION['gdscript'] = GD.ABBREVIATION
 
 ABBREVIATION['go'] = GO.ABBREVIATION
 TEXT_BLOCK['go'] = GO.TEXT_BLOCK
+
+ABBREVIATION['c'] = C.ABBREVIATION
+TEXT_BLOCK['c'] = C.TEXT_BLOCK
+
+ABBREVIATION['header'] = HD.ABBREVIATION
+TEXT_BLOCK['header'] = HD.TEXT_BLOCK
 

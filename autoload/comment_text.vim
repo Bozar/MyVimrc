@@ -9,8 +9,11 @@ const FILE_TO_COMMENT: dict<string> = {
 	'vim': '#',
 	'gdscript': '#',
 	'sh': '#',
-	'go': '\/\/',
 	'make': '#',
+	'go': '\/\/',
+	'c': '\/\/',
+	'cpp': '\/\/',
+	'header': '\/\/',
 }
 
 
