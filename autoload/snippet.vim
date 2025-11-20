@@ -45,6 +45,16 @@ def InsertTextBlock(text_block: string): void
 	const INDENT_SPACE: number = indent(FIRST_LINE_NR)
 	execute INDENT_RANGE .. 'left ' .. INDENT_SPACE
 
+	# Left align lines.
+	execute ':' .. FIRST_LINE_NR
+	if search(DT.PATTERN_LEFT_ALIGN_PLACEHOLDER, 'cn', LAST_LINE_NR) ># 0
+		execute INDENT_RANGE .. 'g/'
+				.. DT.PATTERN_LEFT_ALIGN_PLACEHOLDER .. '/'
+				.. 'left 0'
+		execute INDENT_RANGE .. 's/'
+				.. DT.PATTERN_LEFT_ALIGN_PLACEHOLDER .. '//g'
+	endif
+
 	# Insert more spaces if required.
 	#const INSERT_SPACE: string = repeat(' ', &shiftwidth)
 	#execute INDENT_RANGE .. 's/' .. DT.PATTERN_INDENT_PLACEHOLDER .. '/'
@@ -52,7 +62,7 @@ def InsertTextBlock(text_block: string): void
 
 	# Indent with <tab>.
 	execute INDENT_RANGE .. 's/' .. DT.PATTERN_INDENT_PLACEHOLDER
-		.. '/\t/ge'
+			.. '/\t/ge'
 
 	# Move cursor.
 	execute ':' .. FIRST_LINE_NR
