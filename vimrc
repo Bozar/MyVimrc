@@ -68,7 +68,9 @@ set listchars=tab:»\ ,
 # if a tab is shown as three characters.
 #set listchars=tab:].[,
 #set listchars=tab:].[,lead:›
-set cursorline
+if IS_GUI || !IS_WINDOWS
+	set cursorline
+endif
 
 
 set wildmode=full
