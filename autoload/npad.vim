@@ -2,6 +2,7 @@ vim9script
 
 import autoload 'power_search.vim' as PS
 import autoload 'layout.vim' as LT
+import autoload 'fold_marker.vim' as FM
 
 
 export def SearchText(is_visual: bool, has_prompt: bool): void
@@ -78,9 +79,19 @@ enddef
 
 
 export def CdLine(): void
+	var is_ok: bool = v:true
+
 	echom 'Old: ' .. getcwd()
-	execute ':cd ' .. getline('.')
-	echom 'New: ' .. getcwd()
+	try
+		execute ':cd ' .. getline('.')
+	catch /.*/
+		echom 'Error: Wrong path.'
+		FM.EditFoldMarker(&filetype)
+		is_ok = v:false
+	endtry
+	if is_ok
+		echom 'New: ' .. getcwd()
+	endif
 enddef
 
 
