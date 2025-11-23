@@ -13,13 +13,18 @@ export const TEXT_BLOCK: dict<any> = {
 	],
 	'jj;': [
 		'#! \\/usr\\/bin\\/bash',
+		'%I%',
 		'',
 		'',
 		'main() {',
-		'%S%%I%#BODY',
 		'}',
 		'',
 		'main \"$@\"',
+		'',
+	],
+	'fu;': [
+		'%P%() {',
+		'}',
 		'',
 	],
 	'if;': [
@@ -34,8 +39,8 @@ export const TEXT_BLOCK: dict<any> = {
 	],
 	'sw;': [
 		'case %I% in',
-		'%S%#%P%)',
-		'%S%#;;',
+		'%S%%P%)',
+		'%S%;;',
 		'%S%#*)',
 		'%S%#;;',
 		'esac',
