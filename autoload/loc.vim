@@ -11,6 +11,13 @@ export const MAP_VISUAL: number = 1
 export const MAP_NORMAL_SHIFT: number = 2
 export const MAP_VISUAL_SHIFT: number = 3
 
+# Glossary
+export const FILE_GL: number = 0
+# Reference
+export const FILE_RF: number = 1
+# Additional reference
+export const FILE_AD: number = 2
+
 const DEBUG: bool = v:false
 const EOL: string = "\n"
 
@@ -147,27 +154,23 @@ export def FilterSearchResult(map_mode: number): void
 	JoinLine()
 	update
 
-	if map_mode ==# MAP_NORMAL_SHIFT
+	if map_mode ==# MAP_NORMAL
 		if search(PATTERN_NO_TARGET, 'cw') ># 0
 			execute 'g/' .. PATTERN_NO_TARGET .. '/d _'
+			:1
 		endif
-	else
-		const ESCAPE_PATTERN: string = PS.EscapeVeryNoMagic(PATTERN)
-		# ':h :v', ':h E538'
-		if search(ESCAPE_PATTERN, 'cw') ># 0
-			execute 'g/' .. ESCAPE_PATTERN .. '/d _'
-			# MAP_VISUAL_SHIFT: Delete selected pattern, which is
-			# done above.
-			if map_mode !=# MAP_VISUAL_SHIFT
-				const IS_MATCH_ALL: bool =
-						(search('.', 'cw') ==# 0)
-				undo
-				if !IS_MATCH_ALL
-					execute 'g!/' .. ESCAPE_PATTERN
-							.. '/d _'
-				endif
-			endif
-		endif
+		return
+	endif
+
+	const ESCAPE_PATTERN: string = PS.EscapeVeryNoMagic(PATTERN)
+	# ':h :v', ':h E538'
+	if search(ESCAPE_PATTERN, 'cw') ==# 0
+		return
+	endif
+	if map_mode ==# MAP_VISUAL
+		execute 'v/' .. ESCAPE_PATTERN .. '/d _'
+	elseif map_mode ==# MAP_VISUAL_SHIFT
+		execute 'g/' .. ESCAPE_PATTERN .. '/d _'
 	endif
 	:1
 enddef

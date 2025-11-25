@@ -56,18 +56,26 @@ nnoremap <buffer> <silent> <c-cr>
 
 nnoremap <buffer> <silent> <f1>
 		\ :update<cr>
-		\:call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 0)<cr>
+		\:call <sid>LC.SearchPattern(
+		\<sid>LC.MAP_NORMAL, <sid>LC.FILE_GL
+		\)<cr>
 vnoremap <buffer> <silent> <f1>
 		\ y:update<cr>
-		\:call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 0)<cr>
+		\:call <sid>LC.SearchPattern(
+		\<sid>LC.MAP_VISUAL, <sid>LC.FILE_GL
+		\)<cr>
 
 
 nnoremap <buffer> <silent> <f2>
 		\ :update<cr>
-		\:call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 1)<cr>
+		\:call <sid>LC.SearchPattern(
+		\<sid>LC.MAP_NORMAL, <sid>LC.FILE_RF
+		\)<cr>
 vnoremap <buffer> <silent> <f2>
 		\ y:update<cr>
-		\:call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 1)<cr>
+		\:call <sid>LC.SearchPattern(
+		\<sid>LC.MAP_VISUAL, <sid>LC.FILE_RF
+		\)<cr>
 
 nnoremap <buffer> <silent> <s-f2>
 		\ :call <sid>LC.SearchGUID()<cr>
@@ -78,8 +86,8 @@ nnoremap <buffer> <silent> <f3>
 vnoremap <buffer> <silent> <f3>
 		\ y:call <sid>LC.FilterSearchResult(<sid>LC.MAP_VISUAL)<cr>
 
-nnoremap <buffer> <silent> <s-f3>
-		\ :call <sid>LC.FilterSearchResult(<sid>LC.MAP_NORMAL_SHIFT)<cr>
+#nnoremap <buffer> <silent> <s-f3>
+		#\ :call <sid>LC.FilterSearchResult(<sid>LC.MAP_NORMAL_SHIFT)<cr>
 vnoremap <buffer> <silent> <s-f3>
 		\ y:call <sid>LC.FilterSearchResult(
 		\<sid>LC.MAP_VISUAL_SHIFT
@@ -111,8 +119,12 @@ vnoremap <buffer> <silent> <s-f6>
 
 nnoremap <buffer> <silent> <f7>
 		\ :update<cr>
-		\:call <sid>LC.SearchPattern(<sid>LC.MAP_NORMAL, 2)<cr>
+		\:call <sid>LC.SearchPattern(
+		\<sid>LC.MAP_NORMAL, <sid>LC.FILE_AD
+		\)<cr>
 vnoremap <buffer> <silent> <f7>
 		\ y:update<cr>
-		\:call <sid>LC.SearchPattern(<sid>LC.MAP_VISUAL, 2)<cr>
+		\:call <sid>LC.SearchPattern(
+		\<sid>LC.MAP_VISUAL, <sid>LC.FILE_AD
+		\)<cr>
 
