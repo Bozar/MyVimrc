@@ -16,8 +16,6 @@ import autoload 'comment_text.vim' as CT
 
 nnoremap <silent> <unique> <leader>fe
 		\ :Explore<cr>
-nnoremap <silent> <unique> <leader>fE
-		\ :execute 'Explore ' .. getcwd()<cr>
 
 nnoremap <silent> <unique> <leader>fd
 		\ :call <sid>FM.EditFoldMarker(&filetype)<cr>

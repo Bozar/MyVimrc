@@ -26,7 +26,7 @@ export const TEXT_BLOCK: dict<any> = {
 	],
 	'fuu;': [
 		'export def %I%(): void',
-		'%S%#BODY',
+		'%S%%P%',
 		'enddef',
 	],
 	'fu;': [

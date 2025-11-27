@@ -79,24 +79,27 @@ enddef
 
 
 export def CdLine(): void
-	var is_ok: bool = v:true
+	var new_dir: string = expand(getline('.'))
 
-	echom 'Old: ' .. getcwd()
-	try
-		execute ':cd ' .. getline('.')
-	catch /.*/
-		echom 'Error: Wrong path.'
-		FM.EditFoldMarker(&filetype)
-		is_ok = v:false
-	endtry
-	if is_ok
+	if isdirectory(new_dir)
+		echom 'Old: ' .. getcwd()
+		execute ':cd ' .. new_dir
 		echom 'New: ' .. getcwd()
+	else
+		FM.EditFoldMarker(&filetype)
 	endif
 enddef
 
 
-export def EditLine(): void
-	ExecuteCommand('edit ' .. getline('.'))
+export def ExploreLine(): void
+	var path: string = expand(getline('.'))
+
+	if isdirectory(path)
+		LT.GotoWindow('Explore in window? ')
+	else
+		path = ''
+	endif
+	execute 'Explore ' .. path
 enddef
 
 

@@ -24,7 +24,7 @@ vnoremap <buffer> <silent> <leader><cr>
 nnoremap <buffer> <silent> <leader>ff
 		\ :call <sid>TF.SaveLoadText()<cr>
 nnoremap <buffer> <silent> <leader>fe
-		\ :call <sid>NP.EditLine()<cr>
+		\ :call <sid>NP.ExploreLine()<cr>
 
 nnoremap <buffer> <silent> <leader>fc
 		\ :call <sid>NP.ExecuteLine(v:true)<cr>
