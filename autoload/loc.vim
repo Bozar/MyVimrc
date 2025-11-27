@@ -18,8 +18,11 @@ export const FILE_RF: number = 1
 # Additional reference
 export const FILE_AD: number = 2
 
-const DEBUG: bool = v:false
-const EOL: string = "\n"
+const MAX_SEARCH_FILE: number = 3
+const SEARCH_FILE_HEAD: string = '\v\C^SEARCH_FILE'
+		.. '(-' .. toupper(hostname()) .. '){0,1}' .. '$'
+const SEARCH_FILE_OUTPUT: list<string> = ['Glo: ', 'Ref_1: ', 'Ref_2: ']
+
 
 const LABEL_MARK: string = '#MARK#'
 const LABEL_END: string = '#END#'
@@ -45,6 +48,7 @@ const PATTERN_HEADER_GLOSSARY: string = 'Glossary {{{'
 # -- [TARGET] --
 const PATTERN_REPLACE_TARGET: string = '\v(\t)([^\t]{-})(\t)'
 
+
 const GLOSSARY_TAG: list<string> = [
 	'General',
 	'NPC',
@@ -52,6 +56,10 @@ const GLOSSARY_TAG: list<string> = [
 	'Item',
 	'Skill \& Trait',
 ]
+
+
+const DEBUG: bool = v:false
+const EOL: string = "\n"
 
 const INPUT_A: string = 'a'
 const INPUT_B: string = 'b'
@@ -62,6 +70,7 @@ const INPUT_C: string = 'c'
 
 var snippet_source: string = ''
 var snippet_target: string = ''
+var search_files: list<string>
 
 
 export def ResetCursorPosition(): void
@@ -93,10 +102,45 @@ export def QuickCopy(): void
 enddef
 
 
+export def LoadSearchFile(is_verbose: bool): bool
+	SLS.SaveLoadState(v:true)
+	normal! gg
+	if search(SEARCH_FILE_HEAD, 'cw') ==# 0
+		echom 'Cannot load search files.'
+		echom ' '
+		echom 'SEARCH_FILE[-{HOSTNAME}]'
+		echom 'path/to/glossary'
+		echom 'path/to/reference_1'
+		echom 'path/to/reference_2'
+		SLS.SaveLoadState(v:false)
+		return v:false
+	endif
+
+	const ERROR_FILE: string = 'Invalid file: '
+	var new_path: string
+	search_files = []
+	for i: number in range(0, MAX_SEARCH_FILE - 1)
+		new_path = getline(line('.') + 1 + i)
+		if !filereadable(expand(new_path))
+			echom ERROR_FILE .. SEARCH_FILE_OUTPUT[i] .. new_path
+			SLS.SaveLoadState(v:false)
+			return v:false
+		endif
+		search_files = add(search_files, new_path)
+	endfor
+
+	if is_verbose
+		for i: number in range(0, MAX_SEARCH_FILE - 1)
+			echom SEARCH_FILE_OUTPUT[i] .. search_files[i]
+		endfor
+	endif
+	SLS.SaveLoadState(v:false)
+	return v:true
+enddef
+
+
 export def SearchPattern(map_mode: number, search_file_index: number): void
-	# If g:PRIVATE_DATA exists, make sure it has the right data structure.
-	if !exists('g:PRIVATE_DATA')
-		echom 'g:PRIVATE_DATA does not exist.'
+	if (len(search_files) <# MAX_SEARCH_FILE) && !LoadSearchFile(v:false)
 		return
 	endif
 
@@ -105,9 +149,7 @@ export def SearchPattern(map_mode: number, search_file_index: number): void
 		: @"
 	const ESCAPE_PATTERN: string = shellescape(PATTERN, 1)
 
-	const SEARCH_FILE: string = g:PRIVATE_DATA['LOC_FILE'][
-		search_file_index
-	]
+	const SEARCH_FILE: string = search_files[search_file_index]
 	const OUTPUT_FILE: string = TF.GetTempFileName(TF.LOC)
 
 	const COMMAND: string = 'grep -i ' .. ESCAPE_PATTERN .. ' '

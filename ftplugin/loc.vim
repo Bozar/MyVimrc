@@ -29,13 +29,11 @@ augroup END
 
 nnoremap <buffer> <silent> <leader>jh
 		\ :call <sid>TF.GotoTempWindow(
-		\		<sid>TF.LOC, <sid>TF.DEFAULT_NAME, v:false
-		\		)<cr>
+		\<sid>TF.LOC, <sid>TF.DEFAULT_NAME, v:false
+		\)<cr>
 
 nnoremap <buffer> <silent> <leader>fc
-		\ :call <sid>NP.ExecuteCurrentLine(v:true)<cr>
-vnoremap <buffer> <silent> <leader>fc
-		\ y:call <sid>NP.ExecuteCurrentLine(v:false)<cr>
+		\ :call <sid>LC.LoadSearchFile(v:true)<cr>
 
 nnoremap <buffer> <silent> <cr>
 		\ :call <sid>LC.ResetCursorPosition()<cr>
