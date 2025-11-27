@@ -66,23 +66,17 @@ enddef
 export def GotoPreviousWindow(): void
 	if !IsMovableWindow()
 		return
-	endif
-
-	if winnr('$') ==# 1
+	elseif winnr('$') ==# 1
 		return
 	endif
 
 	const CURRENT_WINDOW: number = winnr()
+
 	wincmd p
 	if winnr() !=# CURRENT_WINDOW
 		return
 	endif
-
-	const GOTO_WINDOW: number = str2nr(input('Go to window? '))
-	 if !IsValidWindowNumber(GOTO_WINDOW)
-		 return
-	 endif
-	execute ':' .. GOTO_WINDOW .. 'wincmd w'
+	GotoWindow()
 enddef
 
 
@@ -101,6 +95,15 @@ export def GotoLeftTopBottomWindow(is_left_top: bool): void
 		wincmd p
 	endif
 	execute ':' .. win_nr .. 'wincmd w'
+enddef
+
+
+export def GotoWindow(prompt: string = 'Goto window? '): void
+	const WIN_NUMBER: number = str2nr(input(prompt))
+
+	if IsValidWindowNumber(WIN_NUMBER)
+		execute ':' .. WIN_NUMBER .. 'wincmd w'
+	endif
 enddef
 
 

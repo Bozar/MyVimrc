@@ -101,11 +101,7 @@ enddef
 
 
 def ExecuteCommand(command: string): void
-	const WIN_NUMBER: number = str2nr(input('Execute in window? '))
-
-	if LT.IsValidWindowNumber(WIN_NUMBER)
-		execute ':' .. WIN_NUMBER .. 'wincmd w'
-	endif
+	LT.GotoWindow('Execute in window? ')
 	execute ':' .. command
 enddef
 
