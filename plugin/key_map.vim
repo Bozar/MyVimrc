@@ -111,9 +111,9 @@ nnoremap <silent> <unique> <leader><f12>
 
 # Insert character {{{1
 
-noremap! <unique> ,, *
-noremap! <unique> ,. _
-noremap! <unique> ,< <><left>
+inoremap <unique> ,, <-
+inoremap <unique> ,. ->
+inoremap <unique> ,< <><left>
 
 noremap! <unique> ( ()<left>
 noremap! <unique> [ []<left>
