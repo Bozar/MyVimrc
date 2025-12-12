@@ -60,7 +60,7 @@ enddef
 export def ArgaddLine(is_normal_mode: bool): void
 	var ln_0: number
 	var ln_1: number
-
+	var lines: list<string>
 	if is_normal_mode
 		ln_0 = line('.')
 		ln_1 = line('.')
@@ -68,13 +68,19 @@ export def ArgaddLine(is_normal_mode: bool): void
 		ln_0 = line("'<")
 		ln_1 = line("'>")
 	endif
-
-	var lines: list<string>
-
 	for i: number in range(ln_0, ln_1)
 		add(lines, getline(i))
 	endfor
-	execute ':%argdelete | argadd ' .. join(lines, ' ') .. '| :%argdelete'
+
+	const JOIN_LINES: string = join(lines, ' ')
+	const YES: string = 'y'
+	const ASK: string = '[argadd ' .. JOIN_LINES .. ']? [y/N] '
+	if input(ASK) !=# YES
+		wall
+		return
+	endif
+
+	execute ':%argdelete | argadd ' .. JOIN_LINES .. '| :%argdelete'
 enddef
 
 
