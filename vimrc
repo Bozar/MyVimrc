@@ -61,16 +61,17 @@ set ambiwidth=double
 set linespace=0
 set list
 # https://www.reddit.com/r/vim/comments/4hoa6e/what_do_you_use_for_your_listchars/
-# <c-k>>>
-set listchars=tab:»\ ,
-#set listchars=tab:[\ ,
+# <c-k>>>, <c-k>>1
+set listchars=tab:»\ ,leadmultispace:›---,
 # BUG?: A long line containing tabs in a narrow window cannot be shown properly,
 # if a tab is shown as three characters.
 #set listchars=tab:].[,
 #set listchars=tab:].[,lead:›
-if IS_GUI || !IS_WINDOWS
-	set cursorline
-endif
+
+#if IS_GUI || !IS_WINDOWS
+	#set cursorline
+#endif
+set cursorline
 
 
 set wildmode=full
