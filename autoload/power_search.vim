@@ -11,14 +11,14 @@ const EOL: string = "\n"
 const SET_A: string = 'a'
 const SET_B: string = 'b'
 const SET_F: string = 'f'
-const SWAP_AB: string = 's'
-const MOD_A: string = 'm'
-const ERASE_B: string = 'e'
+const SWAP_AB: string = 'w'
+const MOD_A: string = 'd'
+const REMOVE_B: string = 'v'
 const COPY_COMMAND: string = 'c'
-const REPLACE_PATTERN: string = 'r'
+const LOCAL_SUB: string = 's'
 const COLLECT_TEXT: string = 't'
-const GREP_PATTERN: string = 'g'
-const CFDO: string = 'd'
+const GREP_PATTERN: string = 'r'
+const GLOBAL_SUB: string = 'g'
 
 
 # Function variables cannot shadow script ones: ':h E1006'.
@@ -82,15 +82,19 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 	escaped_substitute_text = EscapeSubstitution(substitute_text)
 
 	const ORDERED_COMMANDS: list<string> = [
-		REPLACE_PATTERN,
+		GLOBAL_SUB,
+		LOCAL_SUB,
 		COLLECT_TEXT,
 		GREP_PATTERN,
-		CFDO,
 	]
 	const CMD_CODE: string = FilterCommand(INPUT, ORDERED_COMMANDS)
 	# Save only one command.
 	var command: string = ''
-	if CMD_CODE ==# REPLACE_PATTERN
+	if CMD_CODE ==# GLOBAL_SUB
+		command = GetCmdGsub(
+			escaped_search_pattern, escaped_substitute_text
+		)
+	elseif CMD_CODE ==# LOCAL_SUB
 		command = GetCmdSubstitute(
 				escaped_search_pattern, escaped_substitute_text
 		)
@@ -98,17 +102,14 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 		command = GetCmdYank(escaped_search_pattern)
 	elseif CMD_CODE ==# GREP_PATTERN
 		command = GetCmdGrep(escaped_search_pattern, grep_path)
-	elseif CMD_CODE ==# CFDO
-		command = GetCmdCfdo(
-			escaped_search_pattern,
-			escaped_substitute_text
-		)
 	else
 		command = ''
 	endif
 
-	if INPUT =~# COPY_COMMAND
+	if (INPUT =~# COPY_COMMAND) || (CMD_CODE ==# GLOBAL_SUB)
 		@" = command
+		unsilent echo EOL
+		unsilent echom 'COPIED: [' .. command .. ']'
 		return
 	elseif escaped_search_pattern ==# EscapeVeryNoMagic('')
 		return
@@ -117,14 +118,12 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 	SLS.SaveLoadState(v:true)
 	var save_yank: string
 	# Copy or execute only one command.
-	if CMD_CODE ==# REPLACE_PATTERN
+	if CMD_CODE ==# LOCAL_SUB
 		unsilent execute ':' .. command
 	elseif CMD_CODE ==# COLLECT_TEXT
 		save_yank = ExeCmdYank(command)
 	elseif CMD_CODE ==# GREP_PATTERN
 		unsilent execute ':' .. command
-	elseif CMD_CODE ==# CFDO
-		ExeCmdCfdo(command)
 	endif
 	SLS.SaveLoadState(v:false)
 
@@ -191,8 +190,8 @@ def GetPrompt(
 			.. '[F] File path: [' .. path .. ']' .. EOL
 			.. '[@"]: [' .. raw_register .. ']' .. EOL
 			.. '--------------------------------------------' .. EOL
-			.. 'Set [A|B|F], [S]wap AB, [M]od A, [E]rase B,' .. EOL
-			.. '[C]opy, [R]eplace, Collec[T], [G]rep, Cf[D]o' .. EOL
+			.. 'Set [A|B|F], S[W]ap AB, Mo[D] A, Remo[V]e B,' .. EOL
+			.. '[C]opy, [G]sub, L[S]ub, Collec[T], G[R]ep' .. EOL
 			.. '> '
 	return INPUT
 enddef
@@ -224,11 +223,11 @@ def SetVariable(input: string, raw_register: string): void
 	endif
 	# Modify [search_pattern]
 	if input =~# MOD_A
-		search_pattern = input('Mod A: ', search_pattern)
+		search_pattern = input('Mod A: ', '\v' .. search_pattern)
 		is_new_search = v:true
 	endif
 	# Clear [substitute_text]
-	if input =~# ERASE_B
+	if input =~# REMOVE_B
 		substitute_text = ''
 	endif
 
@@ -269,21 +268,9 @@ def GetCmdGrep(pattern: string, path: string): string
 enddef
 
 
-def GetCmdCfdo(pattern: string, text: string): string
-	const PATTERN_TEXT: string = pattern .. '/' .. text
-	const COMMAND: string = 'cfdo :%s/' .. PATTERN_TEXT .. '/gce'
+def GetCmdGsub(pattern: string, text: string): string
+	const COMMAND: string = '%s/' .. pattern .. '/' .. text .. '/gce'
 	return COMMAND
-enddef
-
-
-def ExeCmdCfdo(command: string): void
-	try
-		silent execute ':' .. command
-	catch /^Vim\%((\a\+)\)\=:E480:/
-		unsilent echom 'E480: Pattern not found.'
-	catch /^Vim\%((\a\+)\)\=:E683:/
-		unsilent echom 'E684: Invalid file path.'
-	endtry
 enddef
 
 
