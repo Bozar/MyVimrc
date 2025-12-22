@@ -10,6 +10,7 @@ const FILE_TO_COMMENT: dict<string> = {
 	'gdscript': '#',
 	'sh': '#',
 	'go': '\/\/',
+	'make': '#',
 }
 
 
