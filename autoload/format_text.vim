@@ -80,6 +80,6 @@ enddef
 def FormatDefaultText(line_space: number, placeholder: string): void
 	RemoveTrailSpace()
 	RemoveExtraLine(line_space, placeholder)
-	AddLastBlankLine()
+	#AddLastBlankLine()
 enddef
 
