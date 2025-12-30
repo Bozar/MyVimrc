@@ -7,6 +7,7 @@ import autoload 'snippet/gdscript.vim' as GD
 import autoload 'snippet/go.vim' as GO
 import autoload 'snippet/c.vim' as C
 import autoload 'snippet/header.vim' as HD
+import autoload 'snippet/python.vim' as PY
 
 
 export const INSERT_PLACEHOLDER: string = '%I%'
@@ -45,4 +46,7 @@ TEXT_BLOCK['c'] = C.TEXT_BLOCK
 
 ABBREVIATION['header'] = HD.ABBREVIATION
 TEXT_BLOCK['header'] = HD.TEXT_BLOCK
+
+ABBREVIATION['python'] = PY.ABBREVIATION
+TEXT_BLOCK['python'] = PY.TEXT_BLOCK
 
