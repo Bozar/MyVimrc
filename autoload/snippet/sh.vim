@@ -20,7 +20,6 @@ export const TEXT_BLOCK: dict<any> = {
 		'}',
 		'',
 		'main \"$@\"',
-		'',
 	],
 	'fu;': [
 		'%P%() {',
