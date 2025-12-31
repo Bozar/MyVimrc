@@ -72,15 +72,19 @@ export def ArgaddLine(is_normal_mode: bool): void
 		add(lines, getline(i))
 	endfor
 
-	const JOIN_LINES: string = join(lines, ' ')
+	var command: string = 'argadd ' .. join(lines, ' ')
 	const YES: string = 'y'
-	const ASK: string = '[argadd ' .. JOIN_LINES .. ']? [y/N] '
-	if input(ASK) !=# YES
+	const EDIT: string = 'e'
+	const ASK: string = '[' .. command .. ']: [y/e/N]? '
+	const USR_INPUT: string = input(ASK)
+	if USR_INPUT ==# YES
+		execute ':%argdelete | ' .. command .. '| :%argdelete'
+	elseif USR_INPUT ==# EDIT
+		command = input('', command)
+		execute ':' .. command
+	else
 		wall
-		return
 	endif
-
-	execute ':%argdelete | argadd ' .. JOIN_LINES .. '| :%argdelete'
 enddef
 
 
