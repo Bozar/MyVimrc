@@ -55,10 +55,9 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
 
 	endif
 
-	:1wincmd w
+	wincmd b
 	if layout ==# QUICK_FIX
 		belowright copen
-		:1wincmd w
 	endif
 enddef
 
@@ -80,21 +79,19 @@ export def GotoPreviousWindow(): void
 enddef
 
 
-export def GotoLeftTopBottomWindow(is_left_top: bool): void
+export def GotoRightTopBottomWindow(is_right_top: bool): void
 	if !IsMovableWindow()
 		return
 	endif
 
-	var win_nr: number
-
-	if is_left_top
-		win_nr = 1
-	else
-		:1wincmd w
-		win_nr = winnr('99j')
-		wincmd p
+	var old_win_nr: number = winnr()
+	var new_win_nr: number
+	wincmd b
+	if is_right_top
+		new_win_nr = winnr('99k')
+		execute ':' .. old_win_nr .. 'wincmd w'
+		execute ':' .. new_win_nr .. 'wincmd w'
 	endif
-	execute ':' .. win_nr .. 'wincmd w'
 enddef
 
 
@@ -114,14 +111,15 @@ enddef
 
 def VerticalSplit(width: number): void
 	wincmd v
-	execute 'vertical resize ' .. width
 	:2wincmd w
+	execute 'vertical resize ' .. width
+	:1wincmd w
 enddef
 
 
 def HorizontalSplit(height: number): void
 	wincmd s
-	:3wincmd w
+	:2wincmd w
 	execute 'resize ' .. height
 enddef
 

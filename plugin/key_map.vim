@@ -68,9 +68,9 @@ nnoremap <silent> <unique> <leader>jh
 nnoremap <silent> <unique> <leader><space>
 		\ :silent call <sid>LT.GotoPreviousWindow()<cr>
 nnoremap <silent> <unique> <leader>jk
-		\ :silent call <sid>LT.GotoLeftTopBottomWindow(v:true)<cr>
+		\ :silent call <sid>LT.GotoRightTopBottomWindow(v:true)<cr>
 nnoremap <silent> <unique> <leader>jj
-		\ :silent call <sid>LT.GotoLeftTopBottomWindow(v:false)<cr>
+		\ :silent call <sid>LT.GotoRightTopBottomWindow(v:false)<cr>
 
 
 # x. {{{1

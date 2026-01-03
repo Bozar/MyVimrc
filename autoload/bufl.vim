@@ -56,12 +56,12 @@ enddef
 
 export def SplitOpenWindow(): void
 	if winnr('$') ==# 3
-		:1wincmd w
+		:3wincmd w
 		split
 		TF.GotoTempWindow(TF.BUFL)
-		OpenWindow(2, 2)
+		OpenWindow(3, 3)
 	elseif winnr('$') ==# 4
-		OpenWindow(2, 2)
+		OpenWindow(3, 3)
 	else
 		OpenByPrompt()
 	endif
