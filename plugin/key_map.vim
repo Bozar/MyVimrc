@@ -56,8 +56,8 @@ nnoremap <silent> <unique> <leader>jL
 
 nnoremap <silent> <unique> <leader>ju
 		\ :silent call <sid>TF.GotoTempWindow(
-		\		<sid>TF.BUFL, <sid>TF.DEFAULT_NAME, v:false
-		\		)<cr>
+		\<sid>TF.BUFL, <sid>TF.DEFAULT_NAME, v:false
+		\)<cr>
 nnoremap <silent> <unique> <leader>jU
 		\ :silent call <sid>TF.GotoTempBuffer(<sid>TF.BUFL)<cr>
 

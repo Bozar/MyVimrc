@@ -17,6 +17,7 @@ augroup quick_command
 	autocmd FileType * call SNP.LoadSnippet(
 			\expand('<amatch>'), expand('<afile>:e')
 	\)
+	autocmd WinEnter * checktime
 augroup END
 
 
