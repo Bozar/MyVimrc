@@ -43,6 +43,13 @@ export def CloseTabPageToTheRight(): void
 enddef
 
 
+export def CloseTabPage(): void
+	if tabpagenr('$') > 1
+		tabclose
+	endif
+enddef
+
+
 export def GotoTabPage(is_move_right: bool): void
 	if !LT.IsMovableWindow()
 		if is_move_right

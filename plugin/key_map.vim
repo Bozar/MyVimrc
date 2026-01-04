@@ -208,4 +208,6 @@ nnoremap <silent> <unique> <down>
 		\ :silent call <sid>TP.MoveTabPage(v:true)<cr>
 nnoremap <silent> <unique> <leader>zt
 		\ :silent call <sid>TP.CloseTabPageToTheRight()<cr>
+nnoremap <silent> <unique> <leader>zr
+		\ :silent call <sid>TP.CloseTabPage()<cr>
 
