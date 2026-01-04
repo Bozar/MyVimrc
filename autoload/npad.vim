@@ -90,11 +90,26 @@ enddef
 
 export def CdLine(): void
 	var new_dir: string = expand(getline('.'))
-
 	if isdirectory(new_dir)
 		echom 'Old: ' .. getcwd()
 		execute ':cd ' .. new_dir
 		echom 'New: ' .. getcwd()
+	else
+		FM.EditFoldMarker(&filetype)
+	endif
+enddef
+
+
+export def GtdLine(): void
+	const PAT_TODO: string = '\v\[[ ]\]\s+'
+	const PAT_DONE: string = '\v\[[X]\]\s+'
+	const STR_TODO: string = '[ ] '
+	const STR_DONE: string = '[X] '
+	const LINE: string = getline('.')
+	if LINE =~# PAT_TODO
+		execute ':s/' .. PAT_TODO .. '/' .. STR_DONE
+	elseif LINE =~# PAT_DONE
+		execute ':s/' .. PAT_DONE .. '/' .. STR_TODO
 	else
 		FM.EditFoldMarker(&filetype)
 	endif
