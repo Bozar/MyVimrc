@@ -6,48 +6,51 @@ import autoload 'fold_marker.vim' as FM
 
 
 export def SearchText(is_visual: bool, has_prompt: bool): void
+	const CURRENT_WIN: number = winnr()
 	const EMPTY_LINE: string = '\v(^\s*$)|\n'
-	const PROMPT: string = 'Search in window? '
-
-	var current_line: string
-	var goto_window: number
-	var search_range: list<number>
-	var search_text: string
-	var current_window: number
-
+	var target_win: number = winnr('#')
+	var current_line: string = getline(line('.'))
 	# vnoremap
 	if is_visual
 		current_line = @"
-	else
-		current_line = getline(line('.'))
 	endif
 	if current_line =~# EMPTY_LINE
 		return
 	endif
 
+	const PROMPT: string = 'Search in window? '
+	var goto_window: number = 0
+	var search_range: list<number> = range(1, winnr('$'))
 	# <leader><cr>
 	if has_prompt
 		unsilent goto_window = str2nr(input(PROMPT))
-		if LT.IsValidWindowNumber(goto_window)
-			search_range = range(goto_window, goto_window)
-		else
+		if ! LT.IsValidWindowNumber(goto_window)
 			return
 		endif
-	else
-		search_range = range(1, winnr('$'))
+		# Search a specific window.
+		search_range = range(goto_window, goto_window)
 	endif
 
-	search_text = PS.EscapeVeryNoMagic(trim(current_line))
-	current_window = winnr()
-
+	var search_text: string = PS.EscapeVeryNoMagic(trim(current_line))
+	var has_target: bool = v:false
 	for i: number in search_range
 		execute ':' .. i .. 'wincmd w'
-		if (i !=# current_window) && (search(search_text, 'cw') > 0)
+		if (i !=# CURRENT_WIN) && (search(search_text, 'cw') > 0)
 			@/ = search_text
-			return
+			target_win = i
+			has_target = v:true
+			break
 		endif
 	endfor
-	execute ':' .. current_window .. 'wincmd w'
+	# Reset current window & last window.
+	if has_target
+		execute ':' .. CURRENT_WIN .. 'wincmd w'
+		execute ':' .. target_win .. 'wincmd w'
+	# target_win remains unchanged: winnr('#').
+	else
+		execute ':' .. target_win .. 'wincmd w'
+		execute ':' .. CURRENT_WIN .. 'wincmd w'
+	endif
 enddef
 
 
