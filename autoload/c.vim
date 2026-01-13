@@ -12,6 +12,7 @@ export def ExpandLine(is_visual: bool): void
 		:'<,'>left 0
 		:'<,'>s/\v\s*$//
 		:'<,'>join
+		:'<,'>s/\v\(\s*/(/g
 	endif
 	if getline('.') !~# PATTERN_FUNC
 		if is_visual
