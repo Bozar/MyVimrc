@@ -54,5 +54,10 @@ export const TEXT_BLOCK: dict<any> = {
 	'vv;': [
 		'var %I%: %P% =',
 	],
+	'try;': [
+		'try',
+		'%S%%P%',
+		'catch \\\/^Vim\\\\%((\\\\a\\\\+)\\\\)\\\\=:E%I%\\\/',
+		'endtry',
+	],
 }
-
