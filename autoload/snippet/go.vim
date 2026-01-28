@@ -47,4 +47,3 @@ export const TEXT_BLOCK: dict<any> = {
 		'}',
 	],
 }
-

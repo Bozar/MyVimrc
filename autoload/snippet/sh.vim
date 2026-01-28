@@ -12,7 +12,7 @@ export const TEXT_BLOCK: dict<any> = {
 		'readonly %I%'
 	],
 	'jj;': [
-		'#! \\/usr\\/bin\\/bash',
+		'#! %FS%usr%FS%bin%FS%bash',
 		'%I%',
 		'',
 		'',
@@ -49,4 +49,3 @@ export const TEXT_BLOCK: dict<any> = {
 		'done',
 	],
 }
-

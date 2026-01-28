@@ -29,4 +29,3 @@ export const TEXT_BLOCK: dict<any> = {
 		'var %I%: %P% =',
 	],
 }
-

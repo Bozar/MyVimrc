@@ -57,7 +57,7 @@ export const TEXT_BLOCK: dict<any> = {
 	'try;': [
 		'try',
 		'%S%%P%',
-		'catch \\\/^Vim\\\\%((\\\\a\\\\+)\\\\)\\\\=:E%I%\\\/',
+		'catch %FS%^Vim%BS%%((%BS%a%BS%+)%BS%)%BS%=:E%I%:%FS%',
 		'endtry',
 	],
 }

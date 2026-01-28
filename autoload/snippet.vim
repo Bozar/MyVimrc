@@ -16,7 +16,6 @@ import autoload 'snippet/data.vim' as DT
 export def LoadSnippet(file_type: string, file_extension: string): void
 	var join_line: string
 	var new_ft: string = get(DT.FIX_FILETYPE, file_extension, file_type)
-
 	if has_key(DT.ABBREVIATION, new_ft)
 		for i: string in keys(DT.ABBREVIATION[new_ft])
 			execute 'inoreabbrev <silent> <buffer> ' .. i .. ' '
@@ -41,27 +40,48 @@ def InsertTextBlock(text_block: string): void
 
 	# Indent text block.
 	const LAST_LINE_NR: number = line('.')
-	const INDENT_RANGE: string = ':' .. FIRST_LINE_NR .. ',' .. LAST_LINE_NR
+	const INSERT_RANGE: string = ':' .. FIRST_LINE_NR .. ',' .. LAST_LINE_NR
 	const INDENT_SPACE: number = indent(FIRST_LINE_NR)
-	execute INDENT_RANGE .. 'left ' .. INDENT_SPACE
+	execute INSERT_RANGE .. 'left ' .. INDENT_SPACE
 
 	# Left align lines.
 	execute ':' .. FIRST_LINE_NR
 	if search(DT.PATTERN_LEFT_ALIGN_PLACEHOLDER, 'cn', LAST_LINE_NR) ># 0
-		execute INDENT_RANGE .. 'g/'
-				.. DT.PATTERN_LEFT_ALIGN_PLACEHOLDER .. '/'
-				.. 'left 0'
-		execute INDENT_RANGE .. 's/'
-				.. DT.PATTERN_LEFT_ALIGN_PLACEHOLDER .. '//g'
+		execute INSERT_RANGE .. 'g/'
+				.. DT.PATTERN_LEFT_ALIGN_PLACEHOLDER
+				.. '/' .. 'left 0'
+		execute INSERT_RANGE .. 's/'
+				.. DT.PATTERN_LEFT_ALIGN_PLACEHOLDER
+				.. '//g'
+	endif
+
+	# Substitute forward slash.
+	execute ':' .. FIRST_LINE_NR
+	if search(DT.PATTERN_FORWARD_SLASH_PLACEHOLDER, 'cn', LAST_LINE_NR)
+			># 0
+		execute INSERT_RANGE .. 's/'
+				.. DT.PATTERN_FORWARD_SLASH_PLACEHOLDER
+				.. '/' .. DT.TEXT_FORWARD_SLASH
+				.. '/g'
+	endif
+
+	# Substitute backward slash.
+	execute ':' .. FIRST_LINE_NR
+	if search(DT.PATTERN_BACKWARD_SLASH_PLACEHOLDER, 'cn', LAST_LINE_NR)
+			># 0
+		execute INSERT_RANGE .. 's/'
+				.. DT.PATTERN_BACKWARD_SLASH_PLACEHOLDER
+				.. '/' .. DT.TEXT_BACKWARD_SLASH
+				.. '/g'
 	endif
 
 	# Insert more spaces if required.
 	#const INSERT_SPACE: string = repeat(' ', &shiftwidth)
-	#execute INDENT_RANGE .. 's/' .. DT.PATTERN_INDENT_PLACEHOLDER .. '/'
+	#execute INSERT_RANGE .. 's/' .. DT.PATTERN_INDENT_PLACEHOLDER .. '/'
 	#		.. INSERT_SPACE .. '/ge'
 
 	# Indent with <tab>.
-	execute INDENT_RANGE .. 's/' .. DT.PATTERN_INDENT_PLACEHOLDER
+	execute INSERT_RANGE .. 's/' .. DT.PATTERN_INDENT_PLACEHOLDER
 			.. '/\t/ge'
 
 	# Move cursor.
@@ -76,8 +96,8 @@ def InsertTextBlock(text_block: string): void
 		@/ = DT.PATTERN_DEFAULT_PLACEHOLDER
 	endif
 	SLS.SaveLoadState(v:false)
+
 	# Move cursor left because a snippet is usually triggered by <space>
 	# key.
 	normal! h
 enddef
-

@@ -14,12 +14,24 @@ export const INSERT_PLACEHOLDER: string = '%I%'
 export const INDENT_PLACEHOLDER: string = '%S%'
 export const DEFAULT_PLACEHOLDER: string = '%P%'
 export const LEFT_ALIGN_PLACEHOLDER: string = '%<%'
+export const FORWARD_SLASH_PLACEHOLDER: string = '%FS%'
+export const BACKWARD_SLASH_PLACEHOLDER: string = '%BS%'
 
-export const PATTERN_INSERT_PLACEHOLDER: string = '\V\C' .. INSERT_PLACEHOLDER
-export const PATTERN_INDENT_PLACEHOLDER: string = '\V\C' .. INDENT_PLACEHOLDER
-export const PATTERN_DEFAULT_PLACEHOLDER: string = '\V\C' .. DEFAULT_PLACEHOLDER
+export const PATTERN_INSERT_PLACEHOLDER: string = '\V\C'
+		.. INSERT_PLACEHOLDER
+export const PATTERN_INDENT_PLACEHOLDER: string = '\V\C'
+		.. INDENT_PLACEHOLDER
+export const PATTERN_DEFAULT_PLACEHOLDER: string = '\V\C'
+		.. DEFAULT_PLACEHOLDER
 export const PATTERN_LEFT_ALIGN_PLACEHOLDER: string = '\V\C'
 		.. LEFT_ALIGN_PLACEHOLDER
+export const PATTERN_FORWARD_SLASH_PLACEHOLDER: string = '\V\C' ..
+			FORWARD_SLASH_PLACEHOLDER
+export const PATTERN_BACKWARD_SLASH_PLACEHOLDER: string = '\V\C' ..
+			BACKWARD_SLASH_PLACEHOLDER
+
+export const TEXT_FORWARD_SLASH: string = '\/'
+export const TEXT_BACKWARD_SLASH: string = '\\'
 
 export final ABBREVIATION: dict<any> = {}
 export final TEXT_BLOCK: dict<any> = {}
@@ -49,4 +61,3 @@ TEXT_BLOCK['header'] = HD.TEXT_BLOCK
 
 ABBREVIATION['python'] = PY.ABBREVIATION
 TEXT_BLOCK['python'] = PY.TEXT_BLOCK
-
