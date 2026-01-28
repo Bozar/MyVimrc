@@ -129,6 +129,13 @@ set matchpairs+=“:”
 set matchpairs+=‘:’
 set matchpairs+=（:）
 
+set completeopt+=longest,noselect
+# 'fuzzy' is a relative new complete option.
+try
+	set completeopt+=fuzzy
+catch /^Vim\%((\a\+)\)\=:E474/
+endtry
+
 
 # Font
 if IS_WINDOWS
@@ -150,4 +157,3 @@ g:netrw_banner = 0
 
 # QuickFix
 g:qf_disable_statusline = 1
-
