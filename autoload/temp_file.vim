@@ -22,7 +22,6 @@ export def GotoTempWindow(
 ): void
 	const FILE_NAME: string = GetTempFileName(file_extension, file_name)
 	const WIN_NUMBER: number = GetTempWindowNumber(FILE_NAME)
-
 	if WIN_NUMBER ># 0
 		execute ':' .. WIN_NUMBER .. 'wincmd w'
 	else
@@ -47,7 +46,6 @@ export def GetTempFileName(
 		has_path: bool = v:true
 ): string
 	const FILE_NAME: string = file_name .. '.' .. file_extension
-
 	if has_path
 		return expand(GetTempDirectory() .. '/' .. FILE_NAME)
 	else
@@ -77,7 +75,6 @@ enddef
 
 export def OpenTempFile(full_file_name: string): void
 	const BUF_NR: number = bufnr(full_file_name)
-
 	if BUF_NR ># 0
 		execute ':' .. BUF_NR .. 'buffer'
 	else
@@ -88,18 +85,13 @@ enddef
 
 def GetTempWindowNumber(file_name: string): number
 	const CURRENT_WIN: number = winnr()
-
 	var win_number: number = 0
-
 	for i: number in range(1, winnr('$'))
-		execute ':' .. i .. 'wincmd w'
-		if expand('%:p') ==# file_name
-			win_number = winnr()
+		if bufname(winbufnr(i)) ==# file_name
+			win_number = i
 			break
 		endif
 	endfor
-
-	execute ':' .. CURRENT_WIN .. 'wincmd w'
 	return win_number
 enddef
 
@@ -107,7 +99,5 @@ enddef
 def GetTempDirectory(): string
 	const TMP_WIN: string = $TEMP
 	const TMP_LINUX: string = '/var/tmp'
-
 	return (len(TMP_WIN) ># 0) ? TMP_WIN : TMP_LINUX
 enddef
-
