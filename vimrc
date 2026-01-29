@@ -136,6 +136,10 @@ try
 catch /^Vim\%((\a\+)\)\=:E474/
 endtry
 
+if exists('g:PRIVATE_DATA')
+	execute 'set tags+=' .. get(g:PRIVATE_DATA, 'MY_TAGS', '')
+endif
+
 
 # Font
 if IS_WINDOWS
