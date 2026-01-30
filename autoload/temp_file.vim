@@ -83,11 +83,14 @@ export def OpenTempFile(full_file_name: string): void
 enddef
 
 
+# When 'autochdir' is on, use 'fnamemodify()' to get absolute path.
+# https://www.reddit.com/r/vim/comments/1ctvfnz/
+# https://vi.stackexchange.com/questions/3016/
 def GetTempWindowNumber(file_name: string): number
 	const CURRENT_WIN: number = winnr()
 	var win_number: number = 0
 	for i: number in range(1, winnr('$'))
-		if bufname(winbufnr(i)) ==# file_name
+		if fnamemodify(bufname(winbufnr(i)), ':p') ==# file_name
 			win_number = i
 			break
 		endif

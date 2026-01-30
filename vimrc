@@ -38,6 +38,7 @@ filetype plugin indent on
 syntax enable
 set backspace=indent,eol,start
 set autoread
+set autochdir
 
 
 # Do not insert 2 spaces after punctuations when joining lines.
