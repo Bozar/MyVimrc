@@ -20,7 +20,7 @@ export const TEXT_BLOCK: dict<any> = {
 	'jj;': [
 		'vim9script',
 		'',
-		"#import auto '%I%' as",
+		"#import autoload '%I%' as",
 		'',
 		'',
 	],
@@ -31,7 +31,7 @@ export const TEXT_BLOCK: dict<any> = {
 	],
 	'fu;': [
 		'def %I%(): void',
-		'%S%#BODY',
+		'%S%%P%',
 		'enddef',
 	],
 	'if;': [
