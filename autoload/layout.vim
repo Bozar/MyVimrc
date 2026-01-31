@@ -1,6 +1,7 @@
 vim9script
 
 import autoload 'temp_file.vim' as TF
+import autoload 'save_load_state.vim' as SLS
 
 
 export const DEFAULT: number = 0
@@ -70,7 +71,6 @@ export def GotoPreviousWindow(): void
 	endif
 
 	const CURRENT_WINDOW: number = winnr()
-
 	wincmd p
 	if winnr() !=# CURRENT_WINDOW
 		return
@@ -97,7 +97,6 @@ enddef
 
 export def GotoWindow(prompt: string = 'Goto window? '): void
 	const WIN_NUMBER: number = str2nr(input(prompt))
-
 	if IsValidWindowNumber(WIN_NUMBER)
 		execute ':' .. WIN_NUMBER .. 'wincmd w'
 	endif
@@ -106,6 +105,46 @@ enddef
 
 export def IsMovableWindow(): bool
 	return index(MOVABLE_WINDOW_TYPE, win_gettype()) >=# 0
+enddef
+
+
+export def OpenWindow(buf_nr: number, open_win: number, jump_win: number): void
+	if buf_nr <# 1
+		return
+	endif
+
+	const OPEN: number = TryFixWinNumber(open_win)
+	const JUMP: number = TryFixWinNumber(jump_win)
+	execute ':' .. OPEN .. 'wincmd w'
+	execute 'buffer ' .. buf_nr
+	execute ':' .. JUMP .. 'wincmd w'
+enddef
+
+
+export def OpenByPrompt(buf_nr: number): void
+	unsilent const INPUT: string = input('[Open|Jump] to window? ')
+	const FIRST_NUMBER: string = '\v^\D*(\d+).*$'
+	const SECOND_NUMBER: string = '\v^\D*\d+\D+(\d+).*$'
+	# If FIRST_NUMBER is not found, OPEN is 0.
+	const OPEN: number = str2nr(substitute(INPUT, FIRST_NUMBER, '\1', ''))
+	# If SECOND_NUMBER is not found, JUMP equals to OPEN.
+	const JUMP: number = str2nr(substitute(INPUT, SECOND_NUMBER, '\1', ''))
+	OpenWindow(buf_nr, OPEN, JUMP)
+enddef
+
+
+export def OpenTab(buf_nr: number): void
+	if buf_nr <# 1
+		return
+	endif
+
+	const TAB_PAGE: number = tabpagenr()
+	SLS.SaveLoadState(v:true)
+	SplitWindow(DEFAULT, v:true)
+	tabmove $
+	execute 'buffer ' .. buf_nr
+	execute 'tabnext ' .. TAB_PAGE
+	SLS.SaveLoadState(v:false)
 enddef
 
 
@@ -123,3 +162,7 @@ def HorizontalSplit(height: number): void
 	execute 'resize ' .. height
 enddef
 
+
+def TryFixWinNumber(win_nr: number): number
+	return IsValidWindowNumber(win_nr) ? win_nr : 1
+enddef

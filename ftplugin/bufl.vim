@@ -1,6 +1,7 @@
 vim9script
 
 import autoload 'bufl.vim' as BL
+import autoload 'layout.vim' as LT
 
 
 setlocal nonumber
@@ -12,13 +13,15 @@ setlocal nobuflisted
 
 
 nnoremap <buffer> <silent> <cr>
-		\ :call <sid>BL.OpenWindow(winnr('$'), winnr('$'))<cr>
+		\ :call <sid>LT.OpenWindow(
+		\<sid>BL.GetBufferNumber(), winnr('$'), winnr('$')
+		\)<cr>
 nnoremap <buffer> <silent> <leader><cr>
-		\ :call <sid>BL.SplitOpenWindow()<cr>
+		\ :call <sid>BL.SplitOpenWindow(<sid>BL.GetBufferNumber())<cr>
 nnoremap <buffer> <silent> o
-		\ :call <sid>BL.OpenByPrompt()<cr>
+		\ :call <sid>LT.OpenByPrompt(<sid>BL.GetBufferNumber())<cr>
 nnoremap <buffer> <silent> i
-		\ :call <sid>BL.OpenTab()<cr>
+		\ :call <sid>LT.OpenTab(<sid>BL.GetBufferNumber())<cr>
 
 nnoremap <buffer> <silent> d
 		\ :call <sid>BL.DeleteBuffer()<cr>
@@ -30,4 +33,3 @@ augroup temp_bufl
 	autocmd BufEnter <buffer> setlocal nobuflisted
 	autocmd BufEnter <buffer> silent BL.RefreshBufferList()
 augroup END
-

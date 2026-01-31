@@ -5,65 +5,16 @@ import autoload 'save_load_state.vim' as SLS
 import autoload 'temp_file.vim' as TF
 
 
-export def OpenByPrompt(): void
-	unsilent const INPUT: string = input('[Open|Jump] to window? ')
-
-	const FIRST_NUMBER: string = '\v^\D*(\d+).*$'
-	const SECOND_NUMBER: string = '\v^\D*\d+\D+(\d+).*$'
-
-	# If FIRST_NUMBER is not found, OPEN is 0.
-	const OPEN: number = str2nr(substitute(INPUT, FIRST_NUMBER, '\1', ''))
-	# If SECOND_NUMBER is not found, JUMP equals to OPEN.
-	const JUMP: number = str2nr(substitute(INPUT, SECOND_NUMBER, '\1', ''))
-
-	OpenWindow(OPEN, JUMP)
-enddef
-
-
-export def OpenTab(): void
-	const BUFFER_NUMBER: number = GetBufferNumber()
-
-	if BUFFER_NUMBER <# 1
-		return
-	endif
-
-	const TAB_PAGE: number = tabpagenr()
-
-	SLS.SaveLoadState(v:true)
-	LT.SplitWindow(LT.DEFAULT, v:true)
-	tabmove $
-	execute 'buffer ' .. BUFFER_NUMBER
-	execute 'tabnext ' .. TAB_PAGE
-	SLS.SaveLoadState(v:false)
-enddef
-
-
-export def OpenWindow(open_win: number, jump_win: number): void
-	const BUFFER_NUMBER: number = GetBufferNumber()
-
-	if BUFFER_NUMBER <# 1
-		return
-	endif
-
-	const OPEN: number = TryFixWinNumber(open_win)
-	const JUMP: number = TryFixWinNumber(jump_win)
-
-	execute ':' .. OPEN .. 'wincmd w'
-	execute 'buffer ' .. BUFFER_NUMBER
-	execute ':' .. JUMP .. 'wincmd w'
-enddef
-
-
-export def SplitOpenWindow(): void
+export def SplitOpenWindow(buf_nr: number): void
 	if winnr('$') ==# 3
 		:3wincmd w
 		split
 		TF.GotoTempWindow(TF.BUFL)
-		OpenWindow(3, 3)
+		LT.OpenWindow(buf_nr, 3, 3)
 	elseif winnr('$') ==# 4
-		OpenWindow(3, 3)
+		LT.OpenWindow(buf_nr, 3, 3)
 	else
-		OpenByPrompt()
+		LT.OpenByPrompt(buf_nr)
 	endif
 enddef
 
@@ -110,40 +61,10 @@ export def DeleteBuffer(): void
 enddef
 
 
-def GetBufferList(): list<string>
-	var buffer_list: list<string> = []
-	var buffer_number: number
-	var last_path: string
-	var file_name: string
-	var buffer_changed: string
-	var list_item: string
-
-	for i: dict<any> in getbufinfo({'buflisted': 1})
-		buffer_number = i['bufnr']
-		last_path = expand('#' .. buffer_number .. ':p:h:t')
-		file_name = expand('#' .. buffer_number .. ':t')
-		buffer_changed = i['changed'] ? '+' : ''
-
-		# Example: [3+] autoload/buffer_list.vim
-		list_item = ' [' .. buffer_number .. buffer_changed .. '] '
-				.. last_path .. '/' .. file_name
-		add(buffer_list, list_item)
-	endfor
-
-	return buffer_list
-enddef
-
-
-def TryFixWinNumber(win_nr: number): number
-	return LT.IsValidWindowNumber(win_nr) ? win_nr : 1
-enddef
-
-
-def GetBufferNumber(): number
+export def GetBufferNumber(): number
 	const CURRENT_LINE: string = getline('.')
 	const PATTERN: string = '\v^\s*\[(\d+)\D*\].*'
 	const STR_BUF_NR: string = substitute(CURRENT_LINE, PATTERN, '\1', '')
-
 	if STR_BUF_NR ==# CURRENT_LINE
 		return 0
 	endif
@@ -152,7 +73,26 @@ def GetBufferNumber(): number
 	if !bufexists(NUM_BUF_NR)
 		return 0
 	endif
-
 	return NUM_BUF_NR
 enddef
 
+
+def GetBufferList(): list<string>
+	var buffer_list: list<string> = []
+	var buffer_number: number
+	var last_path: string
+	var file_name: string
+	var buffer_changed: string
+	var list_item: string
+	for i: dict<any> in getbufinfo({'buflisted': 1})
+		buffer_number = i['bufnr']
+		last_path = expand('#' .. buffer_number .. ':p:h:t')
+		file_name = expand('#' .. buffer_number .. ':t')
+		buffer_changed = i['changed'] ? '+' : ''
+		# Example: [3+] autoload/buffer_list.vim
+		list_item = ' [' .. buffer_number .. buffer_changed .. '] '
+				.. last_path .. '/' .. file_name
+		add(buffer_list, list_item)
+	endfor
+	return buffer_list
+enddef
