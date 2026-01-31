@@ -10,6 +10,7 @@ import autoload 'fold_marker.vim' as FM
 import autoload 'tab_page.vim' as TP
 import autoload 'format_text.vim' as FT
 import autoload 'comment_text.vim' as CT
+import autoload 'tag.vim' as TG
 # f. {{{1
 
 nnoremap <silent> <unique> <leader>fe
@@ -182,7 +183,7 @@ nnoremap <unique> <c-k> gk
 vnoremap <unique> <c-j> gj
 vnoremap <unique> <c-k> gk
 
-# Manage tab page
+# Manage tab page.
 nnoremap <silent> <unique> <left>
 		\ :silent call <sid>TP.GotoTabPage(v:false)<cr>
 nnoremap <silent> <unique> <right>
@@ -195,3 +196,9 @@ nnoremap <silent> <unique> <leader>zt
 		\ :silent call <sid>TP.CloseTabPageToTheRight()<cr>
 nnoremap <silent> <unique> <leader>zr
 		\ :silent call <sid>TP.CloseTabPage()<cr>
+
+# Jump to a tag.
+nnoremap <silent> <unique> <c-]>
+		\ :silent call <sid>TG.GotoTag(expand('<cword>'))<cr>
+vnoremap <silent> <unique> <c-]>
+		\ y:silent call <sid>TG.GotoTag(@")<cr>
