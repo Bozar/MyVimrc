@@ -11,6 +11,10 @@ const EOL: string = "\n"
 const SET_A: string = 'a'
 const SET_B: string = 'b'
 const SET_F: string = 'f'
+const SET_UPPER_A: string = 'A'
+const SET_UPPER_B: string = 'B'
+const SET_UPPER_F: string = 'F'
+
 const SWAP_AB: string = 'w'
 const MOD_A: string = 'd'
 const REMOVE_B: string = 'v'
@@ -25,6 +29,7 @@ const GLOBAL_SUB: string = 'g'
 # https://www.reddit.com/r/vim/comments/1favdyy/
 var substitute_text: string = ''
 var search_pattern: string = ''
+var line_text: string = ''
 var grep_path: string = ''
 
 var escaped_substitute_text: string = ''
@@ -56,6 +61,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 	const RAW_REGISTER: string = GetRawText(@")
 	const ESCAPED_REGISTER: string = EscapeVeryNoMagic(RAW_REGISTER)
 	ResetCursor(is_visual_mode, ESCAPED_REGISTER)
+	line_text = trim(getline('.'))
 
 	SLS.SaveLoadState(v:true)
 	# Set SCRIPT VARIABLES the first time for prompt message.
@@ -65,7 +71,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 			GetSearchResult(ESCAPED_REGISTER, is_lazy_search) .. EOL
 			.. GetPrompt(
 			escaped_search_pattern, escaped_substitute_text,
-			grep_path, RAW_REGISTER
+			grep_path, RAW_REGISTER, line_text
 			)
 	)
 	SLS.SaveLoadState(v:false)
@@ -76,7 +82,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 
 	# Note that search_pattern & substitute_text might be changed after
 	# calling SetVariable().
-	SetVariable(INPUT, RAW_REGISTER)
+	SetVariable(INPUT, RAW_REGISTER, line_text)
 	# Set SCRIPT VARIABLES the second time for command.
 	escaped_search_pattern = EscapeVeryNoMagic(search_pattern)
 	escaped_substitute_text = EscapeSubstitution(substitute_text)
@@ -181,7 +187,7 @@ enddef
 
 def GetPrompt(
 		pattern: string, text: string, path: string,
-		raw_register: string
+		raw_register: string, current_line: string
 ): string
 	const INPUT: string = ''
 			.. '--------------------------------------------' .. EOL
@@ -189,15 +195,18 @@ def GetPrompt(
 			.. '[B] Text: [' .. text .. ']' .. EOL
 			.. '[F] File path: [' .. path .. ']' .. EOL
 			.. '[@"]: [' .. raw_register .. ']' .. EOL
+			.. '[^$]: [' .. current_line .. ']' .. EOL
 			.. '--------------------------------------------' .. EOL
-			.. 'Set [A|B|F], S[W]ap AB, Mo[D] A, Remo[V]e B,' .. EOL
-			.. '[C]opy, [G]sub, L[S]ub, Collec[T], G[R]ep' .. EOL
+			.. 'Set [^?(A|B|F)], S[W]p AB, Mo[D] A, Rm[V] B,' .. EOL
+			.. '[C]opy, [G]sub, L[S]ub, Ge[T], G[R]ep' .. EOL
 			.. '> '
 	return INPUT
 enddef
 
 
-def SetVariable(input: string, raw_register: string): void
+def SetVariable(
+		input: string, raw_register: string, current_line: string
+): void
 	var is_new_search: bool = v:false
 
 	# [register "] -> [search_pattern]
@@ -212,6 +221,20 @@ def SetVariable(input: string, raw_register: string): void
 	# [register "] -> [grep_path]
 	if input =~# SET_F
 		grep_path = raw_register
+	endif
+
+	# [line_text] -> [search_pattern]
+	if input =~# SET_UPPER_A
+		search_pattern = line_text
+		is_new_search = v:true
+	# [line_text] -> [substitute_text]
+	endif
+	if input =~# SET_UPPER_B
+		substitute_text = line_text
+	endif
+	# [line_text] -> [grep_path]
+	if input =~# SET_UPPER_F
+		grep_path = line_text
 	endif
 
 	# [substitute_text] <-> [search_pattern]
@@ -296,4 +319,3 @@ def SearchPlaceholder(): void
 	execute '@/ = "' .. EscapeSubstitution(DT.DEFAULT_PLACEHOLDER) .. '"'
 	execute 'normal! gn'
 enddef
-
