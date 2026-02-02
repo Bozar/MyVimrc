@@ -16,11 +16,11 @@ nnoremap <buffer> <silent> <cr>
 		\ :call <sid>LT.OpenWindow(
 		\<sid>BL.GetBufferNumber(), winnr('$'), winnr('$')
 		\)<cr>
-nnoremap <buffer> <silent> <leader><cr>
+nnoremap <buffer> <silent> s
 		\ :call <sid>BL.SplitOpenWindow(<sid>BL.GetBufferNumber())<cr>
 nnoremap <buffer> <silent> o
 		\ :call <sid>LT.OpenByPrompt(<sid>BL.GetBufferNumber())<cr>
-nnoremap <buffer> <silent> i
+nnoremap <buffer> <silent> t
 		\ :call <sid>LT.OpenTab(<sid>BL.GetBufferNumber())<cr>
 
 nnoremap <buffer> <silent> d
