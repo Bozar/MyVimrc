@@ -4,6 +4,8 @@ import autoload 'layout.vim' as LT
 import autoload 'save_load_state.vim' as SLS
 
 
+# NOTE: Add tag file paths to ~/.vimrc because they are private data. Refer to
+# README.md for a sample vimrc.
 export def GotoTag(tag: string): void
 	const CURRENT_WINNR: number = winnr()
 

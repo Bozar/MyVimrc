@@ -15,7 +15,7 @@ Actually, my Vim launches in two steps. First, there is a `$HOME/.vimrc` that de
 
 ## Folder Structure
 
-If something in the demo catches your eye, search a key map (`plugin/key_map.vim`) or command (`plugin/quick_command.vim`), or a file specific feature (`ftplugin/*.vim`). Although `autoload/*.vim` scripts do the most hard work, it might not be a good start point for an outlander new to Vvardenfell. 
+If something in the demo catches your eye, search a key map (`plugin/key_map.vim`) or command (`plugin/quick_command.vim`), or a file specific feature (`ftplugin/*.vim`). Although `autoload/*.vim` scripts do the most hard work, it might not be a good start point for an outlander new to Vvardenfell.
 
 Besides, key maps call functions directly without a middle layer (`<plug>`). It's not the best practice for a plugin, but quite convenient for personal use.
 
@@ -29,19 +29,24 @@ Besides, key maps call functions directly without a middle layer (`<plug>`). It'
 
 set nocompatible
 
+
 let g:PRIVATE_DATA = {}
+let g:PRIVATE_DATA['MY_TAGS'] = [
+	\ '~/tags',
+\ ]
+let g:PRIVATE_DATA['MY_TAGS'] = join(g:PRIVATE_DATA['MY_TAGS'], ',')
 lockvar! g:PRIVATE_DATA
 
+
 if has('win32')
-    set packpath+=pack\path
-    set runtimepath+=runtime\path
-    cd working\dir
-    source path\to\vimrc
+	set packpath+=pack\path
+	set runtimepath+=runtime\path
+	cd working\dir
+	source path\to\vimrc
 else
-    set packpath+=pack/path
-    set runtimepath+=runtime/path
-    cd working/dir
-    source path/to/vimrc
+	set packpath+=pack/path
+	set runtimepath+=runtime/path
+	cd working/dir
+	source path/to/vimrc
 endif
 ```
-
