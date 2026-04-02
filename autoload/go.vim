@@ -2,7 +2,10 @@ vim9script
 
 
 export def AutoFormat(): void
-	!go fmt % | go vet %
+	system('go fmt ' .. expand('%'))
+	edit
+#	!go fmt %
+#	!go fmt % | go vet %
 enddef
 
 
@@ -13,4 +16,3 @@ export def IsAvailable(): bool
 	endif
 	return v:true
 enddef
-
