@@ -4,7 +4,8 @@ import autoload 'bufl.vim' as BL
 import autoload 'layout.vim' as LT
 
 
-setlocal nonumber
+#setlocal nonumber
+#setlocal norelativenumber
 setlocal statusline=%!g:MyStatusLine(3,3)
 # :h special-buffers
 setlocal bufhidden=hide

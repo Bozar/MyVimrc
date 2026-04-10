@@ -52,7 +52,8 @@ set tabline=%!g:MyTabLine()
 set showtabline=2
 
 
-set number
+set nonumber
+set relativenumber
 set linebreak
 # Do not break at `Tab`s.
 set breakat=\ !@*-+;:,./?

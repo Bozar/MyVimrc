@@ -90,7 +90,8 @@ def GetBufferList(): list<string>
 		file_name = expand('#' .. buffer_number .. ':t')
 		buffer_changed = i['changed'] ? '+' : ''
 		# Example: [3+] autoload/buffer_list.vim
-		list_item = ' [' .. buffer_number .. buffer_changed .. '] '
+		#list_item = ' [' .. buffer_number .. buffer_changed .. '] '
+		list_item = '[' .. buffer_number .. buffer_changed .. '] '
 				.. last_path .. '/' .. file_name
 		add(buffer_list, list_item)
 	endfor
