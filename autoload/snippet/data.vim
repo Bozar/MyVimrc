@@ -1,6 +1,5 @@
 vim9script
 
-
 import autoload 'snippet/vim.vim' as VI
 import autoload 'snippet/sh.vim' as SH
 import autoload 'snippet/gdscript.vim' as GD
@@ -8,7 +7,6 @@ import autoload 'snippet/go.vim' as GO
 import autoload 'snippet/c.vim' as C
 import autoload 'snippet/header.vim' as HD
 import autoload 'snippet/python.vim' as PY
-
 
 export const INSERT_PLACEHOLDER: string = '%I%'
 export const INDENT_PLACEHOLDER: string = '%S%'
@@ -37,9 +35,7 @@ export final ABBREVIATION: dict<any> = {}
 export final TEXT_BLOCK: dict<any> = {}
 export final FIX_FILETYPE: dict<any> = {}
 
-
 FIX_FILETYPE['h'] = 'header'
-
 
 ABBREVIATION['vim'] = VI.ABBREVIATION
 TEXT_BLOCK['vim'] = VI.TEXT_BLOCK

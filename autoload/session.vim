@@ -1,19 +1,15 @@
 vim9script
 
-
 import autoload 'temp_file.vim' as TF
 import autoload 'save_load_state.vim' as SLS
 
-
 const FILE_NAME: string = TF.GetTempFileName('vim', 'session')
-
 
 export def SaveSession(): void
 	execute 'mksession! ' .. FILE_NAME
 	nnoremap <f1> <Nop>
 	unsilent echom 'Session saved: ' .. FILE_NAME
 enddef
-
 
 export def LoadSession(): void
 	try
@@ -23,7 +19,6 @@ export def LoadSession(): void
 		execute 'throw ' .. v:exception
 	endtry
 enddef
-
 
 export def SaveListedBuffer(): void
 	const COMMAND_TAIL: string = '\ |:%argdelete'
@@ -43,4 +38,3 @@ export def SaveListedBuffer(): void
 	nnoremap <f1> <Nop>
 	unsilent echom	'Argedit command saved: ' .. FILE_NAME
 enddef
-

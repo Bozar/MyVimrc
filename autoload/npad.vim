@@ -4,7 +4,6 @@ import autoload 'power_search.vim' as PS
 import autoload 'layout.vim' as LT
 import autoload 'fold_marker.vim' as FM
 
-
 export def SearchText(is_visual: bool, has_prompt: bool): void
 	const CURRENT_WIN: number = winnr()
 	const EMPTY_LINE: string = '\v(^\s*$)|\n'
@@ -53,12 +52,10 @@ export def SearchText(is_visual: bool, has_prompt: bool): void
 	endif
 enddef
 
-
 export def ExecuteLine(is_normal_mode: bool): void
 	const COMMAND: string = is_normal_mode ? getline('.') : @"
 	ExecuteCommand(COMMAND)
 enddef
-
 
 export def ArgaddLine(is_normal_mode: bool): void
 	var ln_0: number
@@ -90,7 +87,6 @@ export def ArgaddLine(is_normal_mode: bool): void
 	endif
 enddef
 
-
 export def CdLine(): void
 	var new_dir: string = expand(getline('.'))
 	if isdirectory(new_dir)
@@ -101,7 +97,6 @@ export def CdLine(): void
 		FM.EditFoldMarker(&filetype)
 	endif
 enddef
-
 
 export def GtdLine(): void
 	const PAT_TODO: string = '\v\[[ ]\]\s+'
@@ -118,7 +113,6 @@ export def GtdLine(): void
 	endif
 enddef
 
-
 export def ExploreLine(): void
 	var path: string = expand(getline('.'))
 
@@ -130,9 +124,7 @@ export def ExploreLine(): void
 	execute 'Explore ' .. path
 enddef
 
-
 def ExecuteCommand(command: string): void
 	LT.GotoWindow('Execute in window? ')
 	execute ':' .. command
 enddef
-

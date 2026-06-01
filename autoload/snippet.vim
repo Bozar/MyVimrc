@@ -3,7 +3,6 @@ vim9script
 import autoload 'save_load_state.vim' as SLS
 import autoload 'snippet/data.vim' as DT
 
-
 # NOTE: ALWAYS USE NOREMAP OR NOREAB!
 # Disable custom settings when something weird happens.
 #
@@ -31,7 +30,6 @@ export def LoadSnippet(file_type: string, file_extension: string): void
 		endfor
 	endif
 enddef
-
 
 def InsertTextBlock(text_block: string): void
 	# Insert text block.

@@ -1,10 +1,8 @@
 vim9script
 
-
 import autoload 'save_load_state.vim' as SLS
 import autoload 'layout.vim' as LT
 import autoload 'snippet/data.vim' as DT
-
 
 const EOL: string = "\n"
 
@@ -24,7 +22,6 @@ const COLLECT_TEXT: string = 't'
 const GREP_PATTERN: string = 'r'
 const GLOBAL_SUB: string = 'g'
 
-
 # Function variables cannot shadow script ones: ':h E1006'.
 # https://www.reddit.com/r/vim/comments/1favdyy/
 var substitute_text: string = ''
@@ -35,7 +32,6 @@ var grep_path: string = ''
 var escaped_substitute_text: string = ''
 var escaped_search_pattern: string = ''
 
-
 # If the text starts with '\[vVmMcC]', it is used as is.
 export def EscapeVeryNoMagic(text: string): string
 	if text =~# '\v^\\[vVmMcC]'
@@ -45,11 +41,9 @@ export def EscapeVeryNoMagic(text: string): string
 	endif
 enddef
 
-
 export def EscapeSubstitution(text: string): string
 	return escape(text, '\/~&')
 enddef
-
 
 export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 	# Visual select a placeholder instead of launching Search Hub.
@@ -142,7 +136,6 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 	endif
 enddef
 
-
 def GetRawText(raw_register: string): string
 	const FIRST_LINE_PATTERN: string = '\v([^\n]*)\n*.*'
 	# If `register "` has more than one lines, keep only the first one.
@@ -152,14 +145,12 @@ def GetRawText(raw_register: string): string
 	return RAW_TEXT
 enddef
 
-
 def ResetCursor(is_visual_mode: bool, escaped_register: string): void
 	if is_visual_mode
 		normal! `<
 		@/ = escaped_register
 	endif
 enddef
-
 
 def GetSearchResult(escaped_register: string, is_lazy_search: bool): string
 	const NO_RESULT: string = 'Match: 0, Line: 0'
@@ -184,7 +175,6 @@ def GetSearchResult(escaped_register: string, is_lazy_search: bool): string
 	endif
 enddef
 
-
 def GetPrompt(
 		pattern: string, text: string, path: string,
 		raw_register: string, current_line: string
@@ -202,7 +192,6 @@ def GetPrompt(
 			.. '> '
 	return INPUT
 enddef
-
 
 def SetVariable(
 		input: string, raw_register: string, current_line: string
@@ -259,7 +248,6 @@ def SetVariable(
 	endif
 enddef
 
-
 def GetCmdSubstitute(pattern: string, text: string): string
 	const PATTERN_TEXT: string = pattern .. '/' .. text
 	# Substitute whole text. Start from the current line.
@@ -268,12 +256,10 @@ def GetCmdSubstitute(pattern: string, text: string): string
 	return COMMAND
 enddef
 
-
 def GetCmdYank(pattern: string): string
 	const COMMAND: string = 'vim9cmd @a = ""|g/' .. pattern .. '/yank A'
 	return COMMAND
 enddef
-
 
 def ExeCmdYank(command: string): string
 	const SAVE_REG: string = @a
@@ -284,18 +270,15 @@ def ExeCmdYank(command: string): string
 	return SAVE_YANK
 enddef
 
-
 def GetCmdGrep(pattern: string, path: string): string
 	const COMMAND: string = 'vim /' .. pattern .. '/j ' .. path
 	return COMMAND
 enddef
 
-
 def GetCmdGsub(pattern: string, text: string): string
 	const COMMAND: string = '%s/' .. pattern .. '/' .. text .. '/gce'
 	return COMMAND
 enddef
-
 
 def FilterCommand(input: string, ordered_commands: list<string>): string
 	for i: string in ordered_commands
@@ -306,14 +289,12 @@ def FilterCommand(input: string, ordered_commands: list<string>): string
 	return ''
 enddef
 
-
 def HasPlaceholder(is_visual_mode: bool): bool
 	if is_visual_mode
 		return v:false
 	endif
 	return search(DT.PATTERN_DEFAULT_PLACEHOLDER, 'cnw') ># 0
 enddef
-
 
 def SearchPlaceholder(): void
 	execute '@/ = "' .. EscapeSubstitution(DT.DEFAULT_PLACEHOLDER) .. '"'

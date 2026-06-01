@@ -1,13 +1,11 @@
 vim9script
 
-
 export def AutoFormat(): void
 	system('go fmt ' .. expand('%'))
 	edit
 #	!go fmt %
 #	!go fmt % | go vet %
 enddef
-
 
 export def IsAvailable(): bool
 	system('go version')

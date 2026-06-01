@@ -2,10 +2,8 @@ vim9script
 
 import autoload 'fold_marker.vim' as FM
 
-
 const PATTERN_FUNC: string = '\v^(.{-})\s*([a-zA-Z0-9_]+\()(.*);$'
 const PATTERN_TAIL: string = '\v;$'
-
 
 export def ExpandLine(is_visual: bool): void
 	if is_visual
@@ -26,4 +24,3 @@ export def ExpandLine(is_visual: bool): void
 	execute ':s/' .. PATTERN_FUNC .. '/\1\r\2\3 {\r}'
 	normal! k
 enddef
-

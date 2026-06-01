@@ -1,14 +1,11 @@
 vim9script
 
-
 import autoload 'save_load_state.vim' as SLS
 import autoload 'loc.vim' as LC
 import autoload 'go.vim' as GO
 
-
-const DEFAULT_LINE_SPACE: string = '2'
+const DEFAULT_LINE_SPACE: string = '1'
 const DEFAULT_PLACEHOLDER: string = ' '
-
 
 # 1. 'placeholder' is a string that will be added to the end of a line. It is
 #	one <space> by default. In this case, be sure to call RemoveTrailSpace()
@@ -34,17 +31,14 @@ export def AutoFormat(
 	SLS.SaveLoadState(v:false)
 enddef
 
-
 def RemoveTrailSpace(): void
 	:%s/\v\s+$//ge
 enddef
-
 
 def RemoveExtraLine(line_space: number, placeholder: string): void
 	const LAST_LINE: number = line('$')
 	const PATTERN_BLANK_LINE: string = '\v^$'
 	const PATTERN_MARKED_LINE: string = '\V' .. placeholder .. '\$'
-
 	var line_count: number = 0
 
 	if (line_space <# 0) || (1 + line_space ># LAST_LINE)
@@ -68,7 +62,6 @@ def RemoveExtraLine(line_space: number, placeholder: string): void
 	endif
 enddef
 
-
 def AddLastBlankLine(): void
 	if getline(line('$')) =~# '\v^$'
 		return
@@ -76,10 +69,16 @@ def AddLastBlankLine(): void
 	:$s/\v$/\r
 enddef
 
+def RemoveLastBlankLine(): void
+	if getline(line('$')) !~# '\v^$'
+		return
+	endif
+	:$g/\v^$/d
+enddef
 
 def FormatDefaultText(line_space: number, placeholder: string): void
 	RemoveTrailSpace()
 	RemoveExtraLine(line_space, placeholder)
 	#AddLastBlankLine()
+	RemoveLastBlankLine()
 enddef
-

@@ -1,6 +1,5 @@
 vim9script
 
-
 export const ABBREVIATION: dict<any> = {
 	'==': '==#',
 	'!=': '!=#',
@@ -14,7 +13,6 @@ export const ABBREVIATION: dict<any> = {
 	'isn;': 'isnot#',
 	'ex;': 'execute',
 }
-
 
 export const TEXT_BLOCK: dict<any> = {
 	'jj;': [

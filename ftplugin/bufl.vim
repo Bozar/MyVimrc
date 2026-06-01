@@ -3,7 +3,6 @@ vim9script
 import autoload 'bufl.vim' as BL
 import autoload 'layout.vim' as LT
 
-
 #setlocal nonumber
 #setlocal norelativenumber
 setlocal statusline=%!g:MyStatusLine(3,3)
@@ -11,7 +10,6 @@ setlocal statusline=%!g:MyStatusLine(3,3)
 setlocal bufhidden=hide
 setlocal noswapfile
 setlocal nobuflisted
-
 
 nnoremap <buffer> <silent> <cr>
 		\ :call <sid>LT.OpenWindow(
@@ -27,7 +25,6 @@ nnoremap <buffer> <silent> t
 nnoremap <buffer> <silent> d
 		\ :call <sid>BL.DeleteBuffer()<cr>
 		\ :call <sid>BL.RefreshBufferList()<cr>
-
 
 augroup temp_bufl
 	autocmd!

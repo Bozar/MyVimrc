@@ -1,8 +1,6 @@
 vim9script
 
-
 import autoload 'layout.vim' as LT
-
 
 export def MoveTabPage(is_move_down: bool): void
 	if !LT.IsMovableWindow()
@@ -35,20 +33,17 @@ export def MoveTabPage(is_move_down: bool): void
 	execute 'tabmove ' .. next_tab
 enddef
 
-
 export def CloseTabPageToTheRight(): void
 	while tabpagenr() <# tabpagenr('$')
 		tabclose $
 	endwhile
 enddef
 
-
 export def CloseTabPage(): void
 	if tabpagenr('$') > 1
 		tabclose
 	endif
 enddef
-
 
 export def GotoTabPage(is_move_right: bool): void
 	if !LT.IsMovableWindow()
@@ -65,4 +60,3 @@ export def GotoTabPage(is_move_right: bool): void
 		normal! gT
 	endif
 enddef
-

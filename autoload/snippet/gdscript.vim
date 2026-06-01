@@ -1,8 +1,6 @@
 vim9script
 
-
 export const ABBREVIATION: dict<any> = {}
-
 
 export const TEXT_BLOCK: dict<any> = {
 	'fu;': [

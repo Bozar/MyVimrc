@@ -1,14 +1,11 @@
 vim9script
 
-
 import autoload 'temp_file.vim' as TF
 import autoload 'loc.vim' as LC
 import autoload 'npad.vim' as NP
 
-
 const TMP_FILE: string = TF.GetTempFileName(TF.LOC, TF.DEFAULT_NAME, v:false)
 const TMP_FILE_FULL: string = TF.GetTempFileName(TF.LOC)
-
 
 if expand('%') ==# TMP_FILE_FULL
 	setlocal statusline=%!g:MyStatusLine(3,4)
@@ -17,7 +14,6 @@ if expand('%') ==# TMP_FILE_FULL
 	setlocal nobuflisted
 endif
 
-
 augroup temp_loc
 	autocmd!
 	execute 'autocmd BufEnter ' .. TMP_FILE .. ' setlocal nobuflisted'
@@ -25,7 +21,6 @@ augroup temp_loc
 	execute 'autocmd BufLeave ' .. TMP_FILE .. ' setlocal nobuflisted'
 	execute 'autocmd BufLeave ' .. TMP_FILE .. ' silent update'
 augroup END
-
 
 nnoremap <buffer> <silent> <leader>jh
 		\ :call <sid>TF.GotoTempWindow(
@@ -63,7 +58,6 @@ vnoremap <buffer> <silent> <f1>
 		\<sid>LC.MAP_VISUAL, <sid>LC.FILE_GL
 		\)<cr>
 
-
 nnoremap <buffer> <silent> <f2>
 		\ :update<cr>
 		\:call <sid>LC.SearchPattern(
@@ -78,7 +72,6 @@ vnoremap <buffer> <silent> <f2>
 nnoremap <buffer> <silent> <s-f2>
 		\ :call <sid>LC.SearchGUID()<cr>
 
-
 nnoremap <buffer> <silent> <f3>
 		\ :call <sid>LC.FilterSearchResult(<sid>LC.MAP_NORMAL)<cr>
 vnoremap <buffer> <silent> <f3>
@@ -91,18 +84,15 @@ vnoremap <buffer> <silent> <s-f3>
 		\<sid>LC.MAP_VISUAL_SHIFT
 		\)<cr>
 
-
 nnoremap <buffer> <silent> <f4>
 		\ :call <sid>LC.CopySnippet(<sid>LC.MAP_NORMAL)<cr>
 vnoremap <buffer> <silent> <f4>
 		\ y:call <sid>LC.CopySnippet(<sid>LC.MAP_VISUAL)<cr>
 
-
 nnoremap <buffer> <silent> <f5>
 		\ :silent call <sid>LC.AddSnippet()<cr>
 nnoremap <buffer> <silent> <s-f5>
 		\ :silent call <sid>LC.AddSnippet(<sid>LC.MAP_NORMAL_SHIFT)<cr>
-
 
 nnoremap <buffer> <silent> <f6>
 		\ :call <sid>LC.RemoveLabel(<sid>LC.MAP_NORMAL, v:false)<cr>
@@ -114,7 +104,6 @@ nnoremap <buffer> <silent> <s-f6>
 vnoremap <buffer> <silent> <s-f6>
 		\ <esc>:call <sid>LC.RemoveLabel(<sid>LC.MAP_VISUAL, v:true)<cr>
 
-
 nnoremap <buffer> <silent> <f7>
 		\ :update<cr>
 		\:call <sid>LC.SearchPattern(
@@ -125,4 +114,3 @@ vnoremap <buffer> <silent> <f7>
 		\:call <sid>LC.SearchPattern(
 		\<sid>LC.MAP_VISUAL, <sid>LC.FILE_AD
 		\)<cr>
-

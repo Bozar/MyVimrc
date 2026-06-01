@@ -1,10 +1,8 @@
 vim9script
 
-
 import autoload 'save_load_state.vim' as SLS
 import autoload 'temp_file.vim' as TF
 import autoload 'power_search.vim' as PS
-
 
 export const MAP_NORMAL: number = 0
 export const MAP_VISUAL: number = 1
@@ -22,7 +20,6 @@ const MAX_SEARCH_FILE: number = 3
 const SEARCH_FILE_HEAD: string = '\v\C^SEARCH_FILE'
 		.. '(-' .. toupper(hostname()) .. '){0,1}' .. '$'
 const SEARCH_FILE_OUTPUT: list<string> = ['Glo: ', 'Ref_1: ', 'Ref_2: ']
-
 
 const LABEL_MARK: string = '#MARK#'
 const LABEL_END: string = '#END#'
@@ -48,7 +45,6 @@ const PATTERN_HEADER_GLOSSARY: string = 'Glossary {{{'
 # -- [TARGET] --
 const PATTERN_REPLACE_TARGET: string = '\v(\t)([^\t]{-})(\t)'
 
-
 const GLOSSARY_TAG: list<string> = [
 	'General',
 	'NPC',
@@ -56,7 +52,6 @@ const GLOSSARY_TAG: list<string> = [
 	'Item',
 	'Skill \& Trait',
 ]
-
 
 const DEBUG: bool = v:false
 const EOL: string = "\n"
@@ -67,11 +62,9 @@ const INPUT_S: string = 's'
 const INPUT_I: string = 'i'
 const INPUT_C: string = 'c'
 
-
 var snippet_source: string = ''
 var snippet_target: string = ''
 var search_files: list<string>
-
 
 export def ResetCursorPosition(): void
 	const LINE_TEXT: string = getline('.')
@@ -86,7 +79,6 @@ export def ResetCursorPosition(): void
 	endif
 enddef
 
-
 export def QuickCopy(): void
 	var save_reg: string
 
@@ -100,7 +92,6 @@ export def QuickCopy(): void
 	SLS.SaveLoadState(v:false)
 	@" = save_reg
 enddef
-
 
 export def LoadSearchFile(is_verbose: bool): bool
 	SLS.SaveLoadState(v:true)
@@ -138,7 +129,6 @@ export def LoadSearchFile(is_verbose: bool): bool
 	return v:true
 enddef
 
-
 export def SearchPattern(map_mode: number, search_file_index: number): void
 	if (len(search_files) <# MAX_SEARCH_FILE) && !LoadSearchFile(v:false)
 		return
@@ -169,7 +159,6 @@ export def SearchPattern(map_mode: number, search_file_index: number): void
 	endif
 enddef
 
-
 export def SearchGUID(): void
 	const split_line: list<string> = split(getline(line('.')), '\t')
 	# At least three parts: SOURCE -- TARGET -- [OPTIONAL] -- GUID
@@ -185,7 +174,6 @@ export def SearchGUID(): void
 	@" = GUID
 	SearchPattern(MAP_VISUAL, 1)
 enddef
-
 
 export def FilterSearchResult(map_mode: number): void
 	const PATTERN: string = (map_mode ==# MAP_NORMAL)
@@ -217,7 +205,6 @@ export def FilterSearchResult(map_mode: number): void
 	:1
 enddef
 
-
 export def CopySnippet(map_mode: number): void
 	if map_mode ==# MAP_NORMAL
 		CopySnippetNormal(split(getline('.'), '\t'))
@@ -225,7 +212,6 @@ export def CopySnippet(map_mode: number): void
 		CopySnippetVisual(@")
 	endif
 enddef
-
 
 export def AddSnippet(map_mode: number = MAP_NORMAL): void
 	if map_mode ==# MAP_NORMAL_SHIFT
@@ -240,7 +226,6 @@ export def AddSnippet(map_mode: number = MAP_NORMAL): void
 	endif
 enddef
 
-
 export def RemoveLabel(map_mode: number, is_remove_all: bool): void
 	const COMMAND_RANGE: string = (map_mode ==# MAP_NORMAL)
 			? ':.'
@@ -253,7 +238,6 @@ export def RemoveLabel(map_mode: number, is_remove_all: bool): void
 	execute COMMAND_RANGE .. 's/' .. PATTERN_CR .. '/\r/ge'
 	SLS.SaveLoadState(v:false)
 enddef
-
 
 def AddSnippetGlossary(current_line: string): void
 	const NORMAL_LENGTH: number = 3
@@ -278,7 +262,6 @@ def AddSnippetGlossary(current_line: string): void
 		execute ':s/\v^.*$/' .. (join(split_line, '\t'))
 	endif
 enddef
-
 
 def AddSnippetTarget(): void
 	const ESCAPE_SOURCE: string = PS.EscapeVeryNoMagic(snippet_source)
@@ -328,7 +311,6 @@ def AddSnippetTarget(): void
 	endif
 enddef
 
-
 export def JoinLine(): void
 	if (search(PATTERN_END, 'cw') ==# 0)
 			|| (search(PATTERN_BROKEN_LINE, 'cw') ==# 0)
@@ -342,7 +324,6 @@ export def JoinLine(): void
 			.. ':.,/' .. PATTERN_END .. '/' .. 'join!'
 enddef
 
-
 export def AutoFormat(): void
 	setlocal fileencoding=utf-8
 	setlocal fileformat=unix
@@ -350,11 +331,9 @@ export def AutoFormat(): void
 	JoinLine()
 enddef
 
-
 def HasFullSnippet(): bool
 	return (snippet_source !=# '') && (snippet_target !=# '')
 enddef
-
 
 def CopySnippetNormal(split_line: list<string>): void
 	const MIN_LENGTH: number = 2
@@ -391,7 +370,6 @@ def CopySnippetNormal(split_line: list<string>): void
 	endif
 enddef
 
-
 def CopySnippetVisual(reg_text: string): void
 	unsilent const INPUT: string = input(
 			'Source A: ' .. snippet_source .. EOL
@@ -413,4 +391,3 @@ def CopySnippetVisual(reg_text: string): void
 		snippet_target = TEMP_SAVE
 	endif
 enddef
-

@@ -1,6 +1,5 @@
 vim9script
 
-
 syntax case ignore
 
 syntax match locLabel /\v\C-(\a|\d)+$/
@@ -14,4 +13,3 @@ syntax match locTitle /\v^.{-}\s\{{3}\d?$/
 highlight link locSource Statement
 highlight link locLabel Identifier
 highlight link locTitle Comment
-

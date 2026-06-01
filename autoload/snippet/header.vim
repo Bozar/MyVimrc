@@ -1,13 +1,11 @@
 vim9script
 
-
 export const ABBREVIATION: dict<any> = {
 	'vc;': 'const',
 	'vd;': '#define',
 	'va;': 'static',
 	'vu;': 'struct',
 }
-
 
 export const TEXT_BLOCK: dict<any> = {
 	'jj;': [

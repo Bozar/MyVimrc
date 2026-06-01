@@ -1,6 +1,5 @@
 vim9script
 
-
 export def InsertCodeBlock(map_mode: number): void
 	# Normal mode
 	if map_mode ==# 0
@@ -12,4 +11,3 @@ export def InsertCodeBlock(map_mode: number): void
 		execute ":'<" .. 's/^/````\r/'
 	endif
 enddef
-

@@ -1,8 +1,6 @@
 vim9script
 
-
 import autoload 'save_load_state.vim' as SLS
-
 
 # Temp file name
 export const DEFAULT_NAME: string = 'tmp'
@@ -14,7 +12,6 @@ export const BUFL: string = 'bufl'
 
 const SAVE_LOAD_PROMPT: string = '[S]ave or [L]oad text? '
 const BACKUP_EXTENSION: string = '.bak'
-
 
 export def GotoTempWindow(
 		file_extension: string, file_name: string = DEFAULT_NAME,
@@ -32,14 +29,12 @@ export def GotoTempWindow(
 	endif
 enddef
 
-
 export def GotoTempBuffer(
 		file_extension: string, file_name: string = DEFAULT_NAME
 ): void
 	const FILE_NAME: string = GetTempFileName(file_extension, file_name)
 	OpenTempFile(FILE_NAME)
 enddef
-
 
 export def GetTempFileName(
 		file_extension: string, file_name: string = DEFAULT_NAME,
@@ -52,7 +47,6 @@ export def GetTempFileName(
 		return FILE_NAME
 	endif
 enddef
-
 
 export def SaveLoadText(): void
 	unsilent const INPUT: string = input(SAVE_LOAD_PROMPT)
@@ -72,7 +66,6 @@ export def SaveLoadText(): void
 	SLS.SaveLoadState(v:false)
 enddef
 
-
 export def OpenTempFile(full_file_name: string): void
 	const BUF_NR: number = bufnr(full_file_name)
 	if BUF_NR ># 0
@@ -81,7 +74,6 @@ export def OpenTempFile(full_file_name: string): void
 		execute 'edit ' .. full_file_name
 	endif
 enddef
-
 
 # When 'autochdir' is on, use 'fnamemodify()' to get absolute path.
 # https://www.reddit.com/r/vim/comments/1ctvfnz/
@@ -97,7 +89,6 @@ def GetTempWindowNumber(file_name: string): number
 	endfor
 	return win_number
 enddef
-
 
 def GetTempDirectory(): string
 	const TMP_WIN: string = $TEMP

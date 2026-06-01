@@ -4,7 +4,6 @@ import autoload 'layout.vim' as LT
 import autoload 'save_load_state.vim' as SLS
 import autoload 'temp_file.vim' as TF
 
-
 export def SplitOpenWindow(buf_nr: number): void
 	if winnr('$') ==# 3
 		:3wincmd w
@@ -17,7 +16,6 @@ export def SplitOpenWindow(buf_nr: number): void
 		LT.OpenByPrompt(buf_nr)
 	endif
 enddef
-
 
 # nomodifiable: cannot insert text; readonly: cannot save file.
 # https://stackoverflow.com/questions/16680615/
@@ -33,7 +31,6 @@ export def RefreshBufferList(): void
 	setlocal nomodifiable
 	SLS.SaveLoadState(v:false)
 enddef
-
 
 # The function is not mapped by any key. I should update files outside buffer
 # list to avoid mistakes.
@@ -51,7 +48,6 @@ export def UpdateBuffer(): void
 	SLS.SaveLoadState(v:false)
 enddef
 
-
 export def DeleteBuffer(): void
 	const BUFFER_NUMBER: number = GetBufferNumber()
 	if (BUFFER_NUMBER <# 1)
@@ -59,7 +55,6 @@ export def DeleteBuffer(): void
 	endif
 	execute 'bdelete ' .. BUFFER_NUMBER
 enddef
-
 
 export def GetBufferNumber(): number
 	const CURRENT_LINE: string = getline('.')
@@ -75,7 +70,6 @@ export def GetBufferNumber(): number
 	endif
 	return NUM_BUF_NR
 enddef
-
 
 def GetBufferList(): list<string>
 	var buffer_list: list<string> = []

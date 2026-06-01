@@ -1,6 +1,5 @@
 vim9script
 
-
 # https://shapeshed.com/vim-statuslines/
 # https://jip.dev/posts/a-simpler-vim-statusline/
 
@@ -94,7 +93,6 @@ def g:MyStatusLine(show_mode: number, custom_text: number = 0): string
 	return status_text
 enddef
 
-
 # https://vi.stackexchange.com/questions/21204/
 def g:MyTabLine(): string
 	var tab_text: string = ''
@@ -112,4 +110,3 @@ def g:MyTabLine(): string
 	tab_text ..= '%#TabLineFill#%T%='
 	return tab_text
 enddef
-

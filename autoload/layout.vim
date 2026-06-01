@@ -3,7 +3,6 @@ vim9script
 import autoload 'temp_file.vim' as TF
 import autoload 'save_load_state.vim' as SLS
 
-
 export const DEFAULT: number = 0
 export const LOC: number = 1
 export const QUICK_FIX: number = 2
@@ -15,11 +14,9 @@ const MOVABLE_WINDOW_TYPE: list<string> = [
 	'quickfix',
 ]
 
-
 export def IsValidWindowNumber(win_nr: number): bool
 	return (win_nr >=# 1) && (win_nr <=# winnr('$'))
 enddef
-
 
 export def SplitWindow(layout: number, is_new_tab: bool): void
 	if !IsMovableWindow()
@@ -62,7 +59,6 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
 	endif
 enddef
 
-
 export def GotoPreviousWindow(): void
 	if !IsMovableWindow()
 		return
@@ -77,7 +73,6 @@ export def GotoPreviousWindow(): void
 	endif
 	GotoWindow()
 enddef
-
 
 export def GotoRightTopBottomWindow(is_right_top: bool): void
 	if !IsMovableWindow()
@@ -94,7 +89,6 @@ export def GotoRightTopBottomWindow(is_right_top: bool): void
 	endif
 enddef
 
-
 export def GotoWindow(prompt: string = 'Goto window? '): void
 	const WIN_NUMBER: number = str2nr(input(prompt))
 	if IsValidWindowNumber(WIN_NUMBER)
@@ -102,11 +96,9 @@ export def GotoWindow(prompt: string = 'Goto window? '): void
 	endif
 enddef
 
-
 export def IsMovableWindow(): bool
 	return index(MOVABLE_WINDOW_TYPE, win_gettype()) >=# 0
 enddef
-
 
 export def OpenWindow(buf_nr: number, open_win: number, jump_win: number): void
 	if buf_nr <# 1
@@ -120,7 +112,6 @@ export def OpenWindow(buf_nr: number, open_win: number, jump_win: number): void
 	execute ':' .. JUMP .. 'wincmd w'
 enddef
 
-
 export def OpenByPrompt(buf_nr: number): void
 	unsilent const INPUT: string = input('[Open|Jump] to window? ')
 	const FIRST_NUMBER: string = '\v^\D*(\d+).*$'
@@ -131,7 +122,6 @@ export def OpenByPrompt(buf_nr: number): void
 	const JUMP: number = str2nr(substitute(INPUT, SECOND_NUMBER, '\1', ''))
 	OpenWindow(buf_nr, OPEN, JUMP)
 enddef
-
 
 export def OpenTab(buf_nr: number): void
 	if buf_nr <# 1
@@ -147,7 +137,6 @@ export def OpenTab(buf_nr: number): void
 	SLS.SaveLoadState(v:false)
 enddef
 
-
 def VerticalSplit(width: number): void
 	wincmd v
 	:2wincmd w
@@ -155,13 +144,11 @@ def VerticalSplit(width: number): void
 	:1wincmd w
 enddef
 
-
 def HorizontalSplit(height: number): void
 	wincmd s
 	:2wincmd w
 	execute 'resize ' .. height
 enddef
-
 
 def TryFixWinNumber(win_nr: number): number
 	return IsValidWindowNumber(win_nr) ? win_nr : 1

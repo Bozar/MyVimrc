@@ -1,8 +1,6 @@
 vim9script
 
-
 import autoload 'save_load_state.vim' as SLS
-
 
 const LEADING_PATTERN: string = '\v^(\s*)'
 const FILE_TO_COMMENT: dict<string> = {
@@ -16,7 +14,6 @@ const FILE_TO_COMMENT: dict<string> = {
 	'cpp': '\/\/',
 	'header': '\/\/',
 }
-
 
 export def AutoComment(file_type: string, is_normal: bool): void
 	if ! has_key(FILE_TO_COMMENT, file_type)
@@ -46,7 +43,6 @@ export def AutoComment(file_type: string, is_normal: bool): void
 	SLS.SaveLoadState(v:false)
 enddef
 
-
 def HasComment(start: number, end: number, pattern: string): bool
 	var current_line: number = start
 	var search_line: number
@@ -63,7 +59,6 @@ def HasComment(start: number, end: number, pattern: string): bool
 	return v:true
 enddef
 
-
 def DelComment(
 		start: number, end: number, leading_pattern: string,
 		comment_string: string
@@ -73,7 +68,6 @@ def DelComment(
 			.. '/\1' .. '/'
 enddef
 
-
 def AddComment(
 		start: number, end: number, leading_pattern: string,
 		comment_string: string
@@ -81,4 +75,3 @@ def AddComment(
 	execute ':' .. start .. ',' .. end .. 's/'
 			.. '^/' .. comment_string .. '/'
 enddef
-

@@ -1,6 +1,5 @@
 vim9script
 
-
 const COUNT: number = 0
 const FOLD: number = 1
 const WIN: number = 2
@@ -10,7 +9,6 @@ const BUF_NR: number = 4
 final SAVED_STATE: dict<any> = {}
 SAVED_STATE[COUNT] = 0
 
-
 # NOTE: SaveLoadState(v:true) & SaveLoadState(v:false) MUST BE called in pairs.
 export def SaveLoadState(is_save: bool): void
 	if is_save
@@ -19,7 +17,6 @@ export def SaveLoadState(is_save: bool): void
 		LoadState()
 	endif
 enddef
-
 
 def SaveState(): void
 	if SAVED_STATE[COUNT] ==# 0
@@ -31,7 +28,6 @@ def SaveState(): void
 	endif
 	SAVED_STATE[COUNT] += 1
 enddef
-
 
 def LoadState(): void
 	if SAVED_STATE[COUNT] ># 0
@@ -47,4 +43,3 @@ def LoadState(): void
 		@" = SAVED_STATE[REGISTER]
 	endif
 enddef
-

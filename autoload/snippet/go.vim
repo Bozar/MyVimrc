@@ -1,6 +1,5 @@
 vim9script
 
-
 export const ABBREVIATION: dict<any> = {
 	'vv;': 'var',
 	'vc;': 'const',
@@ -12,19 +11,19 @@ export const ABBREVIATION: dict<any> = {
 	'ky;': 'type',
 	'kd;': 'defer',
 	'ks;': 'string<esc>h',
+	'ku;': 'rune<esc>h',
 	'ke;': 'err != nil<esc>h',
 	'kr;': 'return<esc>h',
 	'kc;': 'continue<esc>h',
 	'kb;': 'break<esc>h',
 }
 
-
 export const TEXT_BLOCK: dict<any> = {
 	'jj;': [
 		'package%I% ',
 		'',
 		'import (',
-		'\"%P%\"',
+		'%P%',
 		')',
 	],
 	'if;': [
