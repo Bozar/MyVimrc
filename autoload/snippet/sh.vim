@@ -1,29 +1,27 @@
 vim9script
 
-export const ABBREVIATION: dict<any> = {}
+export const ABBREVIATION: dict<any> = {
+	'vv;': 'local',
+	'vc;': 'readonly',
+	'kr;': 'return<esc>h',
+	'kc;': 'continue<esc>h',
+	'kb;': 'break<esc>h',
+	'kd;': '# shellcheck disable=SC<esc>h',
+}
 
 export const TEXT_BLOCK: dict<any> = {
-	'vv;': [
-		'local %I%'
-	],
-	'vc;': [
-		'readonly %I%'
-	],
 	'jj;': [
 		'#! %FS%usr%FS%bin%FS%bash',
 		'%I%',
 		'',
-		'',
 		'main() {',
 		'}',
-		'',
 		'',
 		'main \"$@\"',
 	],
 	'fu;': [
 		'%P%() {',
 		'}',
-		'',
 	],
 	'if;': [
 		'if %I%; then',
