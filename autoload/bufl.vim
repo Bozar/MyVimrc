@@ -4,6 +4,18 @@ import autoload 'layout.vim' as LT
 import autoload 'save_load_state.vim' as SLS
 import autoload 'temp_file.vim' as TF
 
+export def OpenWindow(buf_nr: number): void
+	if winnr('$') ==# 1
+		LT.OpenWindow(buf_nr, 1, 1)
+	elseif winnr('$') ==# 2
+		LT.OpenWindow(buf_nr, winnr(), winnr())
+	elseif winnr('$') <=# 4
+		LT.OpenWindow(buf_nr, 3, 3)
+	else
+		LT.OpenByPrompt(buf_nr)
+	endif
+enddef
+
 export def SplitOpenWindow(buf_nr: number): void
 	if winnr('$') ==# 3
 		:3wincmd w

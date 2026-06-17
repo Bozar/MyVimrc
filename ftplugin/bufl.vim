@@ -12,9 +12,7 @@ setlocal noswapfile
 setlocal nobuflisted
 
 nnoremap <buffer> <silent> <cr>
-		\ :call <sid>LT.OpenWindow(
-		\<sid>BL.GetBufferNumber(), winnr('$'), winnr('$')
-		\)<cr>
+		\ :call <sid>BL.OpenWindow(<sid>BL.GetBufferNumber())<cr>
 nnoremap <buffer> <silent> s
 		\ :call <sid>BL.SplitOpenWindow(<sid>BL.GetBufferNumber())<cr>
 nnoremap <buffer> <silent> o
