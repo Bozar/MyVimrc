@@ -99,3 +99,15 @@ def InsertTextBlock(text_block: string): void
 	# key.
 	normal! h
 enddef
+
+export def AutoFormat(): void
+	# 1: Modeline, 2: Blank line
+	var begin: number = 3
+	:%s/\v^\s+//e
+	:%s/\v\s+$//e
+	execute ':' .. begin
+	if search('^$', 'cW') ># 0
+		execute ':' .. begin .. ',$g/^$/d'
+	endif
+	execute ':' .. begin .. ',$sort u'
+enddef

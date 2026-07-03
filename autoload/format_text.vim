@@ -1,6 +1,7 @@
 vim9script
 
 import autoload 'save_load_state.vim' as SLS
+import autoload 'snippet.vim' as SNP
 import autoload 'loc.vim' as LC
 import autoload 'go.vim' as GO
 
@@ -24,6 +25,8 @@ export def AutoFormat(
 		LC.AutoFormat()
 	elseif (file_type ==# 'go') && GO.IsAvailable()
 		GO.AutoFormat()
+	elseif file_type ==# 'snippet'
+		SNP.AutoFormat()
 	else
 		FormatDefaultText(NR_LINE_SPACE, placeholder)
 	endif
