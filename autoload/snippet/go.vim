@@ -2,46 +2,47 @@ vim9script
 
 export const ABBREVIATION: dict<any> = {
 	'vv;': 'var',
-	'vc;': 'const',
-	'vl;': '[]<esc>h',
-	'vm;': 'map[]%P%<esc>hF[',
-	'vf;': 'func () (%P%)<esc>h2F(',
-	'kt;': 'true<esc>h',
-	'kf;': 'false<esc>h',
-	'ky;': 'type',
-	'kd;': 'defer',
-	'ks;': 'string<esc>h',
-	'ku;': 'rune<esc>h',
-	'ke;': 'err != nil<esc>h',
-	'kr;': 'return<esc>h',
-	'kc;': 'continue<esc>h',
-	'kb;': 'break<esc>h',
+	'cc;': 'const',
+	'sl;': '[]<esc>h',
+	'mm;': 'map[]%P%<esc>hF[',
+	'fuy;': 'func () (%P%)<esc>h2F(',
+	'tt;': 'true<esc>h',
+	'ff;': 'false<esc>h',
+	'yy;': 'type',
+	'df;': 'defer',
+	'ss;': 'string<esc>h',
+	'rr;': 'rune<esc>h',
+	'ee;': 'err != nil<esc>h',
+	'rt;': 'return<esc>h',
+	'ct;': 'continue<esc>h',
+	'bk;': 'break<esc>h',
+	'cmp;': 'comparable',
 }
 
 export const TEXT_BLOCK: dict<any> = {
 	'jj;': [
-		'package%I% ',
+		'package %I%%P%',
 		'',
 		'import (',
 		'%P%',
 		')',
 	],
 	'if;': [
-		'if %I% {',
+		'if %I%%P% {',
 		'%FS%%FS%} else if {',
 		'%FS%%FS%} else {',
 		'}',
 	],
 	'for;': [
-		'for %I%; %P%; %P% {',
+		'for %I%%P%; %P%; %P% {',
 		'}',
 	],
 	'frr;': [
-		'for %I%, %P% := range %P% {',
+		'for %I%%P% := range %P% {',
 		'}',
 	],
 	'sw;': [
-		'switch %I% {',
+		'switch %I%%P% {',
 		'case %P%:',
 		'case :',
 		'case :',
@@ -51,23 +52,23 @@ export const TEXT_BLOCK: dict<any> = {
 		'}',
 	],
 	'fu;': [
-		'func %I%(%P%) (%P%) {',
+		'func %I%%P%(%P%) (%P%) {',
 		'}',
 	],
 	'fum;': [
-		'func (%I% *%P%) %P%(%P%) (%P%) {',
+		'func (%I%%P% *%P%) %P%(%P%) (%P%) {',
 		'}',
 	],
 	'fut;': [
-		'func Test%I%(t *testing.T) {',
+		'func Test%I%%P%(t *testing.T) {',
 		'}',
 	],
-	'vs;': [
-		'struct %I%{',
+	'st;': [
+		'struct %I%%P%{',
 		'}',
 	],
-	'vi;': [
-		'interface %I%{',
+	'it;': [
+		'interface %I%%P%{',
 		'}',
 	],
 }
