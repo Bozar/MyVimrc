@@ -8,6 +8,7 @@ export const MAP_NORMAL: number = 0
 export const MAP_VISUAL: number = 1
 export const MAP_NORMAL_SHIFT: number = 2
 export const MAP_VISUAL_SHIFT: number = 3
+export const MAP_LEADER: number = 4
 
 # Glossary
 export const FILE_GL: number = 0
@@ -201,6 +202,9 @@ export def FilterSearchResult(map_mode: number): void
 		execute 'v/' .. ESCAPE_PATTERN .. '/d _'
 	elseif map_mode ==# MAP_VISUAL_SHIFT
 		execute 'g/' .. ESCAPE_PATTERN .. '/d _'
+	elseif map_mode ==# MAP_LEADER
+		execute ':%!awk ''BEGIN {IGNORECASE=1; FS="\t"} ' ..
+			'$5 ~ /' .. PATTERN .. '/'''
 	endif
 	:1
 enddef

@@ -83,6 +83,10 @@ vnoremap <buffer> <silent> <s-f3>
 		\ y:call <sid>LC.FilterSearchResult(
 		\<sid>LC.MAP_VISUAL_SHIFT
 		\)<cr>
+vnoremap <buffer> <silent> <leader><f3>
+		\ y:call <sid>LC.FilterSearchResult(
+		\<sid>LC.MAP_LEADER
+		\)<cr>
 
 nnoremap <buffer> <silent> <f4>
 		\ :call <sid>LC.CopySnippet(<sid>LC.MAP_NORMAL)<cr>
