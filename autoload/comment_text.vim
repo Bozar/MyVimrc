@@ -73,5 +73,5 @@ def AddComment(
 		comment_string: string
 ): void
 	execute ':' .. start .. ',' .. end .. 's/'
-			.. '^/' .. comment_string .. '/'
+			.. '^\v(\s*)/\1' .. comment_string .. '/'
 enddef
