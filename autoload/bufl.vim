@@ -1,7 +1,7 @@
 vim9script
 
 import autoload 'layout.vim' as LT
-import autoload 'save_load_state.vim' as SLS
+import autoload 'state.vim' as ST
 import autoload 'temp_file.vim' as TF
 
 export def OpenWindow(buf_nr: number): void
@@ -32,7 +32,7 @@ enddef
 # nomodifiable: cannot insert text; readonly: cannot save file.
 # https://stackoverflow.com/questions/16680615/
 export def RefreshBufferList(): void
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	setlocal modifiable
 
 	:%delete
@@ -41,7 +41,7 @@ export def RefreshBufferList(): void
 	update
 
 	setlocal nomodifiable
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 enddef
 
 # The function is not mapped by any key. I should update files outside buffer
@@ -52,12 +52,12 @@ export def UpdateBuffer(): void
 		return
 	endif
 
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	const SAVE_BUF_NR: number = bufnr()
 
 	execute ':' .. BUFFER_NUMBER .. 'bufdo update'
 	execute 'buffer ' .. SAVE_BUF_NR
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 enddef
 
 export def DeleteBuffer(): void

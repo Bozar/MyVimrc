@@ -1,6 +1,6 @@
 vim9script
 
-import autoload 'save_load_state.vim' as SLS
+import autoload 'state.vim' as ST
 
 # Temp file name
 export const DEFAULT_NAME: string = 'tmp'
@@ -52,7 +52,7 @@ export def SaveLoadText(): void
 	unsilent const INPUT: string = input(SAVE_LOAD_PROMPT)
 	const BACKUP_FILE: string = expand('%') .. BACKUP_EXTENSION
 
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	if INPUT ==# 's'
 		execute 'write! ' .. BACKUP_FILE
 		:%delete
@@ -63,7 +63,7 @@ export def SaveLoadText(): void
 			:1
 		endif
 	endif
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 enddef
 
 export def OpenTempFile(full_file_name: string): void

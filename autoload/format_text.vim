@@ -1,6 +1,6 @@
 vim9script
 
-import autoload 'save_load_state.vim' as SLS
+import autoload 'state.vim' as ST
 import autoload 'snippet.vim' as SNP
 import autoload 'loc.vim' as LC
 import autoload 'go.vim' as GO
@@ -19,7 +19,7 @@ export def AutoFormat(
 ): void
 	const NR_LINE_SPACE: number = str2nr(line_space)
 
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 
 	if file_type ==# 'loc'
 		LC.AutoFormat()
@@ -31,7 +31,7 @@ export def AutoFormat(
 		FormatDefaultText(NR_LINE_SPACE, placeholder)
 	endif
 
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 enddef
 
 def RemoveTrailSpace(): void

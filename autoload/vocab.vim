@@ -1,18 +1,20 @@
 vim9script
 
-import autoload 'save_load_state.vim' as SLS
+import autoload 'state.vim' as ST
 
 const PLACEHOLDER_TAB: string = '->'
 
 export def MoveCursor(): void
-	var cursor: list<number> = getcurpos()
+	ST.SaveState()
 	execute 'normal! 0'
 	if search('\t.', 'ce', line('.')) ># 0
+		ST.DropState()
 		return
 	elseif search(PLACEHOLDER_TAB .. '.', 'ce', line('.')) ># 0
+		ST.DropState()
 		return
 	endif
-	setpos('.', cursor)
+	ST.LoadState()
 enddef
 
 export def SwitchTab(is_normal: bool): void
@@ -26,7 +28,7 @@ export def SwitchTab(is_normal: bool): void
 		ln_1 = line("'>")
 	endif
 
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	execute ':' .. ln_0
 	execute 'normal! 0'
 	if search('\t', 'c', ln_1) ># 0
@@ -36,5 +38,5 @@ export def SwitchTab(is_normal: bool): void
 		execute ':' .. ln_0 .. ',' .. ln_1 .. 's/'
 			.. PLACEHOLDER_TAB .. '/\t' .. '/g'
 	endif
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 enddef

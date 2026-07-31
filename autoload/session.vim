@@ -1,7 +1,7 @@
 vim9script
 
 import autoload 'temp_file.vim' as TF
-import autoload 'save_load_state.vim' as SLS
+import autoload 'state.vim' as ST
 
 const FILE_NAME: string = TF.GetTempFileName('vim', 'session')
 
@@ -32,9 +32,9 @@ export def SaveListedBuffer(): void
 	endfor
 	add(command_list, COMMAND_TAIL)
 
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	writefile(command_list, FILE_NAME)
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 	nnoremap <f1> <Nop>
 	unsilent echom	'Argedit command saved: ' .. FILE_NAME
 enddef

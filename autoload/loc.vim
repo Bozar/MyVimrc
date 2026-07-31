@@ -1,6 +1,6 @@
 vim9script
 
-import autoload 'save_load_state.vim' as SLS
+import autoload 'state.vim' as ST
 import autoload 'temp_file.vim' as TF
 import autoload 'power_search.vim' as PS
 
@@ -83,19 +83,19 @@ enddef
 export def QuickCopy(): void
 	var save_reg: string
 
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	ResetCursorPosition()
 
 	execute 'normal! yt	'
 	# Reg " will be restored in the next step.
 	save_reg = @"
 
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 	@" = save_reg
 enddef
 
 export def LoadSearchFile(is_verbose: bool): bool
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	normal! gg
 	if search(SEARCH_FILE_HEAD, 'cw') ==# 0
 		echom 'Cannot load search files.'
@@ -104,7 +104,7 @@ export def LoadSearchFile(is_verbose: bool): bool
 		echom 'path/to/glossary'
 		echom 'path/to/reference_1'
 		echom 'path/to/reference_2'
-		SLS.SaveLoadState(v:false)
+		ST.LoadState()
 		return v:false
 	endif
 
@@ -115,7 +115,7 @@ export def LoadSearchFile(is_verbose: bool): bool
 		new_path = getline(line('.') + 1 + i)
 		if !filereadable(expand(new_path))
 			echom ERROR_FILE .. SEARCH_FILE_OUTPUT[i] .. new_path
-			SLS.SaveLoadState(v:false)
+			ST.LoadState()
 			return v:false
 		endif
 		search_files = add(search_files, new_path)
@@ -126,7 +126,7 @@ export def LoadSearchFile(is_verbose: bool): bool
 			echom SEARCH_FILE_OUTPUT[i] .. search_files[i]
 		endfor
 	endif
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 	return v:true
 enddef
 
@@ -235,12 +235,12 @@ export def RemoveLabel(map_mode: number, is_remove_all: bool): void
 			? ':.'
 			: ":'<, '>"
 
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	if is_remove_all
 		execute COMMAND_RANGE .. 's/' .. PATTERN_MARK_OR_END .. '//ge'
 	endif
 	execute COMMAND_RANGE .. 's/' .. PATTERN_CR .. '/\r/ge'
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 enddef
 
 def AddSnippetGlossary(current_line: string): void
@@ -278,7 +278,7 @@ def AddSnippetTarget(): void
 			.. '> '
 	)
 
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	const START_LINE: number = line('.')
 	execute 'normal! ]z'
 	const END_LINE: number = line('.')
@@ -309,7 +309,7 @@ def AddSnippetTarget(): void
 			execute COMMAND_APPEND
 		endif
 	endif
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 	if INPUT =~# INPUT_C
 		@" = save_command
 	endif

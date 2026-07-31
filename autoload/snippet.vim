@@ -1,6 +1,6 @@
 vim9script
 
-import autoload 'save_load_state.vim' as SLS
+import autoload 'state.vim' as ST
 import autoload 'snippet/data.vim' as DT
 
 # NOTE: ALWAYS USE NOREMAP OR NOREAB!
@@ -87,13 +87,13 @@ def InsertTextBlock(text_block: string): void
 	if search(DT.PATTERN_INSERT_PLACEHOLDER, 'c', LAST_LINE_NR) ==# 0
 		return
 	endif
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	execute ':s/' .. DT.PATTERN_INSERT_PLACEHOLDER .. '//'
 	execute ':' .. FIRST_LINE_NR
 	if search(DT.PATTERN_DEFAULT_PLACEHOLDER, 'c', LAST_LINE_NR) ># 0
 		@/ = DT.PATTERN_DEFAULT_PLACEHOLDER
 	endif
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 
 	# Move cursor left because a snippet is usually triggered by <space>
 	# key.

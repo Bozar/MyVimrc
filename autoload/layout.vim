@@ -1,7 +1,7 @@
 vim9script
 
 import autoload 'temp_file.vim' as TF
-import autoload 'save_load_state.vim' as SLS
+import autoload 'state.vim' as ST
 
 export const DEFAULT: number = 0
 export const LOC: number = 1
@@ -129,12 +129,12 @@ export def OpenTab(buf_nr: number): void
 	endif
 
 	const TAB_PAGE: number = tabpagenr()
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	SplitWindow(DEFAULT, v:true)
 	tabmove $
 	execute 'buffer ' .. buf_nr
 	execute 'tabnext ' .. TAB_PAGE
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 enddef
 
 def VerticalSplit(width: number): void

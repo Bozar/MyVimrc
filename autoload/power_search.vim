@@ -1,6 +1,6 @@
 vim9script
 
-import autoload 'save_load_state.vim' as SLS
+import autoload 'state.vim' as ST
 import autoload 'layout.vim' as LT
 import autoload 'snippet/data.vim' as DT
 
@@ -57,7 +57,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 	ResetCursor(is_visual_mode, ESCAPED_REGISTER)
 	line_text = trim(getline('.'))
 
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	# Set SCRIPT VARIABLES the first time for prompt message.
 	escaped_search_pattern = EscapeVeryNoMagic(search_pattern)
 	escaped_substitute_text = EscapeSubstitution(substitute_text)
@@ -68,7 +68,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 			grep_path, RAW_REGISTER, line_text
 			)
 	)
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 
 	if trim(INPUT) ==# ''
 		return
@@ -115,7 +115,7 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 		return
 	endif
 
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	var save_yank: string
 	# Copy or execute only one command.
 	if CMD_CODE ==# LOCAL_SUB
@@ -125,10 +125,9 @@ export def SearchHub(is_visual_mode: bool, is_lazy_search: bool = v:false): void
 	elseif CMD_CODE ==# GREP_PATTERN
 		unsilent execute ':' .. command
 	endif
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 
-	# @" is protected by 'SLS.SaveLoadState'. Its content remains
-	# unchanged.
+	# @" is protected by 'ST.SaveState()'. Its content remains unchanged.
 	if CMD_CODE ==# COLLECT_TEXT
 		@" = save_yank
 	elseif CMD_CODE ==# GREP_PATTERN

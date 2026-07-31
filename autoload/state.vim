@@ -9,17 +9,11 @@ const BUF_NR: number = 4
 final SAVED_STATE: dict<any> = {}
 SAVED_STATE[COUNT] = 0
 
-# NOTE: SaveLoadState(v:true) & SaveLoadState(v:false) MUST BE called in pairs.
-export def SaveLoadState(is_save: bool): void
-	if is_save
-		SaveState()
-	else
-		LoadState()
-	endif
-enddef
-
-def SaveState(): void
-	if SAVED_STATE[COUNT] ==# 0
+# NOTE: SaveState() && LoadState() MUST BE called in pairs. DropState()
+# forbids outer LoadState() from working.
+export def SaveState(): void
+	if SAVED_STATE[COUNT] <# 1
+		SAVED_STATE[COUNT] = 0
 		SAVED_STATE[BUF_NR] = bufnr()
 		SAVED_STATE[FOLD] = &foldenable
 		SAVED_STATE[WIN] = winsaveview()
@@ -29,7 +23,7 @@ def SaveState(): void
 	SAVED_STATE[COUNT] += 1
 enddef
 
-def LoadState(): void
+export def LoadState(): void
 	if SAVED_STATE[COUNT] ># 0
 		SAVED_STATE[COUNT] -= 1
 	endif
@@ -42,4 +36,8 @@ def LoadState(): void
 		winrestview(SAVED_STATE[WIN])
 		@" = SAVED_STATE[REGISTER]
 	endif
+enddef
+
+export def DropState(): void
+	SAVED_STATE[COUNT] = -1
 enddef

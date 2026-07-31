@@ -1,6 +1,6 @@
 vim9script
 
-import autoload 'save_load_state.vim' as SLS
+import autoload 'state.vim' as ST
 
 const LEADING_PATTERN: string = '\v^(\s*)'
 const FILE_TO_COMMENT: dict<string> = {
@@ -32,7 +32,7 @@ export def AutoComment(file_type: string, is_normal: bool): void
 		ln_1 = line("'>")
 	endif
 
-	SLS.SaveLoadState(v:true)
+	ST.SaveState()
 	if HasComment(ln_0, ln_1, LEADING_PATTERN .. comment_string)
 		#echom 'comment'
 		DelComment(ln_0, ln_1, LEADING_PATTERN, comment_string)
@@ -40,7 +40,7 @@ export def AutoComment(file_type: string, is_normal: bool): void
 		#echom 'no comment'
 		AddComment(ln_0, ln_1, LEADING_PATTERN, comment_string)
 	endif
-	SLS.SaveLoadState(v:false)
+	ST.LoadState()
 enddef
 
 def HasComment(start: number, end: number, pattern: string): bool
