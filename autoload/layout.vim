@@ -7,6 +7,13 @@ export const DEFAULT: number = 0
 export const LOC: number = 1
 export const QUICK_FIX: number = 2
 
+const INVALID_LAYOUT: number = -1
+const LEFT_COLUMN_WIDTH_NARROW: number = 85
+const LEFT_COLUMN_WIDTH: number = 90
+const RIGHT_BOTTOM_HEIGHT: number = 10
+const OUTLINE_FILE: string = TF.GetTempFileName('outl')
+const LOC_FILE: string = TF.GetTempFileName('loc')
+
 const MOVABLE_WINDOW_TYPE: list<string> = [
 	'',
 	'loclist',
@@ -23,40 +30,10 @@ export def SplitWindow(layout: number, is_new_tab: bool): void
 		return
 	endif
 
-	const INVALID_LAYOUT: number = -1
-	const LEFT_COLUMN_WIDTH_NARROW: number = 85
-	const LEFT_COLUMN_WIDTH: number = 90
-	const RIGHT_BOTTOM_HEIGHT: number = 10
-	const OUTLINE_FILE: string = TF.GetTempFileName('outl')
-	const LOC_FILE: string = TF.GetTempFileName('loc')
-
 	if is_new_tab
 		tab split
 	endif
-
-	wincmd o
-	if layout ==# DEFAULT
-		VerticalSplit(LEFT_COLUMN_WIDTH)
-		TF.GotoTempBuffer(TF.NPAD)
-		HorizontalSplit(RIGHT_BOTTOM_HEIGHT)
-		TF.GotoTempBuffer(TF.BUFL)
-
-	elseif layout ==# LOC
-		VerticalSplit(LEFT_COLUMN_WIDTH_NARROW)
-		TF.OpenTempFile(LOC_FILE)
-
-	elseif layout ==# QUICK_FIX
-		VerticalSplit(LEFT_COLUMN_WIDTH)
-		TF.GotoTempBuffer(TF.NPAD)
-		HorizontalSplit(RIGHT_BOTTOM_HEIGHT)
-		TF.GotoTempBuffer(TF.BUFL)
-
-	endif
-
-	wincmd b
-	if layout ==# QUICK_FIX
-		belowright copen
-	endif
+	LoadLayout(layout)
 enddef
 
 export def GotoPreviousWindow(): void
@@ -152,4 +129,22 @@ enddef
 
 def TryFixWinNumber(win_nr: number): number
 	return IsValidWindowNumber(win_nr) ? win_nr : 1
+enddef
+
+def LoadLayout(layout: number): void
+	const IS_DEFAULT: bool = winnr('$') ># 2
+	wincmd o
+	if (layout ==# DEFAULT) || ((layout ==# QUICK_FIX) && IS_DEFAULT)
+		VerticalSplit(LEFT_COLUMN_WIDTH)
+		TF.GotoTempBuffer(TF.NPAD)
+		HorizontalSplit(RIGHT_BOTTOM_HEIGHT)
+		TF.GotoTempBuffer(TF.BUFL)
+	elseif layout ==# LOC
+		VerticalSplit(LEFT_COLUMN_WIDTH_NARROW)
+		TF.OpenTempFile(LOC_FILE)
+	endif
+	wincmd b
+	if layout ==# QUICK_FIX
+		belowright copen
+	endif
 enddef

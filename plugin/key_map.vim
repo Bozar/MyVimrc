@@ -59,7 +59,7 @@ nnoremap <silent> <unique> <leader>jU
 		\ :silent call <sid>TF.GotoTempBuffer(<sid>TF.BUFL)<cr>
 
 nnoremap <silent> <unique> <leader>jh
-		\ :silent 1wincmd w<cr>
+		\ :silent wincmd b<cr>
 		\:silent belowright copen<cr>
 
 nnoremap <silent> <unique> <leader><space>
