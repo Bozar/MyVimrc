@@ -9,3 +9,5 @@ vnoremap <buffer> <silent> <leader>fc
 
 nnoremap <buffer> <silent> <cr>
 	\ :call <sid>VB.MoveCursor()<cr>
+nnoremap <buffer> <silent> <c-cr>
+	\ :call <sid>VB.CopyWord()<cr>

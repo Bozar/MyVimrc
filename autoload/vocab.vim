@@ -3,6 +3,7 @@ vim9script
 import autoload 'state.vim' as ST
 
 const PLACEHOLDER_TAB: string = '->'
+const PATTERN_WORD: string = '\v^#* *(.{-})(\t|-\>).*$'
 
 export def MoveCursor(): void
 	ST.SaveState()
@@ -39,4 +40,8 @@ export def SwitchTab(is_normal: bool): void
 			.. PLACEHOLDER_TAB .. '/\t' .. '/g'
 	endif
 	ST.LoadState()
+enddef
+
+export def CopyWord(): void
+	@* = substitute(getline('.'), PATTERN_WORD, '\1', '')
 enddef
