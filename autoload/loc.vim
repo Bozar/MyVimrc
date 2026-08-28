@@ -149,6 +149,7 @@ export def SearchPattern(map_mode: number, search_file_index: number): void
 	if file_readable(expand(SEARCH_FILE))
 		system(COMMAND)
 		TF.GotoTempWindow(TF.LOC)
+		sort
 	else
 		echom 'File not found: ' .. SEARCH_FILE
 	endif
