@@ -296,6 +296,8 @@ def HasPlaceholder(is_visual_mode: bool): bool
 enddef
 
 def SearchPlaceholder(): void
+	const SAVE_REG: string = @"
 	execute '@/ = "' .. EscapeSubstitution(DT.DEFAULT_PLACEHOLDER) .. '"'
 	execute 'normal! gn'
+	@" = SAVE_REG
 enddef
