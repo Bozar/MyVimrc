@@ -19,16 +19,14 @@ If something in the demo catches your eye, search a key map (`plugin/key_map.vim
 
 Besides, key maps call functions directly without a middle layer (`<plug>`). It's not the best practice for a plugin, but quite convenient for personal use.
 
-## Appendix
+## Appendix A: Sample `.vimrc` File
 
 ```
 " sample .vimrc
 " NOTE: DO NOT use Vim 9 syntax. It seems that filetypes cannot be handled
 " properly.
 
-
 set nocompatible
-
 
 let g:PRIVATE_DATA = {}
 let g:PRIVATE_DATA['MY_TAGS'] = [
@@ -36,7 +34,6 @@ let g:PRIVATE_DATA['MY_TAGS'] = [
 \ ]
 let g:PRIVATE_DATA['MY_TAGS'] = join(g:PRIVATE_DATA['MY_TAGS'], ',')
 lockvar! g:PRIVATE_DATA
-
 
 if has('win32')
 	set packpath+=pack\path
@@ -49,4 +46,47 @@ else
 	cd working/dir
 	source path/to/vimrc
 endif
+```
+
+## Appendix B: Sample `ai_chat` File
+
+```
+vim: set ft=ai_chat:
+
+SAVE_SESSION {{{1
+
+===BEGIN_SAVE_SESSION
+Write a handoff summary of this session, so a fresh session can resume the work.
+Save it as `handoff-<topic>-MMDD-HHmm.md` in the workspace, then stop.
+`MMDD-HHmm` is a time format. Use system local time.
+If this session is loaded from a summary file, use this file's name. Add a timestamp or modify the existing one.
+
+Use exactly these eight sections, in this order, with these headings:
+
+## Primary Request and Intent
+## Key Technical Concepts
+## Files and Code
+## Errors and Fixes
+## Pending Jobs
+## Current Work
+## Next Step
+## Critical Context
+
+Rules:
+- Terse bullets, not prose. Never omit a section — write "(none)" if empty.
+- Preserve exact strings: file paths, commands, error messages, identifiers, numbers.
+- Record decisions with their rationale, and any correction I gave you.
+- "Next Step" must be exactly one concrete action, not a plan.
+- Do not describe the act of summarizing; the file is written for a resuming model, not for me.
+- Do not guess: anything uncertain goes under Critical Context, labeled as unverified.
+- Do not modify any other file.
+
+After writing, reply with only the file path and the line count.
+===END_SAVE_SESSION
+
+LIST_TOPIC {{{1
+
+===BEGIN_LIST_TOPIC
+Print all previous topics related to this session in a bullet list. Report open issues.
+===END_LIST_TOPIC
 ```
