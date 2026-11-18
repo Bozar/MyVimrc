@@ -53,40 +53,15 @@ endif
 ```
 vim: set ft=ai_chat:
 
-SAVE_SESSION {{{1
+LIST_[I]SSUE {{{1
 
-===BEGIN_SAVE_SESSION
-Write a handoff summary of this session, so a fresh session can resume the work.
-Save it as `handoff-<topic>-MMDD-HHmm.md` in the workspace, then stop.
-`MMDD-HHmm` is a time format. Use system local time.
-If this session is loaded from a summary file, use this file's name. Add a timestamp or modify the existing one.
+===BEGIN_LIST_[I]SSUE
+Print all open issues related to this session.
+===END_LIST_[I]SSUE
 
-Use exactly these eight sections, in this order, with these headings:
+EXPORT_[HTML] {{{1
 
-## Primary Request and Intent
-## Key Technical Concepts
-## Files and Code
-## Errors and Fixes
-## Pending Jobs
-## Current Work
-## Next Step
-## Critical Context
-
-Rules:
-- Terse bullets, not prose. Never omit a section — write "(none)" if empty.
-- Preserve exact strings: file paths, commands, error messages, identifiers, numbers.
-- Record decisions with their rationale, and any correction I gave you.
-- "Next Step" must be exactly one concrete action, not a plan.
-- Do not describe the act of summarizing; the file is written for a resuming model, not for me.
-- Do not guess: anything uncertain goes under Critical Context, labeled as unverified.
-- Do not modify any other file.
-
-After writing, reply with only the file path and the line count.
-===END_SAVE_SESSION
-
-LIST_TOPIC {{{1
-
-===BEGIN_LIST_TOPIC
-Print all previous topics related to this session in a bullet list. Report open issues.
-===END_LIST_TOPIC
+===BEGIN_EXPORT_[HTML]
+Convert the exported zip file to HTML, then delete the zip file.
+===END_EXPORT_[HTML]
 ```
