@@ -28,6 +28,12 @@ export def CopySnippet(): void
 	endif
 enddef
 
+export def AddLabel(): void
+	const MARKER: string = toupper(getline('.'))
+	execute ':s/^.*$/' .. HEAD_BEGIN .. MARKER .. '\r'
+		.. HEAD_END .. MARKER .. '/'
+enddef
+
 # Google AI teaches me a clever trick to nest `[]` inside `[]`: `[][]`.
 # REFER: `:h /\]`.
 def GetMarker(): string
