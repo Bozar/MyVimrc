@@ -34,6 +34,14 @@ export def AutoFormat(
 	ST.LoadState()
 enddef
 
+# https://suckless.org/coding_style/
+# Use tabs for indentation and spaces for alignment. This ensures everything
+# will line up independent of tab size.
+# NO SPACE COWBOYS. SHOOT SPIKE ON SIGHT.
+def RemoveLeadSpace(): void
+	:%s/\v^ +//ge
+enddef
+
 def RemoveTrailSpace(): void
 	:%s/\v\s+$//ge
 enddef
@@ -80,6 +88,7 @@ def RemoveLastBlankLine(): void
 enddef
 
 def FormatDefaultText(line_space: number, placeholder: string): void
+	RemoveLeadSpace()
 	RemoveTrailSpace()
 	RemoveExtraLine(line_space, placeholder)
 	#AddLastBlankLine()

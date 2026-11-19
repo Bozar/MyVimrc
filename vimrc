@@ -1,6 +1,5 @@
 vim9script
 
-
 set nocompatible
 
 const IS_GUI: bool = has('gui_running')
@@ -9,7 +8,6 @@ const IS_WINDOWS: bool = has('win32') || has('win32unix')
 # https://github.com/lifepillar/vim-solarized8
 # Refer to the readme for `g:solarized_?` settings.
 const COLOR_SCHEME: string = 'solarized8'
-
 
 if !IS_GUI
 	set termguicolors
@@ -31,7 +29,6 @@ catch /^Vim\%((\a\+)\)\=:E185/
 	set background=dark
 endtry
 
-
 # UI language: change the name of 'lang' folder will force Vim to use English.
 
 filetype plugin indent on
@@ -39,7 +36,6 @@ syntax enable
 set backspace=indent,eol,start
 set autoread
 set autochdir
-
 
 # Do not insert 2 spaces after punctuations when joining lines.
 set nojoinspaces
@@ -50,7 +46,6 @@ set belloff=all
 set statusline=%!g:MyStatusLine(0)
 set tabline=%!g:MyTabLine()
 set showtabline=2
-
 
 set nonumber
 set relativenumber
@@ -75,7 +70,6 @@ set listchars=tab:»\ ,leadmultispace:›---,trail:‹
 #endif
 set cursorline
 
-
 set wildmode=full
 set wildmenu
 set cmdheight=2
@@ -83,25 +77,23 @@ set cmdwinheight=10
 set history=998
 set showcmd
 
-
 set tabstop=8
 set softtabstop=0
 set shiftwidth=0
 set noexpandtab
 set autoindent
 set shiftround
-
+# `:h fo-table`
+set formatoptions+=n
 
 set ignorecase
 set incsearch
 set smartcase
 
-
 # Overwrite fold methods in filetype plugins.
 set foldmethod=marker
 # Unfold all text by default.
 set foldlevel=99
-
 
 set fileformat=unix
 set fileformats=unix,dos
@@ -111,7 +103,6 @@ set fileencodings=ucs-bom,utf-8,cp936,latin1
 # Case-insensitive file names
 set fileignorecase
 
-
 # Use both * and + registers when yanking in visual mode. Show the least GUI
 # components.
 set guioptions=aPc
@@ -119,11 +110,9 @@ set guioptions=aPc
 # Do not blink cursor in all modes.
 set guicursor+=a:blinkon0
 
-
 set notimeout
 set noesckeys
 g:mapleader = ' '
-
 
 set matchpairs+=<:>
 set matchpairs+=《:》
@@ -142,7 +131,6 @@ if exists('g:PRIVATE_DATA')
 	execute 'set tags+=' .. get(g:PRIVATE_DATA, 'MY_TAGS', '')
 endif
 
-
 # Font
 if IS_WINDOWS
 	set renderoptions=type:directx
@@ -153,13 +141,11 @@ else
 	set guifont=DejaVu\ Sans\ \Mono\ 14
 endif
 
-
 # Netrw
 # Tree style listing
 g:netrw_liststyle = 3
 # Hide banner
 g:netrw_banner = 0
-
 
 # QuickFix
 g:qf_disable_statusline = 1
